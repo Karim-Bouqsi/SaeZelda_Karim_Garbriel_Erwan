@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.TilePane?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sae.saezelda.controleur.Controleur">
+   <top>
+      <HBox BorderPane.alignment="CENTER">
+         <children>
+            <Label text="Point de vie : " />
+            <Label fx:id="pvLink" prefHeight="14.0" prefWidth="44.0" />
+         </children>
+      </HBox>
+   </top>
+   <center>
+      <StackPane maxHeight="320.0" maxWidth="640.0" minHeight="320.0" minWidth="640.0" prefHeight="320.0" prefWidth="640.0" BorderPane.alignment="CENTER">
+         <children>
+            <TilePane fx:id="panneauDeJeu" prefHeight="200.0" prefWidth="200.0" />
+            <Pane fx:id="paneJeu" focusTraversable="true" onKeyPressed="#touchePresser" onKeyReleased="#toucheRelacher" prefHeight="200.0" prefWidth="200.0" />
+         </children>
+      </StackPane>
+   </center>
+</BorderPane>
