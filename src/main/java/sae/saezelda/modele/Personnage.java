@@ -87,6 +87,10 @@ public abstract class Personnage {
         this.direction.setValue(direction);
     }
 
+    public Terrain getTerrain() {
+        return terrain;
+    }
+
     public void move() {
         int newX = getXValue();
         int newY = getYValue();

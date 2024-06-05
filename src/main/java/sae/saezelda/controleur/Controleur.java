@@ -36,7 +36,7 @@ public class Controleur implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Terrain terrain = new Terrain();
         TerrainVue terrainVue = new TerrainVue(terrain, panneauDeJeu);
-        link = new Link(terrain);
+        link = terrain.getLink();
         linkVue = new LinkVue(link, paneJeu, terrainVue);
         pvLink.textProperty().bind(link.getPvProperties().asString());
 
@@ -55,6 +55,8 @@ public class Controleur implements Initializable {
 
         Zombie zombie = new Zombie(terrain);
         ZombieVue zombieVue = new ZombieVue(zombie, paneJeu, terrainVue);
+
+
         gameLoop = new GameLoop(link, linkVue, zombie, zombieVue);
         gameLoop.startGameLoop();
     }

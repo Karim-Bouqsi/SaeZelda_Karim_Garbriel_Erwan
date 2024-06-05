@@ -10,29 +10,40 @@ public class ZombieVue {
     private Zombie zombie;
     private Pane panneauJeu;
     private TerrainVue terrainVue;
-    private ImageView image;
-
+    private ImageView imageView;
+    private Image normalImage;
+    private Image attackImage;
 
     public ZombieVue(Zombie zombie, Pane panneauJeu, TerrainVue terrainVue) {
         this.zombie = zombie;
         this.panneauJeu = panneauJeu;
         this.terrainVue = terrainVue;
-        Image imageZombie = new Image(String.valueOf(Main.class.getResource("/image/personnage/zombie19x32.png")));
-        this.image = new ImageView(imageZombie);
 
-        this.image.setFitWidth(19);
-        this.image.setFitHeight(32);
+        normalImage = new Image(String.valueOf(Main.class.getResource("/image/personnage/zombie19x32.png")));
+        attackImage = new Image(String.valueOf(Main.class.getResource("/image/personnage/attaquezombie.gif")));
 
-        this.image.translateXProperty().bind(zombie.getXProperties());
-        this.image.translateYProperty().bind(zombie.getYProperties());
+        imageView = new ImageView(normalImage);
+        imageView.setFitWidth(19);
+        imageView.setFitHeight(32);
+        imageView.setTranslateX(zombie.getXValue());
+        imageView.setTranslateY(zombie.getYValue());
 
+        imageView.translateXProperty().bind(zombie.getXProperties());
+        imageView.translateYProperty().bind(zombie.getYProperties());
 
+        zombie.attaqueLinkProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                imageView.setImage(attackImage);
+            }
+            else {
+                imageView.setImage(normalImage);
+            }
+        });
 
         creerZombie();
     }
 
-    public void creerZombie(){
-        panneauJeu.getChildren().add(this.image);
+    public void creerZombie() {
+        panneauJeu.getChildren().add(imageView);
     }
 }
-
