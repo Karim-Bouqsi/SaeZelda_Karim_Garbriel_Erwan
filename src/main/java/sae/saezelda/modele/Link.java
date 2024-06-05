@@ -2,17 +2,18 @@ package sae.saezelda.modele;
 
 public class Link extends Personnage {
     private Terrain terrain;
-    private Item arme;
+    private Item item;
 
     public Link(Terrain terrain) {
         super("Link", 0, 0, 10, 32, 19, 3, terrain, 100);
         this.terrain = terrain;
-        this.arme = null;
+        this.item = null;
     }
+
     public void utiliser(Item item){
         if(item!=null){
-            System.out.println("Link a ramassé "+item.getNom());
-            this.arme=item;
+            System.out.println("Link a ramassé " + item.getNom());
+            this.item=item;
         }
     }
 

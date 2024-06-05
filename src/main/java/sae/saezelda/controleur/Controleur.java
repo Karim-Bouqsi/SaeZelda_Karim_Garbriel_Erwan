@@ -28,6 +28,7 @@ public class Controleur implements Initializable {
     private Coffre coffre1;
     private CoffreVue coffreVue;
     private Epee epee;
+
     private Link link;
     private LinkVue linkVue;
     @FXML
@@ -44,7 +45,6 @@ public class Controleur implements Initializable {
         ObstacleVue pierreVue = new ObstacleVue(paneJeu, pierre1);
         terrain.ajouterObstacle(pierre1);
 
-        // feature zombie :
 
         epee = new Epee();
 

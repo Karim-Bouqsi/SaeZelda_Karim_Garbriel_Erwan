@@ -13,6 +13,7 @@ public class LinkVue {
     private Pane panneauJeu;
     private TerrainVue terrainVue;
     private ImageView[] imageTab;
+//    private Circle linkCircle;
 
 
     public LinkVue(Link link, Pane panneauJeu, TerrainVue terrainVue) {
@@ -36,11 +37,20 @@ public class LinkVue {
         }
 
 
+//
+//        linkCircle = new Circle(4, Color.RED);
+//        linkCircle.centerXProperty().bind(link.getXProperties());
+//        linkCircle.centerYProperty().bind(link.getYProperties());
+
+
         creeLink();
     }
 
     public void creeLink(){
+
         panneauJeu.getChildren().add(imageTab[0]);
+//        panneauJeu.getChildren().add(linkCircle);
+
     }
 
 
@@ -81,7 +91,7 @@ public class LinkVue {
 
 //        Platform.runLater(() -> {
 //            link.setXValue(x);
-//            link.setYValue(y);
+//            link.setYValue(y);              // efface sa et remmetre le truc en haut
 //        });
     }
 

@@ -44,6 +44,8 @@ public class Terrain {
     }
 
 
+
+
     public int getIndiceTuile(int x, int y) {
         int colonne = x / tailleTuile;
         int ligne = y / tailleTuile;
