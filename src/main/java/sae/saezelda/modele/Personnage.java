@@ -1,6 +1,8 @@
 package sae.saezelda.modele;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public abstract class Personnage {
@@ -18,6 +20,8 @@ public abstract class Personnage {
     private IntegerProperty direction;
     private int largeur;
     private int hauteur;
+    private BooleanProperty mort;
+
 
     public Personnage(String nom, int positionX, int positionY, int capaciteMax, int hauteur, int largeur, int vitesse, Terrain terrain, int pv) {
         this.nom = nom;
@@ -31,6 +35,7 @@ public abstract class Personnage {
         this.vitesse = vitesse;
         this.terrain = terrain;
         this.pv = new SimpleIntegerProperty(pv);
+        this.mort = new SimpleBooleanProperty(false);
 
         direction.addListener((obs, oldVal, newVal) -> {
             int newDirection = newVal.intValue();
@@ -38,53 +43,33 @@ public abstract class Personnage {
             setDirectionValue(newDirection);
         });
     }
-
-    public IntegerProperty getPvProperties() {return pv;}
-    public int getPvValue() {return pv.getValue();}
-    public void setPvValue(int pv) {this.pv.setValue(pv);}
-
-    public IntegerProperty getXProperties() {
-        return this.x;
+    public void setMortValue(boolean bool) {
+        mort.set(bool);
     }
 
-    public int getXValue() {
-        return this.x.getValue();
+
+
+    public BooleanProperty getMortProperty() {
+        return mort;
     }
 
-    public void setXValue(int x) {
-        this.x.setValue(x);
+    public boolean getMortValue() {
+        return mort.get();
     }
 
-    public IntegerProperty getYProperties() {
-        return this.y;
+    public void recevoirDegats(int degats) {
+        setPvValue(getPvValue() - degats);
+        if (getPvValue() <= 0) {
+            mourir();
+        }
+    }
+    public void tuer() {
+        this.mort.set(true);
+        setPvValue(0);
     }
 
-    public int getYValue() {
-        return this.y.getValue();
-    }
-
-    public void setYValue(int y) {
-        this.y.setValue(y);
-    }
-
-    public int getLargeur() {
-        return largeur;
-    }
-
-    public int getHauteur() {
-        return hauteur;
-    }
-
-    public IntegerProperty getDirectionProperty() {
-        return this.direction;
-    }
-
-    public int getDirectionValue() {
-        return this.direction.getValue();
-    }
-
-    public void setDirectionValue(int direction) {
-        this.direction.setValue(direction);
+    public void mourir() {
+        tuer();
     }
 
     public void move() {
@@ -97,7 +82,6 @@ public abstract class Personnage {
                 break;
             case Direction.DOWN:
                 newY += 1;
-//                this.setPvValue(getPvValue() - 1);
                 break;
 
             case Direction.LEFT:
@@ -106,24 +90,30 @@ public abstract class Personnage {
             case Direction.RIGHT:
                 newX += 1;
                 break;
-        }
 
-        Obstacle obstacle = recupererObstacle(newX, newY);
+        }
+        linkVerification(newX, newY);
+    }
+
+    public void linkVerification(int x, int y) {
+
+        Obstacle obstacle = recupererObstacle(x, y);
         if (obstacle != null) {
             pousserPierre(getDirectionValue(), obstacle);
         }
 
-        if (detecterPierre(getDirectionValue(), newX, newY)) {
+        if (detecterPierre(getDirectionValue(), x, y)) {
             System.out.println("Obstacle detecter " + getDirectionValue());
         }
 
-        if (canMove(getDirectionValue(), newX, newY)) {
-            setXValue(newX);
-            setYValue(newY);
+        if (canMove(getDirectionValue(), x, y)) {
+            setXValue(x);
+            setYValue(y);
         }
         else {
             System.out.println("Collision " + getDirectionValue());
         }
+
     }
 
     public boolean canMove(int direction, int x, int y) {
@@ -156,15 +146,6 @@ public abstract class Personnage {
         for (Obstacle obstacle : terrain.getObstacles()) {
             switch (direction) {
                 case Direction.UP:
-//                    System.out.println("x : " + obstacle.getXValue());
-//                    System.out.println("y : " + obstacle.getYValue());
-
-//                    if (x + getLargeur() >= obstacle.getXValue() && x <= obstacle.getXValue() + 32 && (y >= obstacle.getYValue() + 32 && y <= obstacle.getYValue())) {
-//                        return true;
-//                    }
-//                    System.out.println("x de link : " + x + " y de link : " + y);
-//                    System.out.println("x de lobstacle : " + obstacle.getXValue() + "y de lobs : " + obstacle.getYValue());
-
                     if(x >= obstacle.getXValue() && x <= obstacle.getXValue() + obstacle.getLargeurObstacle() && y >= obstacle.getYValue() && y <= obstacle.getYValue()) {
                         return true;
                     }
@@ -239,9 +220,62 @@ public abstract class Personnage {
         return null;
     }
 
-    public String getNom() {
-        return nom;
+
+
+                                    /* GETTEUR / SETTEUR */
+    public String getNom() {return nom;}
+    public IntegerProperty getPvProperties() {return pv;}
+    public int getPvValue() {return pv.getValue();}
+    public void setPvValue(int pv) {this.pv.setValue(pv);}
+
+    public IntegerProperty getXProperties() {
+        return this.x;
     }
+
+    public int getXValue() {
+        return this.x.getValue();
+    }
+
+    public void setXValue(int x) {
+        this.x.setValue(x);
+    }
+
+    public IntegerProperty getYProperties() {
+        return this.y;
+    }
+
+    public int getYValue() {
+        return this.y.getValue();
+    }
+
+    public void setYValue(int y) {
+        this.y.setValue(y);
+    }
+
+    public int getLargeur() {
+        return largeur;
+    }
+
+    public int getHauteur() {
+        return hauteur;
+    }
+
+    public IntegerProperty getDirectionProperty() {
+        return this.direction;
+    }
+
+    public int getDirectionValue() {
+        return this.direction.getValue();
+    }
+
+    public void setDirectionValue(int direction) {
+        this.direction.setValue(direction);
+    }
+
+    public Terrain getTerrain() {
+        return terrain;
+    }
+
 
     @Override
     public String toString() {

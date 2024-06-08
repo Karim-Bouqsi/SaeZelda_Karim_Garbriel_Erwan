@@ -1,5 +1,8 @@
 package sae.saezelda.modele;
 
+import javafx.scene.layout.Pane;
+import sae.saezelda.vue.FlecheVue;
+
 import java.util.ArrayList;
 
 public class Terrain {
@@ -8,6 +11,8 @@ public class Terrain {
     private int largeur = 640;
     private int hauteur = 320;
     private ArrayList<Obstacle> obstacles;
+    private ArrayList<Fleche> fleches;
+    private ArrayList<Zombie> zombies;
     private Link link;
 
 
@@ -25,6 +30,18 @@ public class Terrain {
             0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,2,0,1,1,
     };
 
+    public Terrain() {
+        obstacles = new ArrayList<>();
+        link = new Link(this);
+        this.nom = "Demo";
+        this.fleches = new ArrayList<>();
+        this.zombies = new ArrayList<>();
+    }
+
+    public ArrayList<Zombie> getZombies() {
+        return zombies;
+    }
+
     public int getWidth() {
         return largeur;
     }
@@ -37,12 +54,13 @@ public class Terrain {
         return link;
     }
 
-    public Terrain() {
-        obstacles = new ArrayList<>();
-        link = new Link(this);
-        this.nom = "Demo";
-    }
 
+    public void ajouterFleche(Fleche fleche) {
+        fleches.add(fleche);
+    }
+    public ArrayList<Fleche> getFleches() {
+        return fleches;
+    }
 
     public int getIndiceTuile(int x, int y) {
         int colonne = x / tailleTuile;
@@ -52,6 +70,22 @@ public class Terrain {
             return -1;
         }
         return ligne * (largeur / tailleTuile) + colonne;
+    }
+
+
+    public void faireAvancerLesFleches(Pane panneauJeu) {
+        ArrayList<Fleche> flechesASupprimer = new ArrayList<>();
+        for (int i = 0; i < fleches.size(); i++) {
+            Fleche fleche = fleches.get(i);
+            fleche.deplacer();
+            if (fleche.aDepasseLimites()) {
+                flechesASupprimer.add(fleche);
+            }
+            else {
+                FlecheVue flecheVue = new FlecheVue(fleche, panneauJeu, link);
+            }
+        }
+        fleches.removeAll(flechesASupprimer);
     }
 
 
@@ -70,6 +104,15 @@ public class Terrain {
         return terrain[indice] == 1 || terrain[indice] == 4;
     }
 
+    public void supprimerFleches(ArrayList<Fleche> fleches) {
+        for(int i = 0; i < fleches.size(); i++) {
+            if(estDansLesLimites(fleches.get(i).getX(), fleches.get(i).getX())) {
+                fleches.remove(i);
+            }
+        }
+    }
+
+
 
     public ArrayList<Obstacle> getObstacles() {
         return obstacles;
@@ -81,6 +124,9 @@ public class Terrain {
 
 
 
+    public void ajouterZombie(Zombie zombie) {
+        this.zombies.add(zombie);
+    }
 
 
 
@@ -98,6 +144,9 @@ public class Terrain {
         System.out.println("Nouvelle position valide");
         return true;
     }
+
+
+
 
 
 

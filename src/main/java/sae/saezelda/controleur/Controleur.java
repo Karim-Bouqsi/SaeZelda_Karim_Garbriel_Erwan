@@ -28,15 +28,20 @@ public class Controleur implements Initializable {
     private Coffre coffre1;
     private CoffreVue coffreVue;
     private Epee epee;
+    private Arc arc;
+
     private Link link;
     private LinkVue linkVue;
     @FXML
     private Label pvLink;
 
+    private Terrain terrain;
+    private TerrainVue terrainVue;
+
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Terrain terrain = new Terrain();
-        TerrainVue terrainVue = new TerrainVue(terrain, panneauDeJeu);
-        link = new Link(terrain);
+        terrain = new Terrain();
+        terrainVue = new TerrainVue(terrain, panneauDeJeu);
+        link = terrain.getLink();
         linkVue = new LinkVue(link, paneJeu, terrainVue);
         pvLink.textProperty().bind(link.getPvProperties().asString());
 
@@ -44,24 +49,23 @@ public class Controleur implements Initializable {
         ObstacleVue pierreVue = new ObstacleVue(paneJeu, pierre1);
         terrain.ajouterObstacle(pierre1);
 
-        // feature zombie :
-
         epee = new Epee();
+        arc = new Arc("Arc de Link", 10, 2000);
+//        link.equiperArc(arc);
 
-
-        coffre1 = new Coffre(epee,12*32,2*32,terrain);
+        coffre1 = new Coffre(arc,2*32,0*32,terrain);
         coffreVue = new CoffreVue(coffre1,paneJeu , terrainVue);
 
-
         Zombie zombie = new Zombie(terrain);
+        terrain.ajouterZombie(zombie);
         ZombieVue zombieVue = new ZombieVue(zombie, paneJeu, terrainVue);
+
         gameLoop = new GameLoop(link, linkVue, zombie, zombieVue);
-        gameLoop.startGameLoop();
+        gameLoop.startGameLoop(terrain, paneJeu);
     }
 
     @FXML
     public void touchePresser(KeyEvent event) {
-
         KeyCode code = event.getCode();
         if (code == KeyCode.Z) {
             hPresser = true;
@@ -75,15 +79,17 @@ public class Controleur implements Initializable {
         else if (code == KeyCode.D) {
             dPresser = true;
         }
-        else if (code == KeyCode.E) { // pour le coffre
-            if (coffreDansZone() != null) link.utiliser(coffreDansZone().ouvrir());
+        else if (code == KeyCode.E) {
+            if (coffreDansZone() != null) {
+                link.utiliser(coffreDansZone().ouvrir());
+                link.equiperArc(arc);
+            }
+        }
+        else if (code == KeyCode.A) {
+            link.tirerAvecArc();
         }
         changerDirectionLink();
-//        else if(code == KeyCode.E) {
-//            link.pousser();
-//        }
-
-    } // TODO ici analyse quelle touche, et dire à link sa direction
+    }
 
     @FXML
     public void toucheRelacher(KeyEvent event) {
@@ -101,9 +107,6 @@ public class Controleur implements Initializable {
     }
 
     public Coffre coffreDansZone(){
-        // faire une boucle des qu'il y aura plus de coffre
-//        int tuileCoffre = terrain.getIndiceTuile(coffre1.getX(),coffre1.getY());
-
         if (link.estDansZone(coffre1)){
             if (coffre1.estOuvert()){
                 System.out.println("Le coffre a deja été ouvert");
@@ -117,9 +120,6 @@ public class Controleur implements Initializable {
     }
 
     private void changerDirectionLink() {
-
-        //TODO ajouter les if else pour gérer les diagonales et l'arrêt
-
         if (hPresser) {
             link.setDirectionValue(Direction.UP);
         }

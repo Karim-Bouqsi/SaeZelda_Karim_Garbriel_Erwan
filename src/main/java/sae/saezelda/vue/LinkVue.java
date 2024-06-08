@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import sae.saezelda.Main;
+import sae.saezelda.modele.Direction;
 import sae.saezelda.modele.Link;
 
 public class LinkVue {
@@ -13,6 +14,8 @@ public class LinkVue {
     private Pane panneauJeu;
     private TerrainVue terrainVue;
     private ImageView[] imageTab;
+    private ImageView linkImageView;
+
 
 
     public LinkVue(Link link, Pane panneauJeu, TerrainVue terrainVue) {
@@ -21,69 +24,40 @@ public class LinkVue {
         this.terrainVue = terrainVue;
 
         Image[] images = new Image[4];
-        images[0] = new Image(String.valueOf(Main.class.getResource("/image/personnage/persoFace.png")));
-        images[1] = new Image(String.valueOf(Main.class.getResource("/image/personnage/persoDos.png")));
-        images[2] = new Image(String.valueOf(Main.class.getResource("/image/personnage/persoDroit.png")));
-        images[3] = new Image(String.valueOf(Main.class.getResource("/image/personnage/deplacementGauche.gif")));
+        images[Direction.DOWN] = new Image(String.valueOf(Main.class.getResource("/image/personnage/persoFace.png")));
+        images[Direction.UP] = new Image(String.valueOf(Main.class.getResource("/image/personnage/perso_haut.png")));
+        images[Direction.RIGHT] = new Image(String.valueOf(Main.class.getResource("/image/personnage/perso_droite.png")));
+        images[Direction.LEFT] = new Image(String.valueOf(Main.class.getResource("/image/personnage/perso_gauche.png")));
 
-        imageTab = new ImageView[4];
-        for (int i = 0; i < 4; i++) {
-            imageTab[i] = new ImageView(images[i]);
-            imageTab[i].setFitWidth(19);
-            imageTab[i].setFitHeight(32);
-            imageTab[i].translateXProperty().bind(link.getXProperties());
-            imageTab[i].translateYProperty().bind(link.getYProperties());
-        }
+        Image imageLinkMort = new Image(String.valueOf(Main.class.getResource("/image/personnage/link_mort.png")));
 
+        linkImageView = new ImageView();
+        linkImageView.setFitWidth(19);
+        linkImageView.setFitHeight(32);
+        linkImageView.setImage(images[link.getDirectionValue()]);
 
-        creeLink();
+        panneauJeu.getChildren().add(linkImageView);
+        linkImageView.translateXProperty().bind(link.getXProperties());
+        linkImageView.translateYProperty().bind(link.getYProperties());
+//        creeLink();
+        link.getDirectionProperty().addListener((observable, oldValue, newValue) -> {
+            int direction = newValue.intValue();
+            if (direction >= 0 && direction < images.length) {
+                linkImageView.setImage(images[direction]);
+            }
+        });
+//        link.getMortProperty().addListener((observable, oldValue, newValue) -> {
+//            if (newValue) {
+//                System.out.println("bool true");
+//                linkImageView.setImage(imageLinkMort);
+//            }
+//        });
     }
 
     public void creeLink(){
-        panneauJeu.getChildren().add(imageTab[0]);
+        panneauJeu.getChildren().add(linkImageView);
     }
 
-
-    public void updatePosition(int x, int y, KeyCode keyCode) {
-        Platform.runLater(() -> {
-            link.setXValue(x);
-            link.setYValue(y);
-
-            if (keyCode != null) {
-                ImageView imageAfficher;
-                switch (keyCode) {
-                    case UP:
-                        imageAfficher = imageTab[0]; // haut
-                        break;
-                    case DOWN:
-                        imageAfficher = imageTab[0]; // bas
-                        break;
-                    case LEFT:
-                        imageAfficher = imageTab[0]; // gauche
-                        break;
-                    case RIGHT:
-                        imageAfficher = imageTab[0]; // droite
-                        break;
-                    default:
-                        imageAfficher = null;
-                        break;
-                }
-
-                if (imageAfficher != null) {
-                    for (ImageView imageView : imageTab) {
-                        panneauJeu.getChildren().set(0, imageAfficher);
-//                        imageView.setLayoutX(x);
-//                        imageView.setLayoutY(y);
-                    }
-                }
-            }
-        });
-
-//        Platform.runLater(() -> {
-//            link.setXValue(x);
-//            link.setYValue(y);
-//        });
-    }
 
     public Link getLink() {
         return link;
