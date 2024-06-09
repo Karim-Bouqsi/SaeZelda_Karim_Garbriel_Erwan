@@ -19,7 +19,6 @@ public class Fleche {
         this.direction = new SimpleIntegerProperty(direction);
         this.vitesse = vitesse;
         this.toucher = false;
-
     }
 
 
@@ -66,7 +65,7 @@ public class Fleche {
             case Direction.UP:
                 setY(getY() - vitesse);
                 break;
-            case Direction.DOWN:
+            case Direction.DOWN, Direction.NEUTRE:
                 setY(getY() + vitesse);
                 break;
             case Direction.LEFT:
@@ -75,8 +74,28 @@ public class Fleche {
             case Direction.RIGHT:
                 setX(getX() + vitesse);
                 break;
+
+//            case Direction.UP_LEFT, Direction.UP_RIGHT, Direction.DOWN_LEFT, Direction.DOWN_RIGHT:
+//                break;
+
+            case Direction.UP_LEFT:
+                setX(getX() - vitesse);
+                setY(getY() - vitesse);
+                break;
+            case Direction.UP_RIGHT:
+                setX(getX() + vitesse);
+                setY(getY() - vitesse);
+                break;
+            case Direction.DOWN_LEFT:
+                setX(getX() - vitesse);
+                setY(getY() + vitesse);
+                break;
+            case Direction.DOWN_RIGHT:
+                setX(getX() + vitesse);
+                setY(getY() + vitesse);
+                break;
+
         }
-        // TODO : appeler touchecible
         toucheCible();
 
     }
@@ -92,7 +111,7 @@ public class Fleche {
             boolean toucher = false;
 
             switch (direction.get()) {
-                case Direction.RIGHT:
+                case Direction.RIGHT :
                     if (getX() + getLargeur() >= zombie.getXValue() && getX() + getLargeur() <= zombie.getXValue() + 19 && getY() >= zombie.getYValue() && getY() <= zombie.getYValue() + 32) {
                         zombie.setXValue(zombie.getXValue() + 30);
                         toucher = true;
@@ -110,17 +129,16 @@ public class Fleche {
                         toucher = true;
                     }
                     break;
-                case Direction.DOWN:
+                case Direction.DOWN, Direction.NEUTRE:
                     if (getX() >= zombie.getXValue() && getX() <= zombie.getXValue() + 19 && getY() + 12 >= zombie.getYValue() && getY() + 12 <= zombie.getYValue() + 19) {
                         zombie.setYValue(zombie.getYValue() + 30);
                         toucher = true;
                     }
                     break;
             }
-
             if (toucher) {
                 this.toucher = true;
-                zombie.recevoirDegats(10);
+                zombie.recevoirDegats(25);
                 return true;
             }
         }

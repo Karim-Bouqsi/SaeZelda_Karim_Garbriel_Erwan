@@ -31,10 +31,14 @@ public class Zombie extends Personnage {
             direction = Direction.DOWN;
         }
         setDirectionValue(direction);
-        super.move();
+        int[] indiceTab = super.move();
+        int newX = indiceTab[0];
+        int newY = indiceTab[1];
 
-        if ((moveUp && !super.canMove(direction, getXValue(), getYValue() - 1)) ||
-                (!moveUp && !super.canMove(direction, getXValue(), getYValue() + 1))) {
+        if (super.canMove(direction, newX, newY)) {
+            setXValue(newX);
+            setYValue(newY);
+        } else {
             moveUp = !moveUp;
         }
         System.out.println(getPvValue());

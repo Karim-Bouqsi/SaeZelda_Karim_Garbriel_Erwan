@@ -26,26 +26,25 @@ public class FlecheVue {
         this.terrainVue = terrainVue;
         this.link = link;
 
-        Image[] imagesFleches = new Image[4];
+        Image[] imagesFleches = new Image[9];
         imagesFleches[3] = new Image(String.valueOf(Main.class.getResource("/image/fleche11x3.png")));
         imagesFleches[2] = new Image(String.valueOf(Main.class.getResource("/image/fleche_gauche.png")));
         imagesFleches[0] = new Image(String.valueOf(Main.class.getResource("/image/fleche_haut.png")));
         imagesFleches[1] = new Image(String.valueOf(Main.class.getResource("/image/fleche_bas.png")));
+        imagesFleches[4] = new Image(String.valueOf(Main.class.getResource("/image/fleche_bas.png")));
+        imagesFleches[5] = new Image(String.valueOf(Main.class.getResource("/image/fleche_gauche.png")));
+        imagesFleches[6] = new Image(String.valueOf(Main.class.getResource("/image/fleche_gauche.png")));
+        imagesFleches[7] = new Image(String.valueOf(Main.class.getResource("/image/fleche_gauche.png")));
+        imagesFleches[8] = new Image(String.valueOf(Main.class.getResource("/image/fleche_gauche.png")));
+
 
         flecheImageView = new ImageView();
 
-        flecheImageView.setImage(imagesFleches[link.getDirectionValue()]);
+
+        flecheImageView.setImage(imagesFleches[fleche.getDirectionProperties().get()]);
         panneauJeu.getChildren().add(flecheImageView);
         flecheImageView.translateXProperty().bind(fleche.xProperty());
         flecheImageView.translateYProperty().bind(fleche.yProperty());
-
-        link.getDirectionProperty().addListener((observable, oldValue, newValue) -> {
-            int direction = newValue.intValue();
-            System.out.println(newValue.intValue());
-            if (direction >= 0 && direction < imagesFleches.length) {
-                flecheImageView.setImage(imagesFleches[direction]);
-            }
-        });
 
     }
 

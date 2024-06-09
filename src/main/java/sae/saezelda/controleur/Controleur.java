@@ -120,17 +120,25 @@ public class Controleur implements Initializable {
     }
 
     private void changerDirectionLink() {
-        if (hPresser) {
+        if (hPresser && gPresser) {
+            link.setDirectionValue(Direction.UP_LEFT);
+        } else if (hPresser && dPresser) {
+            link.setDirectionValue(Direction.UP_RIGHT);
+        } else if (bPresser && gPresser) {
+            link.setDirectionValue(Direction.DOWN_LEFT);
+        } else if (bPresser && dPresser) {
+            link.setDirectionValue(Direction.DOWN_RIGHT);
+        } else if (hPresser) {
             link.setDirectionValue(Direction.UP);
-        }
-        if (bPresser) {
+        } else if (bPresser) {
             link.setDirectionValue(Direction.DOWN);
-        }
-        if (gPresser) {
+        } else if (gPresser) {
             link.setDirectionValue(Direction.LEFT);
-        }
-        if (dPresser) {
+        } else if (dPresser) {
             link.setDirectionValue(Direction.RIGHT);
+        } else {
+            link.setDirectionValue(Direction.NEUTRE);
         }
     }
+
 }

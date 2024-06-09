@@ -11,6 +11,8 @@ public class Link extends Personnage {
     private Arc arc;
     private int cooldown;
     private int cooldownCompteur;
+    private BooleanProperty arcEquipe;
+
 
     public Link(Terrain terrain) {
         super("Link", 0, 0, 10, 32, 19, 3, terrain, 100);
@@ -19,6 +21,8 @@ public class Link extends Personnage {
         this.arc = null;
         this.cooldown = 60;
         this.cooldownCompteur = 0;
+        this.arcEquipe = new SimpleBooleanProperty(false);
+
     }
 
 
@@ -44,6 +48,74 @@ public class Link extends Personnage {
 
 
 
+    public void linkMove() {
+        int[] tabindice = super.move();
+        linkVerification(tabindice[0],tabindice[1]);
+    }
+
+    public void pousserPierre(int direction, Obstacle pierre) {
+        int newX = pierre.getXValue();
+        int newY = pierre.getYValue();
+
+        switch (direction) {
+            case Direction.UP:
+                newY -= 1;
+                break;
+            case Direction.DOWN:
+                newY += 1;
+                break;
+            case Direction.LEFT:
+                newX -= 1;
+                break;
+            case Direction.RIGHT:
+                newX += 1;
+                break;
+            case Direction.UP_LEFT, Direction.UP_RIGHT, Direction.DOWN_LEFT, Direction.DOWN_RIGHT:
+                break;
+        }
+
+        if (terrain.nouvellePositionValide(newX, newY)) {
+            switch (direction) {
+                case Direction.UP:
+                    pierre.move(0, -3);
+                    break;
+                case Direction.DOWN:
+                    pierre.move(0, 3);
+                    break;
+                case Direction.LEFT:
+                    pierre.move(-3, 0);
+                    break;
+                case Direction.RIGHT:
+                    pierre.move(3, 0);
+                    break;
+                case Direction.UP_LEFT, Direction.UP_RIGHT, Direction.DOWN_LEFT, Direction.DOWN_RIGHT:
+                    break;
+            }
+        }
+    }
+    public void linkVerification(int x, int y) {
+
+        Obstacle obstacle = recupererObstacle(x, y);
+        if (obstacle != null) {
+            pousserPierre(getDirectionValue(), obstacle);
+        }
+
+        if (detecterPierre(getDirectionValue(), x, y)) {
+            System.out.println("Obstacle detecter " + getDirectionValue());
+        }
+
+        if (canMove(getDirectionValue(), x, y)) {
+            setXValue(x);
+            setYValue(y);
+        }
+        else {
+            System.out.println("Collision " + getDirectionValue());
+        }
+
+    }
+
+
+
 
 
     public void utiliser(Item item){
@@ -53,6 +125,23 @@ public class Link extends Personnage {
         }
     }
 
+    public BooleanProperty getArcEquipeProperty() {
+        return arcEquipe;
+    }
+
+    public boolean arcEquipeValue() {
+        return arcEquipe.get();
+    }
+
+    public void setArcEquipe(boolean arcEquipe) {
+        this.arcEquipe.set(arcEquipe);
+    }
+
+
+    public void desequiperArc() {
+        this.arc = null;
+        setArcEquipe(false);
+    }
 
     public void equiperArc(Arc arc) {
         this.arc = arc;

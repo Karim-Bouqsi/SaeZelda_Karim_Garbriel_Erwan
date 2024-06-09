@@ -43,7 +43,7 @@ public class GameLoop {
     }
 
     private void updateGame(Terrain terrain, Pane paneJeu) {
-        link.move();
+        link.linkMove();
         int linkX = link.getXValue();
         int linkY = link.getYValue();
 

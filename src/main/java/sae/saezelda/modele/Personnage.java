@@ -29,7 +29,7 @@ public abstract class Personnage {
         compteur++;
         this.x = new SimpleIntegerProperty(positionX);
         this.y = new SimpleIntegerProperty(positionY);
-        this.direction = new SimpleIntegerProperty(Direction.UP);
+        this.direction = new SimpleIntegerProperty(Direction.NEUTRE);
         this.largeur = largeur;
         this.hauteur = hauteur;
         this.vitesse = vitesse;
@@ -72,49 +72,63 @@ public abstract class Personnage {
         tuer();
     }
 
-    public void move() {
+    public int[] move() {
+
+        int[] indicetab = new int[2];
         int newX = getXValue();
         int newY = getYValue();
+        indicetab[0] = newX;
+        indicetab[1] = newY;
 
         switch (getDirectionValue()) {
             case Direction.UP:
                 newY -= 1;
+                indicetab[1] = newY;
                 break;
             case Direction.DOWN:
                 newY += 1;
+                indicetab[1] = newY;
                 break;
 
             case Direction.LEFT:
                 newX -= 1;
+                indicetab[0] = newX;
                 break;
             case Direction.RIGHT:
                 newX += 1;
+                indicetab[0] = newX;
+                break;
+            case Direction.UP_LEFT:
+                newY -= 1;
+                newX -= 1;
+                indicetab[0] = newX;
+                indicetab[1] = newY;
+                break;
+            case Direction.UP_RIGHT:
+                newY -= 1;
+                newX += 1;
+                indicetab[0] = newX;
+                indicetab[1] = newY;
+                break;
+            case Direction.DOWN_LEFT:
+                newY += 1;
+                newX -= 1;
+                indicetab[0] = newX;
+                indicetab[1] = newY;
+                break;
+            case Direction.DOWN_RIGHT:
+                newY += 1;
+                newX += 1;
+                indicetab[0] = newX;
+                indicetab[1] = newY;
+                break;
+            case Direction.NEUTRE:
                 break;
 
         }
-        linkVerification(newX, newY);
+        return indicetab;
     }
 
-    public void linkVerification(int x, int y) {
-
-        Obstacle obstacle = recupererObstacle(x, y);
-        if (obstacle != null) {
-            pousserPierre(getDirectionValue(), obstacle);
-        }
-
-        if (detecterPierre(getDirectionValue(), x, y)) {
-            System.out.println("Obstacle detecter " + getDirectionValue());
-        }
-
-        if (canMove(getDirectionValue(), x, y)) {
-            setXValue(x);
-            setYValue(y);
-        }
-        else {
-            System.out.println("Collision " + getDirectionValue());
-        }
-
-    }
 
     public boolean canMove(int direction, int x, int y) {
         switch (direction) {
@@ -136,6 +150,32 @@ public abstract class Personnage {
                 return terrain.estDansLesLimites(x, y) &&
                         !terrain.estObstacle(x + getLargeur(), y + getHauteur() - marge) && // droite bas
                         !detecterPierre(direction, x, y);
+            case Direction.UP_LEFT:
+                return terrain.estDansLesLimites(x - 1, y - 1) &&
+                        !terrain.estObstacle(x - 1, y - 1 + getHauteur() - marge) &&
+                        !terrain.estObstacle(x - 1 + getLargeur(), y - 1 + getHauteur() - marge) &&
+                        !terrain.estObstacle(x - 1, y - 1) &&
+                        !detecterPierre(direction, x - 1, y - 1);
+            case Direction.UP_RIGHT:
+                return terrain.estDansLesLimites(x + 1, y - 1) &&
+                        !terrain.estObstacle(x + 1, y - 1 + getHauteur() - marge) &&
+                        !terrain.estObstacle(x + 1 + getLargeur(), y - 1 + getHauteur() - marge) &&
+                        !terrain.estObstacle(x + 1, y - 1) &&
+                        !detecterPierre(direction, x + 1, y - 1);
+            case Direction.DOWN_LEFT:
+                return terrain.estDansLesLimites(x - 1, y + 1) &&
+                        !terrain.estObstacle(x - 1, y + 1 + getHauteur()) &&
+                        !terrain.estObstacle(x - 1 + getLargeur(), y + 1 + getHauteur()) &&
+                        !terrain.estObstacle(x - 1, y + 1) &&
+                        !detecterPierre(direction, x - 1, y + 1);
+            case Direction.DOWN_RIGHT:
+                return terrain.estDansLesLimites(x + 1, y + 1) &&
+                        !terrain.estObstacle(x + 1, y + 1 + getHauteur()) &&
+                        !terrain.estObstacle(x + 1 + getLargeur(), y + 1 + getHauteur()) &&
+                        !terrain.estObstacle(x + 1, y + 1) &&
+                        !detecterPierre(direction, x + 1, y + 1);
+            case Direction.NEUTRE:
+                return true;
             default:
                 return false;
         }
@@ -156,13 +196,13 @@ public abstract class Personnage {
                         return true;
                     }
                     break;
-                case Direction.LEFT:
+                case Direction.LEFT, Direction.DOWN_LEFT, Direction.UP_LEFT:
                     if (x <= obstacle.getXValue() + obstacle.getLargeurObstacle() && x >= obstacle.getXValue() &&
                             y + getHauteur() >= obstacle.getYValue() && y <= obstacle.getYValue()) {
                         return true;
                     }
                     break;
-                case Direction.RIGHT:
+                case Direction.RIGHT, Direction.DOWN_RIGHT, Direction.UP_RIGHT:
                     if (x + getLargeur() >= obstacle.getXValue() && x <= obstacle.getXValue() + obstacle.getLargeurObstacle() &&
                             y + getHauteur() >= obstacle.getYValue() && y <= obstacle.getYValue()) {
                         return true;
@@ -174,42 +214,7 @@ public abstract class Personnage {
     }
 
 
-    private void pousserPierre(int direction, Obstacle pierre) {
-        int newX = pierre.getXValue();
-        int newY = pierre.getYValue();
 
-        switch (direction) {
-            case Direction.UP:
-                newY -= 1;
-                break;
-            case Direction.DOWN:
-                newY += 1;
-                break;
-            case Direction.LEFT:
-                newX -= 1;
-                break;
-            case Direction.RIGHT:
-                newX += 1;
-                break;
-        }
-
-        if (terrain.nouvellePositionValide(newX, newY)) {
-            switch (direction) {
-                case Direction.UP:
-                    pierre.move(0, -3);
-                    break;
-                case Direction.DOWN:
-                    pierre.move(0, 3);
-                    break;
-                case Direction.LEFT:
-                    pierre.move(-3, 0);
-                    break;
-                case Direction.RIGHT:
-                    pierre.move(3, 0);
-                    break;
-            }
-        }
-    }
 
     public Obstacle recupererObstacle(int x, int y) {
         for (Obstacle obstacle : terrain.getObstacles()) {
