@@ -1,10 +1,12 @@
 package sae.saezelda.controleur;
 
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
 import sae.saezelda.GameLoop;
@@ -32,6 +34,10 @@ public class Controleur implements Initializable {
     private LinkVue linkVue;
     @FXML
     private Label pvLink;
+    @FXML
+    private GridPane inventaireGrid;
+
+    private InventaireVue inventaireVue;
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Terrain terrain = new Terrain();
@@ -43,6 +49,15 @@ public class Controleur implements Initializable {
         Pierre pierre1 = new Pierre(80, 50);
         ObstacleVue pierreVue = new ObstacleVue(paneJeu, pierre1);
         terrain.ajouterObstacle(pierre1);
+
+        // feature inventaire
+        inventaireVue = new InventaireVue(inventaireGrid,link);
+        link.getInventaire().addListener(new ListChangeListener() {
+            @Override
+            public void onChanged(Change change) {
+                inventaireVue.dessinePane();
+            }
+        });
 
         // feature zombie :
 
@@ -133,4 +148,6 @@ public class Controleur implements Initializable {
             link.setDirectionValue(Direction.RIGHT);
         }
     }
+
+
 }
