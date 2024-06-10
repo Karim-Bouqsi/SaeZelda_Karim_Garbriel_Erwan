@@ -1,13 +1,14 @@
 package sae.saezelda.modele;
-
 public class Link extends Personnage {
     private Terrain terrain;
     private Item item;
+
 
     public Link(Terrain terrain) {
         super("Link", 0, 0, 10, 32, 19, 3, terrain, 100);
         this.terrain = terrain;
         this.item = null;
+
     }
 
     public void utiliser(Item item){

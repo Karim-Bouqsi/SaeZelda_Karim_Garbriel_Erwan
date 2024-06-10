@@ -9,7 +9,6 @@ public class ObstacleVue {
     private Pane panneauJeu;
     private ImageView imageObstacle;
 
-    //TODO dans package vue
     public ObstacleVue(Pane panneauJeu, Obstacle obstacle) {
         this.obstacle = obstacle;
         this.panneauJeu = panneauJeu;

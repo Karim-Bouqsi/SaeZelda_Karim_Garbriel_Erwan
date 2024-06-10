@@ -24,11 +24,6 @@ public class GameLoop {
         this.zombieVue = zombieVue;
     }
 
-//    @Override
-//    public void initialize(URL location, ResourceBundle resources) {
-//        this.startGameLoop();
-//    }
-
     public void startGameLoop() {
         Duration duration = Duration.millis(1000.0 / FPS);
         KeyFrame keyFrame = new KeyFrame(duration, event -> {
@@ -44,7 +39,6 @@ public class GameLoop {
         link.move();
         int linkX = link.getXValue();
         int linkY = link.getYValue();
-
         zombie.deplacerVersLink(linkX, linkY);
     }
 }

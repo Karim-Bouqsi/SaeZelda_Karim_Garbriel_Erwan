@@ -1,5 +1,9 @@
 package sae.saezelda.modele;
 
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
+
+
 import java.util.ArrayList;
 
 public class Terrain {
@@ -9,6 +13,7 @@ public class Terrain {
     private int hauteur = 320;
     private ArrayList<Obstacle> obstacles;
     private Link link;
+    private ArrayList<Bombe> bombes;
 
 
 
@@ -39,12 +44,19 @@ public class Terrain {
 
     public Terrain() {
         obstacles = new ArrayList<>();
+        bombes = new ArrayList<>();
         link = new Link(this);
         this.nom = "Demo";
     }
 
 
 
+    public ArrayList<Bombe> getBombes() {
+        return bombes;
+    }
+    public void retirerObstacle(Obstacle obstacle) {
+        obstacles.remove(obstacle);
+    }
 
     public int getIndiceTuile(int x, int y) {
         int colonne = x / tailleTuile;
@@ -55,7 +67,6 @@ public class Terrain {
         }
         return ligne * (largeur / tailleTuile) + colonne;
     }
-
 
     public boolean estDansLesLimites(int x, int y) {
         if(x >= 0 && x <= largeur - link.getLargeur() && y >= -link.getHauteur() && y <= hauteur - link.getHauteur()) {
@@ -72,6 +83,13 @@ public class Terrain {
         return terrain[indice] == 1 || terrain[indice] == 4;
     }
 
+    public void ajouterBombe(Bombe bombe) {
+        bombes.add(bombe);
+    }
+
+    public void retirerBombe(Bombe bombe) {
+        bombes.remove(bombe);
+    }
 
     public ArrayList<Obstacle> getObstacles() {
         return obstacles;

@@ -55,6 +55,10 @@ public class Controleur implements Initializable {
 
         Zombie zombie = new Zombie(terrain);
         ZombieVue zombieVue = new ZombieVue(zombie, paneJeu, terrainVue);
+
+        Bombe bombe = new Bombe("bombe", 15, 100,100,terrain);
+        BombeVue bombeVue = new BombeVue(bombe, paneJeu);
+
         gameLoop = new GameLoop(link, linkVue, zombie, zombieVue);
         gameLoop.startGameLoop();
     }
@@ -77,6 +81,9 @@ public class Controleur implements Initializable {
         }
         else if (code == KeyCode.E) { // pour le coffre
             if (coffreDansZone() != null) link.utiliser(coffreDansZone().ouvrir());
+        }
+        else if (code == KeyCode.B) {
+            placerBombe();
         }
         changerDirectionLink();
 //        else if(code == KeyCode.E) {
@@ -133,4 +140,12 @@ public class Controleur implements Initializable {
             link.setDirectionValue(Direction.RIGHT);
         }
     }
+    public void placerBombe() {
+        Bombe bombe = new Bombe("Bombe", 50, link.getXValue(), link.getYValue(), link.getTerrain());
+        BombeVue bombeVue = new BombeVue(bombe, paneJeu);
+        link.getTerrain().ajouterBombe(bombe);
+        bombe.bombeExplose();
+    }
+
+
 }
