@@ -97,7 +97,6 @@ public abstract class Personnage {
                 break;
             case Direction.DOWN:
                 newY += 1;
-//                this.setPvValue(getPvValue() - 1);
                 break;
 
             case Direction.LEFT:
@@ -120,9 +119,6 @@ public abstract class Personnage {
         if (canMove(getDirectionValue(), newX, newY)) {
             setXValue(newX);
             setYValue(newY);
-        }
-        else {
-            System.out.println("Collision " + getDirectionValue());
         }
     }
 

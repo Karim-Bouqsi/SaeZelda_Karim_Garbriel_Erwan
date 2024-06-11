@@ -15,7 +15,7 @@ public class BombeVue {
         this.bombe = bombe;
         this.panneauJeu = panneauJeu;
 
-        Image bombeImage = new Image(String.valueOf(Main.class.getResource("/image/bombe.png")));
+        Image bombeImage = new Image(String.valueOf(Main.class.getResource("/image/bombe.gif")));
         bombeImageView = new ImageView(bombeImage);
 
         bombeImageView.translateXProperty().bind(bombe.getXProperty());
@@ -25,7 +25,6 @@ public class BombeVue {
 
     public void detruireBombe() {
         panneauJeu.getChildren().remove(bombeImageView);
-        System.out.println("Bombe détruite");
     }
 
     public Bombe getBombe() {

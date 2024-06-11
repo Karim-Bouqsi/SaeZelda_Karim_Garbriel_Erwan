@@ -1,5 +1,7 @@
 package sae.saezelda.controleur;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -7,6 +9,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
+import javafx.util.Duration;
 import sae.saezelda.GameLoop;
 import sae.saezelda.modele.*;
 import sae.saezelda.vue.*;
@@ -33,6 +36,8 @@ public class Controleur implements Initializable {
     private LinkVue linkVue;
     @FXML
     private Label pvLink;
+    private MonObservableListeBombe observableListeBombe;
+
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Terrain terrain = new Terrain();
@@ -40,9 +45,12 @@ public class Controleur implements Initializable {
         link = new Link(terrain);
         linkVue = new LinkVue(link, paneJeu, terrainVue);
         pvLink.textProperty().bind(link.getPvProperties().asString());
-
+        MonObservableListeObstacle observableListeObstacle = new MonObservableListeObstacle(paneJeu);
+        terrain.getObstacles().addListener(observableListeObstacle);
+        observableListeBombe = new MonObservableListeBombe(paneJeu);
+        link.getTerrain().getBombes().addListener(observableListeBombe);
         Pierre pierre1 = new Pierre(80, 50);
-        ObstacleVue pierreVue = new ObstacleVue(paneJeu, pierre1);
+//        ObstacleVue pierreVue = new ObstacleVue(paneJeu, pierre1);
         terrain.ajouterObstacle(pierre1);
 
 
@@ -56,8 +64,12 @@ public class Controleur implements Initializable {
         Zombie zombie = new Zombie(terrain);
         ZombieVue zombieVue = new ZombieVue(zombie, paneJeu, terrainVue);
 
-        Bombe bombe = new Bombe("bombe", 15, 100,100,terrain);
-        BombeVue bombeVue = new BombeVue(bombe, paneJeu);
+
+//        Bombe bombe2 = new Bombe("Bombe", 50, 100, 100, terrain);
+//        bombe2.bombeExplose();
+
+//        Bombe bombe = new Bombe("bombe", 15, 100,100,terrain);
+//        BombeVue bombeVue = new BombeVue(bombe, paneJeu);
 
         gameLoop = new GameLoop(link, linkVue, zombie, zombieVue);
         gameLoop.startGameLoop();
@@ -83,12 +95,10 @@ public class Controleur implements Initializable {
             if (coffreDansZone() != null) link.utiliser(coffreDansZone().ouvrir());
         }
         else if (code == KeyCode.B) {
-            placerBombe();
+            link.placerBombe();
         }
         changerDirectionLink();
-//        else if(code == KeyCode.E) {
-//            link.pousser();
-//        }
+
 
     } // TODO ici analyse quelle touche, et dire à link sa direction
 
@@ -140,12 +150,4 @@ public class Controleur implements Initializable {
             link.setDirectionValue(Direction.RIGHT);
         }
     }
-    public void placerBombe() {
-        Bombe bombe = new Bombe("Bombe", 50, link.getXValue(), link.getYValue(), link.getTerrain());
-        BombeVue bombeVue = new BombeVue(bombe, paneJeu);
-        link.getTerrain().ajouterBombe(bombe);
-        bombe.bombeExplose();
-    }
-
-
 }

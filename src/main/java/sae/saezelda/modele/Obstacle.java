@@ -5,15 +5,20 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.image.Image;
 
 public abstract class Obstacle {
+    private static int nextId = 1;
+    private final int id;
     private IntegerProperty x;
     private IntegerProperty y;
     private int hauteur;
     private int largeur;
     private Image image;
+    private String cheminImage;
 
 // mettre varialbe hauteur/largeur de l'obstacle
 
     public Obstacle(int x, int y, String cheminImage, int hauteur, int largeur) {
+        this.id = nextId++;
+
         this.x = new SimpleIntegerProperty(x);
         this.y = new SimpleIntegerProperty(y);
         this.image = new Image(cheminImage);
@@ -49,6 +54,9 @@ public abstract class Obstacle {
         return this.image;
     }
 
+    public String getCheminImage() {
+        return cheminImage;
+    }
 
     public void move(int x, int y) {
         setXValue(getXValue() + x);
@@ -69,6 +77,8 @@ public abstract class Obstacle {
     public int getLargeurObstacle() {
         return largeur;
     }
-
+    public int getId() {
+        return id;
+    }
 
 }

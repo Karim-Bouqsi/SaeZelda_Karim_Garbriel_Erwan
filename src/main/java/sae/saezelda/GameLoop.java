@@ -3,6 +3,7 @@ package sae.saezelda;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
+import sae.saezelda.modele.Bombe;
 import sae.saezelda.modele.Link;
 import sae.saezelda.modele.Zombie;
 import sae.saezelda.vue.LinkVue;

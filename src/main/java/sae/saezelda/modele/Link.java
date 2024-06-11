@@ -14,8 +14,27 @@ public class Link extends Personnage {
     public void utiliser(Item item){
         if(item!=null){
             System.out.println("Link a ramassé " + item.getNom());
-            this.item=item;
+            this.item = item;
         }
+    }
+    public void placerBombe() {
+        Bombe bombe = new Bombe("Bombe", 50, getXValue(), getYValue(), getTerrain());
+        getTerrain().ajouterBombe(bombe);
+        bombe.cooldownBombeEtExplose();
+    }
+
+    public void recevoirDegats(int degats) {
+        setPvValue(getPvValue() - degats);
+    }
+
+    public boolean estDansZoneBombe(int bombeX, int bombeY) {
+        int linkX = getXValue();
+        int linkY = getYValue();
+
+        System.out.println(linkX);
+        System.out.println(linkY);
+        return linkX - 19 < bombeX + 32 && linkX + (19 * 2) > bombeX &&
+                linkY - 32 <bombeY + 32 && linkY + (32 * 2) > bombeY;
     }
 
     public boolean estDansZone(Coffre coffre){

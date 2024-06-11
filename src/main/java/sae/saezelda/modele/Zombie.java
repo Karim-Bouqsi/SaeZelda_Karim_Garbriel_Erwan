@@ -3,20 +3,10 @@ package sae.saezelda.modele;
 import javafx.beans.property.IntegerProperty;
 
 public class Zombie extends Personnage {
-    private Terrain terrain;  // TODO attention : déjà dans la super classe
     private boolean moveUp = true;
 
     public Zombie(Terrain terrain) {
         super("ZombieMan", 400, 110, 20, 32, 19, 4, terrain, 50);
-        this.terrain = terrain;
-    }
-
-    public IntegerProperty getXProperty() {
-        return super.getXProperties();
-    }
-
-    public IntegerProperty getYProperty() {
-        return super.getYProperties();
     }
 
 

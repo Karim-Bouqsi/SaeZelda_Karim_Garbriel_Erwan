@@ -37,62 +37,11 @@ public class LinkVue {
         }
 
 
-//
-//        linkCircle = new Circle(4, Color.RED);
-//        linkCircle.centerXProperty().bind(link.getXProperties());
-//        linkCircle.centerYProperty().bind(link.getYProperties());
-
-
         creeLink();
     }
 
     public void creeLink(){
-
         panneauJeu.getChildren().add(imageTab[0]);
-//        panneauJeu.getChildren().add(linkCircle);
-
-    }
-
-
-    public void updatePosition(int x, int y, KeyCode keyCode) {
-        Platform.runLater(() -> {
-            link.setXValue(x);
-            link.setYValue(y);
-
-            if (keyCode != null) {
-                ImageView imageAfficher;
-                switch (keyCode) {
-                    case UP:
-                        imageAfficher = imageTab[0]; // haut
-                        break;
-                    case DOWN:
-                        imageAfficher = imageTab[0]; // bas
-                        break;
-                    case LEFT:
-                        imageAfficher = imageTab[0]; // gauche
-                        break;
-                    case RIGHT:
-                        imageAfficher = imageTab[0]; // droite
-                        break;
-                    default:
-                        imageAfficher = null;
-                        break;
-                }
-
-                if (imageAfficher != null) {
-                    for (ImageView imageView : imageTab) {
-                        panneauJeu.getChildren().set(0, imageAfficher);
-//                        imageView.setLayoutX(x);
-//                        imageView.setLayoutY(y);
-                    }
-                }
-            }
-        });
-
-//        Platform.runLater(() -> {
-//            link.setXValue(x);
-//            link.setYValue(y);              // efface sa et remmetre le truc en haut
-//        });
     }
 
     public Link getLink() {

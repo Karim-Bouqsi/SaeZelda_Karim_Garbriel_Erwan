@@ -2,6 +2,8 @@ package sae.saezelda.modele;
 
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 
 import java.util.ArrayList;
@@ -11,9 +13,9 @@ public class Terrain {
     private int tailleTuile = 32;
     private int largeur = 640;
     private int hauteur = 320;
-    private ArrayList<Obstacle> obstacles;
+    private ObservableList<Obstacle> obstacles;
     private Link link;
-    private ArrayList<Bombe> bombes;
+    private ObservableList<Bombe> bombes;
 
 
 
@@ -43,20 +45,24 @@ public class Terrain {
     }
 
     public Terrain() {
-        obstacles = new ArrayList<>();
-        bombes = new ArrayList<>();
+        obstacles = FXCollections.observableArrayList();
+        bombes = FXCollections.observableArrayList();
         link = new Link(this);
         this.nom = "Demo";
     }
 
 
 
-    public ArrayList<Bombe> getBombes() {
+    public ObservableList<Bombe> getBombes() {
         return bombes;
     }
-    public void retirerObstacle(Obstacle obstacle) {
+
+   public void retirerObstacle(Obstacle obstacle) {
         obstacles.remove(obstacle);
     }
+
+
+
 
     public int getIndiceTuile(int x, int y) {
         int colonne = x / tailleTuile;
@@ -91,18 +97,14 @@ public class Terrain {
         bombes.remove(bombe);
     }
 
-    public ArrayList<Obstacle> getObstacles() {
-        return obstacles;
-    }
 
     public void ajouterObstacle(Obstacle obstacle) {
         obstacles.add(obstacle);
     }
 
-
-
-
-
+    public ObservableList<Obstacle> getObstacles() {
+        return obstacles;
+    }
 
     public boolean nouvellePositionValide(int x, int y) {
         if (!estDansLesLimites(x, y)) {
@@ -118,6 +120,8 @@ public class Terrain {
         System.out.println("Nouvelle position valide");
         return true;
     }
+
+
 
 
 
