@@ -111,6 +111,7 @@ public abstract class Personnage {
                 indicetab[1] = newY;
                 break;
             case Direction.DOWN_LEFT:
+                System.out.println("ok");
                 newY += 1;
                 newX -= 1;
                 indicetab[0] = newX;

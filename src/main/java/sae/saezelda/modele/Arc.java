@@ -2,7 +2,7 @@ package sae.saezelda.modele;
 
 public class Arc extends Arme {
     private int nbFleche;
-    private int portee = 200; // en px TODO Ajouter une portée à l'arc si le temps est favorable
+    private int portee = 200;
 
     public Arc(String nom, int ptAtt, int nbFleche) {
         super(nom, ptAtt);

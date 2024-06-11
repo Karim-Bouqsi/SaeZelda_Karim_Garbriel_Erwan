@@ -48,11 +48,20 @@ public class Controleur implements Initializable {
         terrainVue = new TerrainVue(terrain, panneauDeJeu);
         link = terrain.getLink();
         linkVue = new LinkVue(link, paneJeu, terrainVue);
+
         pvLink.textProperty().bind(link.getPvProperties().asString());
+
         MonObservableListeObstacle observableListeObstacle = new MonObservableListeObstacle(paneJeu);
         terrain.getObstacles().addListener(observableListeObstacle);
+
         observableListeBombe = new MonObservableListeBombe(paneJeu);
         link.getTerrain().getBombes().addListener(observableListeBombe);
+
+        MonObservableListeFleche observableListeFleche = new MonObservableListeFleche(paneJeu);
+        terrain.getFleches().addListener(observableListeFleche);
+
+
+
         Pierre pierre1 = new Pierre(80, 50);
 //        ObstacleVue pierreVue = new ObstacleVue(paneJeu, pierre1);
         terrain.ajouterObstacle(pierre1);

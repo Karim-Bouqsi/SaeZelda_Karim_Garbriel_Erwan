@@ -49,9 +49,7 @@ public class GameLoop {
         int linkY = link.getYValue();
         zombie.deplacerVersLink(linkX, linkY);
 
-//        updateFleches(terrain, paneJeu);
-        terrain.faireAvancerLesFleches(paneJeu);
+        terrain.faireAvancerLesFleches();
         link.decrementCooldown();
-//        System.out.println(terrain.getFleches().size());
     }
 }

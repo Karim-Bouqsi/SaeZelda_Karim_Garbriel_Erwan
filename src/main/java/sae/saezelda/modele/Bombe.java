@@ -27,9 +27,6 @@ public class Bombe extends Arme {
     public void bombeExplose() {
         ObservableList<Obstacle> obstaclesDansZone = estDansZone(terrain.getObstacles());
         System.out.println("bombe explose");
-//        System.out.println(terrain.getLink().getXValue());
-//        System.out.println(terrain.getLink().getYValue());
-//        System.out.println(terrain.getLink().getXValue());
         if (terrain.getLink().estDansZoneBombe(getXValue(), getYValue())) {
             System.out.println("link toucher par la bombe");
             terrain.getLink().recevoirDegats(10);

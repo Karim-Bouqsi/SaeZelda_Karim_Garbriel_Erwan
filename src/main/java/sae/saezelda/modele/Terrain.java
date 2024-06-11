@@ -15,7 +15,7 @@ public class Terrain {
     private int largeur = 640;
     private int hauteur = 320;
     private ObservableList<Obstacle> obstacles;
-    private ArrayList<Fleche> fleches;
+    private ObservableList<Fleche> fleches;
     private ArrayList<Zombie> zombies;
     private Link link;
     private ObservableList<Bombe> bombes;
@@ -40,7 +40,7 @@ public class Terrain {
         bombes = FXCollections.observableArrayList();
         link = new Link(this);
         this.nom = "Demo";
-        this.fleches = new ArrayList<>();
+        this.fleches = FXCollections.observableArrayList();
         this.zombies = new ArrayList<>();
     }
 
@@ -63,7 +63,7 @@ public class Terrain {
     public void ajouterFleche(Fleche fleche) {
         fleches.add(fleche);
     }
-    public ArrayList<Fleche> getFleches() {
+    public ObservableList<Fleche> getFleches() {
         return fleches;
     }
 
@@ -89,21 +89,24 @@ public class Terrain {
         return ligne * (largeur / tailleTuile) + colonne;
     }
 
-    public void faireAvancerLesFleches(Pane panneauJeu) {
-        ArrayList<Fleche> flechesASupprimer = new ArrayList<>();
+    public void faireAvancerLesFleches() {
+        ObservableList<Fleche> flechesASupprimer = FXCollections.observableArrayList();
         for (int i = 0; i < fleches.size(); i++) {
             Fleche fleche = fleches.get(i);
             fleche.deplacer();
-            if (fleche.aDepasseLimites()) {
+        }
+        verifierEtSupprimerFleches();
+    }
+
+    public void verifierEtSupprimerFleches() {
+        ObservableList<Fleche> flechesASupprimer = FXCollections.observableArrayList();
+        for (Fleche fleche : fleches) {
+            if (fleche.aDepasseLimites() || fleche.toucheCible()) {
                 flechesASupprimer.add(fleche);
-            }
-            else {
-                FlecheVue flecheVue = new FlecheVue(fleche, panneauJeu, link);
             }
         }
         fleches.removeAll(flechesASupprimer);
     }
-
 
     public boolean estDansLesLimites(int x, int y) {
         if(x >= 0 && x <= largeur - link.getLargeur() && y >= -link.getHauteur() && y <= hauteur - link.getHauteur()) {
