@@ -41,7 +41,6 @@ public class Zombie extends Personnage {
         } else {
             moveUp = !moveUp;
         }
-        System.out.println(getPvValue());
     }
 
     public void deplacerVersLink(int linkX, int linkY) {
