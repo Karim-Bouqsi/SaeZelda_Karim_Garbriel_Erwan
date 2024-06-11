@@ -14,7 +14,7 @@ public class Coffre {
 
 
 
-    //Constructeur pour le premier coffre
+    // Constructeur pour le premier coffre
     public Coffre(Item Contenue,int x ,  int y ,Terrain terrain ){
         this.Contenu=Contenue;
         this.x=x;
