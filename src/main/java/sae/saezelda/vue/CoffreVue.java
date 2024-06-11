@@ -7,34 +7,35 @@ import sae.saezelda.Main;
 import sae.saezelda.modele.Coffre;
 
 public class CoffreVue {
-    Coffre coffre;
+    private Coffre coffre;
     private Pane panneauJeu;
     private TerrainVue terrainVue;
+    private ImageView coffreImageView;
 
-    private ImageView[] imageTab;
-    public CoffreVue(Coffre coffre, Pane panneauJeu , TerrainVue terrainVue){
-        this.coffre=coffre;
-        this.panneauJeu=panneauJeu;
-        this.terrainVue=terrainVue;
-        Image[] images = new Image[2];
-        images[0] =  new Image(String.valueOf(Main.class.getResource("/image/coffre_ferme.png")));
-        images[1] = new Image(String.valueOf(Main.class.getResource("/image/coffre_ouvert.png")));
-        imageTab = new ImageView[2];
-        for (int i  =0 ; i<2;i++) {
-            imageTab[i] = new ImageView(images[i]);
-            imageTab[i].setFitWidth(32);
-            imageTab[i].setFitHeight(32);
-            imageTab[i].setTranslateX((coffre.getX()));
-            imageTab[i].setTranslateY(coffre.getY());
-        }
-        panneauJeu.getChildren().add(imageTab[0]);
-        coffre.estOuvertProperty().addListener((obj,old,nouv)->{
-            if(nouv){
-                System.out.println("listener");
-                panneauJeu.getChildren().set(2,imageTab[1]);
+    // Constructor
+    public CoffreVue(Coffre coffre, Pane panneauJeu, TerrainVue terrainVue) {
+        this.coffre = coffre;
+        this.panneauJeu = panneauJeu;
+        this.terrainVue = terrainVue;
+
+        this.coffreImageView = new ImageView();
+        this.coffreImageView.setFitWidth(32);
+        this.coffreImageView.setFitHeight(32);
+        this.coffreImageView.setTranslateX(coffre.getX());
+        this.coffreImageView.setTranslateY(coffre.getY());
+
+        Image coffreFermeImage = new Image(String.valueOf(Main.class.getResource("/image/coffre_ferme.png")));
+        Image coffreOuvertImage = new Image(String.valueOf(Main.class.getResource("/image/coffre_ouvert.png")));
+
+        this.coffreImageView.setImage(coffreFermeImage);
+
+        this.panneauJeu.getChildren().add(this.coffreImageView);
+
+        this.coffre.estOuvertProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                System.out.println("Coffre ouvert");
+                this.coffreImageView.setImage(coffreOuvertImage);
             }
         });
     }
-
-
 }

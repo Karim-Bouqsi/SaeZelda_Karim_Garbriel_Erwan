@@ -1,10 +1,11 @@
 package sae.saezelda.modele;
-
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import javafx.scene.layout.Pane;
+import sae.saezelda.vue.FlecheVue;
 
 import java.util.ArrayList;
 
@@ -14,6 +15,8 @@ public class Terrain {
     private int largeur = 640;
     private int hauteur = 320;
     private ObservableList<Obstacle> obstacles;
+    private ArrayList<Fleche> fleches;
+    private ArrayList<Zombie> zombies;
     private Link link;
     private ObservableList<Bombe> bombes;
 
@@ -32,6 +35,19 @@ public class Terrain {
             0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,2,0,1,1,
     };
 
+    public Terrain() {
+        obstacles = FXCollections.observableArrayList();
+        bombes = FXCollections.observableArrayList();
+        link = new Link(this);
+        this.nom = "Demo";
+        this.fleches = new ArrayList<>();
+        this.zombies = new ArrayList<>();
+    }
+
+    public ArrayList<Zombie> getZombies() {
+        return zombies;
+    }
+
     public int getWidth() {
         return largeur;
     }
@@ -44,13 +60,12 @@ public class Terrain {
         return link;
     }
 
-    public Terrain() {
-        obstacles = FXCollections.observableArrayList();
-        bombes = FXCollections.observableArrayList();
-        link = new Link(this);
-        this.nom = "Demo";
+    public void ajouterFleche(Fleche fleche) {
+        fleches.add(fleche);
     }
-
+    public ArrayList<Fleche> getFleches() {
+        return fleches;
+    }
 
 
     public ObservableList<Bombe> getBombes() {
@@ -74,6 +89,22 @@ public class Terrain {
         return ligne * (largeur / tailleTuile) + colonne;
     }
 
+    public void faireAvancerLesFleches(Pane panneauJeu) {
+        ArrayList<Fleche> flechesASupprimer = new ArrayList<>();
+        for (int i = 0; i < fleches.size(); i++) {
+            Fleche fleche = fleches.get(i);
+            fleche.deplacer();
+            if (fleche.aDepasseLimites()) {
+                flechesASupprimer.add(fleche);
+            }
+            else {
+                FlecheVue flecheVue = new FlecheVue(fleche, panneauJeu, link);
+            }
+        }
+        fleches.removeAll(flechesASupprimer);
+    }
+
+
     public boolean estDansLesLimites(int x, int y) {
         if(x >= 0 && x <= largeur - link.getLargeur() && y >= -link.getHauteur() && y <= hauteur - link.getHauteur()) {
             return true;
@@ -92,6 +123,16 @@ public class Terrain {
     public void ajouterBombe(Bombe bombe) {
         bombes.add(bombe);
     }
+    public void supprimerFleches(ArrayList<Fleche> fleches) {
+        for(int i = 0; i < fleches.size(); i++) {
+            if(estDansLesLimites(fleches.get(i).getX(), fleches.get(i).getX())) {
+                fleches.remove(i);
+            }
+        }
+    }
+
+
+
 
     public void retirerBombe(Bombe bombe) {
         bombes.remove(bombe);
@@ -105,6 +146,13 @@ public class Terrain {
     public ObservableList<Obstacle> getObstacles() {
         return obstacles;
     }
+
+
+    public void ajouterZombie(Zombie zombie) {
+        this.zombies.add(zombie);
+    }
+
+
 
     public boolean nouvellePositionValide(int x, int y) {
         if (!estDansLesLimites(x, y)) {
@@ -120,10 +168,6 @@ public class Terrain {
         System.out.println("Nouvelle position valide");
         return true;
     }
-
-
-
-
 
     public int[] getTerrain() {
         return this.terrain;

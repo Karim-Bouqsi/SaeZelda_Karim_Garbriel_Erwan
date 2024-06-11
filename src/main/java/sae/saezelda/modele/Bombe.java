@@ -35,6 +35,14 @@ public class Bombe extends Arme {
             terrain.getLink().recevoirDegats(10);
 
         }
+        for(int i = 0; i < terrain.getZombies().size(); i++) {
+            if (terrain.getZombies().get(i).estDansZoneBombe(getXValue(), getYValue())) {
+                System.out.println("zombie toucher par la bombe");
+                terrain.getZombies().get(i).recevoirDegats(100);
+
+            }
+        }
+
         terrain.retirerBombe(this);
     }
 
