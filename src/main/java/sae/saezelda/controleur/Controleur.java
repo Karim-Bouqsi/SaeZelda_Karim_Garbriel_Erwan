@@ -38,6 +38,7 @@ public class Controleur implements Initializable {
     private GridPane inventaireGrid;
 
     private InventaireVue inventaireVue;
+    private Potion potion;
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Terrain terrain = new Terrain();
@@ -62,6 +63,8 @@ public class Controleur implements Initializable {
         // feature zombie :
 
         epee = new Epee();
+        potion = new Potion("Vrai Potion");
+
 
 
         coffre1 = new Coffre(epee,12*32,2*32,terrain);
