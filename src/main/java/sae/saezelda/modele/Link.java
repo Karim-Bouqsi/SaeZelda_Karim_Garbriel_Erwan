@@ -4,9 +4,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 
+
 public class Link extends Personnage {
     private Terrain terrain;
     private Item arme;
+    public static final int PV_MAX = 100;
 
     private ObservableList<Item> invetaire;
 
@@ -20,6 +22,33 @@ public class Link extends Personnage {
 
     public ObservableList getInventaire(){
         return invetaire;
+    }
+
+    public void equiper(Item item){
+        if(item instanceof Arme){
+            if(this.arme==null) {
+                this.arme=item;
+                getInventaire().remove(item);
+            }
+            else {
+                getInventaire().add(this.arme);
+                this.arme=item;
+            }
+        }
+        else if (item instanceof PotionVie){
+            boire((PotionVie) item);
+        }
+    }
+    public void boire(PotionVie potion){
+        if (getPvValue()==PV_MAX) System.out.println("Tu ne peux pas boire pv max");
+        else if (getPvValue()>PV_MAX-20){
+            System.out.println("Pv regenerer 100pv");
+            this.setPvValue(100);
+        }
+        else{
+            System.out.println("regene pv");
+            this.setPvValue(getPvValue()+ potion.getPv());
+        }
     }
     public void utiliser(Item item){
 

@@ -6,5 +6,8 @@ public class PotionVie extends Potion {
         super("Potion de vie");
         this.pv=20;
     }
+    public int getPv(){
+        return this.pv;
+    }
 
 }

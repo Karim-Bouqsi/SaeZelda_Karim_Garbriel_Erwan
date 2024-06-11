@@ -53,7 +53,7 @@ public class Controleur implements Initializable {
 
         // feature inventaire
         inventaireVue = new InventaireVue(inventaireGrid,link);
-        link.getInventaire().addListener(new ListChangeListener() {
+        link.getInventaire().addListener( new ListChangeListener() {
             @Override
             public void onChanged(Change change) {
                 inventaireVue.dessinePane();
@@ -151,6 +151,8 @@ public class Controleur implements Initializable {
             link.setDirectionValue(Direction.RIGHT);
         }
     }
+
+
 
 
 }
