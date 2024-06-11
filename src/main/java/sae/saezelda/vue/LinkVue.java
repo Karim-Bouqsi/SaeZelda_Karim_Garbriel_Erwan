@@ -66,7 +66,6 @@ public class LinkVue {
         panneauJeu.getChildren().add(linkImageView);
     }
 
-
     public Link getLink() {
         return link;
     }

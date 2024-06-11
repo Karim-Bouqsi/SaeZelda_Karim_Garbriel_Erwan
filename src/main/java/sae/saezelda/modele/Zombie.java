@@ -87,6 +87,14 @@ public class Zombie extends Personnage {
         }
 
     }
+    public boolean estDansZoneBombe(int bombeX, int bombeY) {
+        int zombieX = getXValue();
+        int zombieY = getYValue();
+
+
+        return zombieX - 19 < bombeX + 32 && zombieX + (19 * 2) > bombeX &&
+                zombieY - 32 <bombeY + 32 && zombieY + (32 * 2) > bombeY;
+    }
 
 
 

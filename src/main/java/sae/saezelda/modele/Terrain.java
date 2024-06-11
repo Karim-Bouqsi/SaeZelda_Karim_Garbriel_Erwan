@@ -1,4 +1,8 @@
 package sae.saezelda.modele;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import javafx.scene.layout.Pane;
 import sae.saezelda.vue.FlecheVue;
@@ -10,10 +14,11 @@ public class Terrain {
     private int tailleTuile = 32;
     private int largeur = 640;
     private int hauteur = 320;
-    private ArrayList<Obstacle> obstacles;
+    private ObservableList<Obstacle> obstacles;
     private ArrayList<Fleche> fleches;
     private ArrayList<Zombie> zombies;
     private Link link;
+    private ObservableList<Bombe> bombes;
 
 
 
@@ -31,7 +36,8 @@ public class Terrain {
     };
 
     public Terrain() {
-        obstacles = new ArrayList<>();
+        obstacles = FXCollections.observableArrayList();
+        bombes = FXCollections.observableArrayList();
         link = new Link(this);
         this.nom = "Demo";
         this.fleches = new ArrayList<>();
@@ -54,13 +60,22 @@ public class Terrain {
         return link;
     }
 
-
     public void ajouterFleche(Fleche fleche) {
         fleches.add(fleche);
     }
     public ArrayList<Fleche> getFleches() {
         return fleches;
     }
+
+
+    public ObservableList<Bombe> getBombes() {
+        return bombes;
+    }
+
+   public void retirerObstacle(Obstacle obstacle) {
+        obstacles.remove(obstacle);
+    }
+
 
 
 
@@ -73,7 +88,6 @@ public class Terrain {
         }
         return ligne * (largeur / tailleTuile) + colonne;
     }
-
 
     public void faireAvancerLesFleches(Pane panneauJeu) {
         ArrayList<Fleche> flechesASupprimer = new ArrayList<>();
@@ -106,6 +120,9 @@ public class Terrain {
         return terrain[indice] == 1 || terrain[indice] == 4;
     }
 
+    public void ajouterBombe(Bombe bombe) {
+        bombes.add(bombe);
+    }
     public void supprimerFleches(ArrayList<Fleche> fleches) {
         for(int i = 0; i < fleches.size(); i++) {
             if(estDansLesLimites(fleches.get(i).getX(), fleches.get(i).getX())) {
@@ -116,14 +133,19 @@ public class Terrain {
 
 
 
-    public ArrayList<Obstacle> getObstacles() {
-        return obstacles;
+
+    public void retirerBombe(Bombe bombe) {
+        bombes.remove(bombe);
     }
+
 
     public void ajouterObstacle(Obstacle obstacle) {
         obstacles.add(obstacle);
     }
 
+    public ObservableList<Obstacle> getObstacles() {
+        return obstacles;
+    }
 
 
     public void ajouterZombie(Zombie zombie) {
@@ -146,11 +168,6 @@ public class Terrain {
         System.out.println("Nouvelle position valide");
         return true;
     }
-
-
-
-
-
 
     public int[] getTerrain() {
         return this.terrain;

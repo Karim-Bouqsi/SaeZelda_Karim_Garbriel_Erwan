@@ -4,6 +4,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.layout.TilePane;
 import javafx.util.Duration;
+import sae.saezelda.modele.Bombe;
 import sae.saezelda.modele.Link;
 import sae.saezelda.modele.Zombie;
 import sae.saezelda.vue.LinkVue;
@@ -46,10 +47,8 @@ public class GameLoop {
         link.linkMove();
         int linkX = link.getXValue();
         int linkY = link.getYValue();
-
         zombie.deplacerVersLink(linkX, linkY);
 
-        //TODO : terrain.avancerLesFLèches
 //        updateFleches(terrain, paneJeu);
         terrain.faireAvancerLesFleches(paneJeu);
         link.decrementCooldown();
