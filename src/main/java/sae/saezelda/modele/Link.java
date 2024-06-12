@@ -16,6 +16,7 @@ public class Link extends Personnage {
     private BooleanProperty arcEquipe;
     private BooleanProperty peutPoserBombe;
     private BooleanProperty peutTirerFLeches;
+    private BooleanProperty peutAttaquerCouteau;
 
 
 
@@ -26,8 +27,7 @@ public class Link extends Personnage {
         this.item = null;
         this.peutPoserBombe = new SimpleBooleanProperty(true);
         this.peutTirerFLeches = new SimpleBooleanProperty(true);
-
-
+        this.peutAttaquerCouteau = new SimpleBooleanProperty(true);
     }
 
     public void utiliser(Item item){
@@ -43,6 +43,19 @@ public class Link extends Personnage {
     }
 
 
+
+    public void placerBombe() {
+        if (peutPoserBombe.get()) {
+            Bombe bombe = new Bombe("Bombe", 50, getXValue(), getYValue(), getTerrain());
+            getTerrain().ajouterBombe(bombe);
+            bombe.cooldownBombeEtExplose();
+            peutPoserBombe.set(false);
+            activerCooldownBombe();
+        }
+        else {
+            System.out.println("Doucement les bombes");
+        }
+    }
     public void tirerAvecArc() {
         System.out.println("print en dehors du if tirerarc");
         if (arc != null && arc.getNombreDeFleches() > 0 && peutTirerFLeches.get() && !getMortValue()) {
@@ -58,16 +71,21 @@ public class Link extends Personnage {
             System.out.println("Tu n'as pas de flèche");
         }
     }
-    public void placerBombe() {
-        if (peutPoserBombe.get()) {
-            Bombe bombe = new Bombe("Bombe", 50, getXValue(), getYValue(), getTerrain());
-            getTerrain().ajouterBombe(bombe);
-            bombe.cooldownBombeEtExplose();
-            peutPoserBombe.set(false);
-            activerCooldownBombe();
-        }
-        else {
-            System.out.println("Doucement les bombes");
+    public void attaquerCouteau() {
+        Couteau couteau = new Couteau("couteau", 15,terrain);
+        for(int i = 0; i < terrain.getZombies().size(); i++) {
+            if(getXValue() - 32 < terrain.getZombies().get(i).getXValue() + terrain.getZombies().get(i).getLargeur() && getXValue() + (32 * 2) > terrain.getZombies().get(i).getXValue() &&
+                    getYValue() - 32 < terrain.getZombies().get(i).getYValue() + terrain.getZombies().get(i).getHauteur() && getYValue() + (32 * 2) > terrain.getZombies().get(i).getYValue()) {
+                System.out.println("Zombie à proximité");
+                if(peutAttaquerCouteau.get()) {
+                    System.out.println("Le zombie à été attaquer au couteau");
+                    terrain.getZombies().get(i).recevoirDegats(couteau.getPtAtt());
+                    peutAttaquerCouteau.set(false);
+                    activerCooldownCouteau();
+                }
+            }
+            else
+                System.out.println("Zombie non détecter a proximité");
         }
     }
     public void activerCooldownBombe() {
@@ -76,6 +94,10 @@ public class Link extends Personnage {
     }
     public void activerCooldownFleche() {
         Timeline cooldownTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> peutTirerFLeches.set(true)));
+        cooldownTimeline.play();
+    }
+    private void activerCooldownCouteau() {
+        Timeline cooldownTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> peutAttaquerCouteau.set(true)));
         cooldownTimeline.play();
     }
 
@@ -166,6 +188,8 @@ public class Link extends Personnage {
         }
     }
 
+
+
     public BooleanProperty getArcEquipeProperty() {
         return arcEquipe;
     }
@@ -195,6 +219,8 @@ public class Link extends Personnage {
     public Terrain getTerrain() {
         return terrain;
     }
+
+
 
 
 }

@@ -114,6 +114,9 @@ public class Controleur implements Initializable {
         else if (code == KeyCode.B) {
             link.placerBombe();
         }
+        else if(code == KeyCode.F) {
+            link.attaquerCouteau();
+        }
         changerDirectionLink();
 
 
