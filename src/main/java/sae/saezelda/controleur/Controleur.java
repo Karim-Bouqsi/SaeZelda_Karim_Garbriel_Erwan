@@ -36,6 +36,8 @@ public class Controleur implements Initializable {
     private Label pvLink;
     @FXML
     private GridPane inventaireGrid;
+    @FXML
+    private GridPane porteGrid;
 
     private InventaireVue inventaireVue;
     private Potion potion;
@@ -52,7 +54,7 @@ public class Controleur implements Initializable {
         terrain.ajouterObstacle(pierre1);
 
         // feature inventaire
-        inventaireVue = new InventaireVue(inventaireGrid,link);
+        inventaireVue = new InventaireVue(inventaireGrid,porteGrid,link);
         link.getInventaire().addListener( new ListChangeListener() {
             @Override
             public void onChanged(Change change) {
