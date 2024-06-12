@@ -90,6 +90,9 @@ public class Controleur implements Initializable {
     @FXML
     public void touchePresser(KeyEvent event) {
         KeyCode code = event.getCode();
+        if (code == KeyCode.G) {
+            link.tirerAvecArc();
+        }
         if (code == KeyCode.Z) {
             hPresser = true;
         }
@@ -107,9 +110,6 @@ public class Controleur implements Initializable {
                 link.utiliser(coffreDansZone().ouvrir());
                 link.equiperArc(arc);
             }
-        }
-        else if (code == KeyCode.A) {
-            link.tirerAvecArc();
         }
         else if (code == KeyCode.B) {
             link.placerBombe();

@@ -44,7 +44,9 @@ public class Link extends Personnage {
 
 
     public void tirerAvecArc() {
+        System.out.println("print en dehors du if tirerarc");
         if (arc != null && arc.getNombreDeFleches() > 0 && peutTirerFLeches.get() && !getMortValue()) {
+            System.out.println("print du if tirerarc");
             Fleche fleche = new Fleche(getXValue() + getLargeur(), getYValue() + getHauteur() / 2, getDirectionValue(), 5, terrain);
             terrain.ajouterFleche(fleche);
             arc.setNombreDeFleches(arc.getNombreDeFleches() - 1);
