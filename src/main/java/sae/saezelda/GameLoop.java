@@ -4,14 +4,10 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.layout.TilePane;
 import javafx.util.Duration;
-import sae.saezelda.modele.Bombe;
-import sae.saezelda.modele.Link;
-import sae.saezelda.modele.Zombie;
+import sae.saezelda.modele.*;
 import sae.saezelda.vue.LinkVue;
 import sae.saezelda.vue.TerrainVue;
 import sae.saezelda.vue.ZombieVue;
-import sae.saezelda.modele.Terrain;
-import sae.saezelda.modele.Fleche;
 import sae.saezelda.vue.FlecheVue;
 import javafx.scene.layout.Pane;
 
@@ -32,10 +28,10 @@ public class GameLoop {
         this.zombieVue = zombieVue;
     }
 
-    public void startGameLoop(Terrain terrain, Pane paneJeu) {
+    public void startGameLoop(Environnement environnement, Pane paneJeu) {
         Duration duration = Duration.millis(1000.0 / FPS);
         KeyFrame keyFrame = new KeyFrame(duration, event -> {
-            updateGame(terrain, paneJeu);
+            updateGame(environnement, paneJeu);
         });
 
         Timeline timeline = new Timeline(keyFrame);
@@ -43,13 +39,13 @@ public class GameLoop {
         timeline.play();
     }
 
-    private void updateGame(Terrain terrain, Pane paneJeu) {
+    private void updateGame(Environnement environnement, Pane paneJeu) {
         link.linkMove();
         int linkX = link.getXValue();
         int linkY = link.getYValue();
         zombie.deplacerVersLink(linkX, linkY);
 
-        terrain.faireAvancerLesFleches();
+        environnement.faireAvancerLesFleches();
         link.decrementCooldown();
     }
 }

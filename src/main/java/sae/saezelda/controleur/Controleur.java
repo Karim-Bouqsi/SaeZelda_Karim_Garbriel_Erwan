@@ -1,7 +1,5 @@
 package sae.saezelda.controleur;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -9,7 +7,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
-import javafx.util.Duration;
 import sae.saezelda.GameLoop;
 import sae.saezelda.modele.*;
 import sae.saezelda.vue.*;
@@ -26,6 +23,7 @@ public class Controleur implements Initializable {
 
     @FXML
     private TilePane panneauDeJeu;
+
     private boolean hPresser, bPresser, gPresser, dPresser;
 
     private Coffre coffre1;
@@ -35,56 +33,49 @@ public class Controleur implements Initializable {
 
     private Link link;
     private LinkVue linkVue;
+
     @FXML
     private Label pvLink;
+
     private MonObservableListeBombe observableListeBombe;
-
-
+    private Environnement environnement;
     private Terrain terrain;
     private TerrainVue terrainVue;
 
+    @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         terrain = new Terrain();
+        environnement = new Environnement();
+        link = new Link(environnement, terrain);
+        environnement.setLink(link);
+
         terrainVue = new TerrainVue(terrain, panneauDeJeu);
-        link = terrain.getLink();
         linkVue = new LinkVue(link, paneJeu, terrainVue);
 
         pvLink.textProperty().bind(link.getPvProperties().asString());
 
         MonObservableListeObstacle observableListeObstacle = new MonObservableListeObstacle(paneJeu);
-        terrain.getObstacles().addListener(observableListeObstacle);
+        environnement.getObstacles().addListener(observableListeObstacle);
 
         observableListeBombe = new MonObservableListeBombe(paneJeu);
-        link.getTerrain().getBombes().addListener(observableListeBombe);
+        environnement.getBombes().addListener(observableListeBombe);
 
         MonObservableListeFleche observableListeFleche = new MonObservableListeFleche(paneJeu);
-        terrain.getFleches().addListener(observableListeFleche);
-
-
+        environnement.getFleches().addListener(observableListeFleche);
 
         Pierre pierre1 = new Pierre(80, 50);
-//        ObstacleVue pierreVue = new ObstacleVue(paneJeu, pierre1);
-        terrain.ajouterObstacle(pierre1);
-        epee = new Epee();
-        arc = new Arc("Arc de Link", 10, 2000);
-//        link.equiperArc(arc);
+        environnement.ajouterObstacle(pierre1);
 
-        coffre1 = new Coffre(arc,2*32,0*32,terrain);
-        coffreVue = new CoffreVue(coffre1,paneJeu , terrainVue);
+        arc = new Arc("Arc", 10, 2000);
+        coffre1 = new Coffre(arc, 2 * 32, 0 * 32, terrain);
+        coffreVue = new CoffreVue(coffre1, paneJeu, terrainVue);
 
-        Zombie zombie = new Zombie(terrain);
-        terrain.ajouterZombie(zombie);
+        Zombie zombie = new Zombie(environnement, terrain);
+        environnement.ajouterZombie(zombie);
         ZombieVue zombieVue = new ZombieVue(zombie, paneJeu, terrainVue);
 
-
-//        Bombe bombe2 = new Bombe("Bombe", 50, 100, 100, terrain);
-//        bombe2.bombeExplose();
-
-//        Bombe bombe = new Bombe("bombe", 15, 100,100,terrain);
-//        BombeVue bombeVue = new BombeVue(bombe, paneJeu);
-
         gameLoop = new GameLoop(link, linkVue, zombie, zombieVue);
-        gameLoop.startGameLoop(terrain, paneJeu);
+        gameLoop.startGameLoop(environnement, paneJeu);
     }
 
     @FXML
@@ -122,7 +113,6 @@ public class Controleur implements Initializable {
 
     }
 
-
     @FXML
     public void toucheRelacher(KeyEvent event) {
         KeyCode code = event.getCode();
@@ -138,16 +128,16 @@ public class Controleur implements Initializable {
         changerDirectionLink();
     }
 
-    public Coffre coffreDansZone(){
-        if (link.estDansZone(coffre1)){
-            if (coffre1.estOuvert()){
-                System.out.println("Le coffre a deja été ouvert");
+    private Coffre coffreDansZone() {
+        if (link.estDansZone(coffre1)) {
+            if (coffre1.estOuvert()) {
+                System.out.println("Le coffre a déjà été ouvert");
                 return null;
             }
-            System.out.println("Coffre a poximité");
+            System.out.println("Coffre à proximité");
             return coffre1;
         }
-        System.out.println("Pas de coffre a proximité");
+        System.out.println("Pas de coffre à proximité");
         return null;
     }
 
@@ -172,5 +162,4 @@ public class Controleur implements Initializable {
             link.setDirectionValue(Direction.NEUTRE);
         }
     }
-
 }

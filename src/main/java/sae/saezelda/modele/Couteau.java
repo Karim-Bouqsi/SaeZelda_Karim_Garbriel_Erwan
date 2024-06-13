@@ -1,20 +1,10 @@
 package sae.saezelda.modele;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-
-import java.util.ArrayList;
-
 public class Couteau extends Arme {
+    private Environnement environnement;
 
-    private Terrain terrain;
-    public Couteau(String nom, int ptAtt, Terrain terrain) {
+    public Couteau(String nom, int ptAtt, Environnement environnement) {
         super(nom, ptAtt);
-        this.terrain = terrain;
-
+        this.environnement = environnement;
     }
-
-
-
-
 }

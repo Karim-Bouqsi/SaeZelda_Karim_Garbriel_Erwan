@@ -1,27 +1,8 @@
 package sae.saezelda.modele;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
-import javafx.scene.layout.Pane;
-import sae.saezelda.vue.FlecheVue;
-
-import java.util.ArrayList;
-
 public class Terrain {
     String nom;
-    private int tailleTuile = 32;
     private int largeur = 640;
     private int hauteur = 320;
-    private ObservableList<Obstacle> obstacles;
-    private ObservableList<Fleche> fleches;
-    private ArrayList<Zombie> zombies;
-    private Link link;
-    private ObservableList<Bombe> bombes;
-
-
-
     private int[] terrain = {
             0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,
             0,0,0,0,0,0,3,3,3,3,3,0,0,0,0,0,0,0,0,0,
@@ -36,17 +17,11 @@ public class Terrain {
     };
 
     public Terrain() {
-        obstacles = FXCollections.observableArrayList();
-        bombes = FXCollections.observableArrayList();
-        link = new Link(this);
+
         this.nom = "Demo";
-        this.fleches = FXCollections.observableArrayList();
-        this.zombies = new ArrayList<>();
+
     }
 
-    public ArrayList<Zombie> getZombies() {
-        return zombies;
-    }
 
     public int getWidth() {
         return largeur;
@@ -54,122 +29,6 @@ public class Terrain {
 
     public int getHeight() {
         return hauteur;
-    }
-
-    public Link getLink() {
-        return link;
-    }
-
-    public void ajouterFleche(Fleche fleche) {
-        fleches.add(fleche);
-    }
-    public ObservableList<Fleche> getFleches() {
-        return fleches;
-    }
-
-
-    public ObservableList<Bombe> getBombes() {
-        return bombes;
-    }
-
-   public void retirerObstacle(Obstacle obstacle) {
-        obstacles.remove(obstacle);
-    }
-
-
-
-
-    public int getIndiceTuile(int x, int y) {
-        int colonne = x / tailleTuile;
-        int ligne = y / tailleTuile;
-
-        if (colonne < 0 || colonne >= largeur / tailleTuile || ligne < 0 || ligne >= hauteur / tailleTuile) {
-            return -1;
-        }
-        return ligne * (largeur / tailleTuile) + colonne;
-    }
-
-    public void faireAvancerLesFleches() {
-        ObservableList<Fleche> flechesASupprimer = FXCollections.observableArrayList();
-        for (int i = 0; i < fleches.size(); i++) {
-            Fleche fleche = fleches.get(i);
-            fleche.deplacer();
-        }
-        verifierEtSupprimerFleches();
-    }
-
-    public void verifierEtSupprimerFleches() {
-        ObservableList<Fleche> flechesASupprimer = FXCollections.observableArrayList();
-        for (Fleche fleche : fleches) {
-            if (fleche.aDepasseLimites() || fleche.toucheCible()) {
-                flechesASupprimer.add(fleche);
-            }
-        }
-        fleches.removeAll(flechesASupprimer);
-    }
-
-    public boolean estDansLesLimites(int x, int y) {
-        if(x >= 0 && x <= largeur - link.getLargeur() && y >= -link.getHauteur() && y <= hauteur - link.getHauteur()) {
-            return true;
-        }
-        return false;
-    }
-
-    public boolean estObstacle(int x, int y) {
-        int indice = getIndiceTuile(x, y);
-        if (indice < 0) {
-            return false;
-        }
-        return terrain[indice] == 1 || terrain[indice] == 4;
-    }
-
-    public void ajouterBombe(Bombe bombe) {
-        bombes.add(bombe);
-    }
-    public void supprimerFleches(ArrayList<Fleche> fleches) {
-        for(int i = 0; i < fleches.size(); i++) {
-            if(estDansLesLimites(fleches.get(i).getX(), fleches.get(i).getX())) {
-                fleches.remove(i);
-            }
-        }
-    }
-
-
-
-
-    public void retirerBombe(Bombe bombe) {
-        bombes.remove(bombe);
-    }
-
-
-    public void ajouterObstacle(Obstacle obstacle) {
-        obstacles.add(obstacle);
-    }
-
-    public ObservableList<Obstacle> getObstacles() {
-        return obstacles;
-    }
-
-
-    public void ajouterZombie(Zombie zombie) {
-        this.zombies.add(zombie);
-    }
-
-
-
-    public boolean nouvellePositionValide(int x, int y) {
-        if (!estDansLesLimites(x, y)) {
-            System.out.println("Nouvelle position invalide");
-            return false;
-        }
-        for (Obstacle obstacle : obstacles) {
-            if (obstacle.getXValue() == x && obstacle.getYValue() == y) {
-                System.out.println("Nouvelle position invalide");
-                return false;
-            }
-        }
-        System.out.println("Nouvelle position valide");
-        return true;
     }
 
     public int[] getTerrain() {

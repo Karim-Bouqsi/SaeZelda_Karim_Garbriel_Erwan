@@ -8,8 +8,8 @@ public class Zombie extends Personnage {
     private boolean moveUp = true;
     private BooleanProperty attaqueLink = new SimpleBooleanProperty(false);
 
-    public Zombie(Terrain terrain) {
-        super("ZombieMan", 400, 110, 20, 32, 19, 4, terrain, 50);
+    public Zombie(Environnement environnement, Terrain terrain) {
+        super("ZombieMan", 400, 110, 20, 32, 19, 4, terrain, environnement, 50);
     }
 
     public IntegerProperty getXProperty() {
@@ -20,8 +20,9 @@ public class Zombie extends Personnage {
         return super.getYProperties();
     }
 
-    public BooleanProperty attaqueLinkProperty() { return attaqueLink; }
-
+    public BooleanProperty attaqueLinkProperty() {
+        return attaqueLink;
+    }
 
     public void deplacer() {
         int direction;
@@ -48,28 +49,25 @@ public class Zombie extends Personnage {
             if (getYValue() == linkY) {
                 if (getXValue() < linkX) {
                     setDirectionValue(Direction.RIGHT);
-                    if(super.canMove(3, getXValue() + 2, getYValue())){
+                    if (super.canMove(3, getXValue() + 2, getYValue())) {
                         setXValue(getXValue() + 2);
                     }
-                }
-                else if (getXValue() > linkX) {
+                } else if (getXValue() > linkX) {
                     setDirectionValue(Direction.LEFT);
-                    if(super.canMove(2, getXValue() - 2, getYValue())){
+                    if (super.canMove(2, getXValue() - 2, getYValue())) {
                         setXValue(getXValue() - 2);
                     }
                 }
-            }
-            else {
+            } else {
                 deplacer();
             }
             attaquerLink();
         }
-
     }
 
     public void attaquerLink() {
-        Terrain terrain = getTerrain();
-        Link link = terrain.getLink();
+        Environnement environnement = getEnvironnement();
+        Link link = environnement.getLink();
 
         if (!super.getMortValue()) {
             int distanceX = Math.abs(getXValue() - link.getXValue());
@@ -79,23 +77,16 @@ public class Zombie extends Personnage {
             if (distanceX <= proximite && distanceY <= proximite) {
                 attaqueLink.set(true);
                 link.recevoirDegats(1);
-            }
-            else {
+            } else {
                 attaqueLink.set(false);
             }
         }
-
     }
+
     public boolean estDansZoneBombe(int bombeX, int bombeY) {
         int zombieX = getXValue();
         int zombieY = getYValue();
-
-
         return zombieX - 19 < bombeX + 32 && zombieX + (19 * 2) > bombeX &&
-                zombieY - 32 <bombeY + 32 && zombieY + (32 * 2) > bombeY;
+                zombieY - 32 < bombeY + 32 && zombieY + (32 * 2) > bombeY;
     }
-
-
-
 }
-

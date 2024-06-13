@@ -21,9 +21,10 @@ public abstract class Personnage {
     private int largeur;
     private int hauteur;
     private BooleanProperty mort;
+    private Environnement environnement;
 
 
-    public Personnage(String nom, int positionX, int positionY, int capaciteMax, int hauteur, int largeur, int vitesse, Terrain terrain, int pv) {
+    public Personnage(String nom, int positionX, int positionY, int capaciteMax, int hauteur, int largeur, int vitesse, Terrain terrain, Environnement environnement, int pv) {
         this.nom = nom;
         this.id = "P" + compteur;
         compteur++;
@@ -33,16 +34,17 @@ public abstract class Personnage {
         this.largeur = largeur;
         this.hauteur = hauteur;
         this.vitesse = vitesse;
-        this.terrain = terrain;
+        this.environnement = environnement;
         this.pv = new SimpleIntegerProperty(pv);
         this.mort = new SimpleBooleanProperty(false);
-
+        this.terrain = terrain;
         direction.addListener((obs, oldVal, newVal) -> {
             int newDirection = newVal.intValue();
 //            System.out.println("changement d direction");
             setDirectionValue(newDirection);
         });
     }
+
     public void setMortValue(boolean bool) {
         mort.set(bool);
     }
@@ -134,46 +136,46 @@ public abstract class Personnage {
     public boolean canMove(int direction, int x, int y) {
         switch (direction) {
             case Direction.UP:
-                return terrain.estDansLesLimites(x, y) &&
-                        !terrain.estObstacle(x, y + getHauteur() - marge) && // haut gauche
-                        !terrain.estObstacle(x + getLargeur(), y + getHauteur() - marge) && // haut droite
+                return environnement.estDansLesLimites(x, y) &&
+                        !environnement.estObstacle(x, y + getHauteur() - marge) && // haut gauche
+                        !environnement.estObstacle(x + getLargeur(), y + getHauteur() - marge) && // haut droite
                         !detecterPierre(direction, x, y);
             case Direction.DOWN:
-                return terrain.estDansLesLimites(x, y) &&
-                        !terrain.estObstacle(x, y + getHauteur()) && // bas gauche
-                        !terrain.estObstacle(x + getLargeur(), y + getHauteur()) && // bas droite
+                return environnement.estDansLesLimites(x, y) &&
+                        !environnement.estObstacle(x, y + getHauteur()) && // bas gauche
+                        !environnement.estObstacle(x + getLargeur(), y + getHauteur()) && // bas droite
                         !detecterPierre(direction, x, y);
             case Direction.LEFT:
-                return terrain.estDansLesLimites(x, y) &&
-                        !terrain.estObstacle(x, y + getHauteur() - 1) && // gauche haut
+                return environnement.estDansLesLimites(x, y) &&
+                        !environnement.estObstacle(x, y + getHauteur() - 1) && // gauche haut
                         !detecterPierre(direction, x, y);
             case Direction.RIGHT:
-                return terrain.estDansLesLimites(x, y) &&
-                        !terrain.estObstacle(x + getLargeur(), y + getHauteur() - marge) && // droite bas
+                return environnement.estDansLesLimites(x, y) &&
+                        !environnement.estObstacle(x + getLargeur(), y + getHauteur() - marge) && // droite bas
                         !detecterPierre(direction, x, y);
             case Direction.UP_LEFT:
-                return terrain.estDansLesLimites(x - 1, y - 1) &&
-                        !terrain.estObstacle(x - 1, y - 1 + getHauteur() - marge) &&
-                        !terrain.estObstacle(x - 1 + getLargeur(), y - 1 + getHauteur() - marge) &&
-                        !terrain.estObstacle(x - 1, y - 1) &&
+                return environnement.estDansLesLimites(x - 1, y - 1) &&
+                        !environnement.estObstacle(x - 1, y - 1 + getHauteur() - marge) &&
+                        !environnement.estObstacle(x - 1 + getLargeur(), y - 1 + getHauteur() - marge) &&
+                        !environnement.estObstacle(x - 1, y - 1) &&
                         !detecterPierre(direction, x - 1, y - 1);
             case Direction.UP_RIGHT:
-                return terrain.estDansLesLimites(x + 1, y - 1) &&
-                        !terrain.estObstacle(x + 1, y - 1 + getHauteur() - marge) &&
-                        !terrain.estObstacle(x + 1 + getLargeur(), y - 1 + getHauteur() - marge) &&
-                        !terrain.estObstacle(x + 1, y - 1) &&
+                return environnement.estDansLesLimites(x + 1, y - 1) &&
+                        !environnement.estObstacle(x + 1, y - 1 + getHauteur() - marge) &&
+                        !environnement.estObstacle(x + 1 + getLargeur(), y - 1 + getHauteur() - marge) &&
+                        !environnement.estObstacle(x + 1, y - 1) &&
                         !detecterPierre(direction, x + 1, y - 1);
             case Direction.DOWN_LEFT:
-                return terrain.estDansLesLimites(x - 1, y + 1) &&
-                        !terrain.estObstacle(x - 1, y + 1 + getHauteur()) &&
-                        !terrain.estObstacle(x - 1 + getLargeur(), y + 1 + getHauteur()) &&
-                        !terrain.estObstacle(x - 1, y + 1) &&
+                return environnement.estDansLesLimites(x - 1, y + 1) &&
+                        !environnement.estObstacle(x - 1, y + 1 + getHauteur()) &&
+                        !environnement.estObstacle(x - 1 + getLargeur(), y + 1 + getHauteur()) &&
+                        !environnement.estObstacle(x - 1, y + 1) &&
                         !detecterPierre(direction, x - 1, y + 1);
             case Direction.DOWN_RIGHT:
-                return terrain.estDansLesLimites(x + 1, y + 1) &&
-                        !terrain.estObstacle(x + 1, y + 1 + getHauteur()) &&
-                        !terrain.estObstacle(x + 1 + getLargeur(), y + 1 + getHauteur()) &&
-                        !terrain.estObstacle(x + 1, y + 1) &&
+                return environnement.estDansLesLimites(x + 1, y + 1) &&
+                        !environnement.estObstacle(x + 1, y + 1 + getHauteur()) &&
+                        !environnement.estObstacle(x + 1 + getLargeur(), y + 1 + getHauteur()) &&
+                        !environnement.estObstacle(x + 1, y + 1) &&
                         !detecterPierre(direction, x + 1, y + 1);
             case Direction.NEUTRE:
                 return true;
@@ -184,7 +186,7 @@ public abstract class Personnage {
 
 
     public boolean detecterPierre(int direction, int x, int y) {
-        for (Obstacle obstacle : terrain.getObstacles()) {
+        for (Obstacle obstacle : environnement.getObstacles()) {
             switch (direction) {
                 case Direction.UP:
                     if(x >= obstacle.getXValue() && x <= obstacle.getXValue() + obstacle.getLargeurObstacle() && y >= obstacle.getYValue() && y <= obstacle.getYValue()) {
@@ -218,7 +220,7 @@ public abstract class Personnage {
 
 
     public Obstacle recupererObstacle(int x, int y) {
-        for (Obstacle obstacle : terrain.getObstacles()) {
+        for (Obstacle obstacle : environnement.getObstacles()) {
             if (detecterPierre(getDirectionValue(), x, y)) {
                 return obstacle;
             }
@@ -230,6 +232,7 @@ public abstract class Personnage {
 
                                     /* GETTEUR / SETTEUR */
     public String getNom() {return nom;}
+
     public IntegerProperty getPvProperties() {return pv;}
     public int getPvValue() {return pv.getValue();}
     public void setPvValue(int pv) {this.pv.setValue(pv);}
@@ -281,7 +284,9 @@ public abstract class Personnage {
     public Terrain getTerrain() {
         return terrain;
     }
-
+    public Environnement getEnvironnement() {
+        return environnement;
+    }
 
     @Override
     public String toString() {
