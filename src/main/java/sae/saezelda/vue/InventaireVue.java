@@ -1,5 +1,6 @@
 package sae.saezelda.vue;
 
+import javafx.geometry.Insets;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -34,19 +35,22 @@ public class InventaireVue {
 
     public void dessinePane(){
         //DESSSINE LINVENTAIRE IMAGE PAR IMAGE SUR LE GRID PANE SANS PRENDRE EN COMPTE LITEM
+
         gi.getChildren().clear();
         ge.getChildren().clear();
+        if (link.getArme()==null){
+            ImageView imageView = new ImageView(new Image(String.valueOf(Main.class.getResource("/image/case.png"))));
+            ge.add(imageView,0,0);
+        }
+        else {
+            ImageView imageView = new ImageView(new Image(String.valueOf(Main.class.getResource("/image/epee.png"))));
+            ge.add(imageView,0,0);
+        }
 
         for(int i =0; i<NB_MAX;i++){// l'inventaire et de 2 colonnes et 4 lignes
             ImageView imageView;
             if (i<link.getInventaire().size()) {
-                if (link.getInventaire().get(i) instanceof Epee) {
-                    image = new Image(String.valueOf(Main.class.getResource("/image/epee.png")));
-                } else if (link.getInventaire().get(i) instanceof Potion) {
-                    image = new Image(String.valueOf(Main.class.getResource("/image/potion.png")));
-                } else {
-                    image = new Image(String.valueOf(Main.class.getResource("/image/sol.png")));
-                }
+                image=choixImage((Item) link.getInventaire().get(i));
                 imageView = new ImageView(image);
                 imageView.setFitWidth(32);
                 imageView.setFitHeight(32);
@@ -65,10 +69,22 @@ public class InventaireVue {
             gi.add(imageView,colonne,ligne);
 
             colonne++;
-            if(i%2==0){
+            if(colonne==2){
                 ligne++;
                 colonne=0;
             }
         }
+    }
+    public Image choixImage(Item item){
+        Image image;
+        if (item instanceof Epee) {
+            image = new Image(String.valueOf(Main.class.getResource("/image/epee.png")));
+        } else if (item instanceof Potion) {
+            image = new Image(String.valueOf(Main.class.getResource("/image/potion.png")));
+        } else {
+            image = new Image(String.valueOf(Main.class.getResource("/image/sol.png")));
+        }
+
+        return image;
     }
 }

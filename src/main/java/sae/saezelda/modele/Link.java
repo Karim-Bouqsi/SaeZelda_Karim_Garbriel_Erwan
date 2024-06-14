@@ -1,13 +1,13 @@
 package sae.saezelda.modele;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 
 
 public class Link extends Personnage {
     private Terrain terrain;
     private Item arme;
+    private Item armure;
     public static final int PV_MAX = 100;
 
     private ObservableList<Item> invetaire;
@@ -16,6 +16,7 @@ public class Link extends Personnage {
         super("Link", 0, 0, 10, 32, 19, 3, terrain, 100);
         this.terrain = terrain;
         this.arme = null;
+        this.armure=null;
         this.invetaire = FXCollections.observableArrayList();
     }
 
@@ -38,6 +39,12 @@ public class Link extends Personnage {
         else if (item instanceof PotionVie){
             boire((PotionVie) item);
         }
+    }
+    public Item getArme(){
+        return this.arme;
+    }
+    public Item getArmure(){
+        return this.armure;
     }
     public void boire(PotionVie potion){
         if (getPvValue()==PV_MAX) System.out.println("Tu ne peux pas boire pv max");
