@@ -3,6 +3,7 @@ package sae.saezelda.modele;
 import javafx.collections.ListChangeListener;
 import javafx.scene.layout.Pane;
 import javafx.scene.image.ImageView;
+import sae.saezelda.vue.ObstacleVue;
 
 public class MonObservableListeObstacle implements ListChangeListener<Obstacle> {
     private Pane panneauJeu;
@@ -30,13 +31,7 @@ public class MonObservableListeObstacle implements ListChangeListener<Obstacle> 
     private void creerSprite(Obstacle obstacle) {
         ImageView imageView = (ImageView) panneauJeu.lookup("#obstacle" + obstacle.getId());
         if (imageView == null) {
-            imageView = new ImageView(obstacle.getImage());
-            imageView.setId("obstacle" + obstacle.getId());
-
-            imageView.translateXProperty().bind(obstacle.getXProperties());
-            imageView.translateYProperty().bind(obstacle.getYProperties());
-
-            panneauJeu.getChildren().add(imageView);
+            ObstacleVue obstacleVue = new ObstacleVue(panneauJeu, obstacle);
         }
     }
 

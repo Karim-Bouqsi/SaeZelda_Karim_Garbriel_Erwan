@@ -4,6 +4,7 @@ import javafx.collections.ListChangeListener;
 import javafx.scene.layout.Pane;
 import javafx.scene.image.ImageView;
 import sae.saezelda.Main;
+import sae.saezelda.vue.FlecheVue;
 
 public class MonObservableListeFleche implements ListChangeListener<Fleche> {
     private Pane panneauJeu;
@@ -31,13 +32,7 @@ public class MonObservableListeFleche implements ListChangeListener<Fleche> {
     private void creerSprite(Fleche fleche) {
         ImageView imageView = (ImageView) panneauJeu.lookup("#fleche" + fleche.getId());
         if (imageView == null) {
-            imageView = new ImageView(obtenirImageFlecheParDirection(fleche.directionValue()));
-            imageView.setId("fleche" + fleche.getId());
-
-            imageView.translateXProperty().bind(fleche.getXProperty());
-            imageView.translateYProperty().bind(fleche.getYProperty());
-
-            panneauJeu.getChildren().add(imageView);
+            FlecheVue flecheVue = new FlecheVue(fleche, panneauJeu);
         }
     }
 

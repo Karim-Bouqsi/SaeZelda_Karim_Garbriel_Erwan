@@ -15,14 +15,12 @@ public class FlecheVue {
     private Pane panneauJeu;
     private ImageView flecheImageView;
     private TerrainVue terrainVue;
-    private Link link;
 
 
-    public FlecheVue(Fleche fleche, Pane panneauJeu, Link link) {
+    public FlecheVue(Fleche fleche, Pane panneauJeu) {
         this.fleche = fleche;
         this.panneauJeu = panneauJeu;
         this.terrainVue = terrainVue;
-        this.link = link;
 
         Image[] imagesFleches = new Image[9];
         imagesFleches[Direction.RIGHT] = new Image(String.valueOf(Main.class.getResource("/image/fleche11x3.png")));
@@ -37,6 +35,7 @@ public class FlecheVue {
 
 
         flecheImageView = new ImageView();
+        flecheImageView.setId("personnage" + fleche.getId());
 
         flecheImageView.setImage(imagesFleches[fleche.getDirectionProperties().get()]);
         panneauJeu.getChildren().add(flecheImageView);

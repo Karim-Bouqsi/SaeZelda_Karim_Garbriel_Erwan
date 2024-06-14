@@ -8,8 +8,8 @@ import javafx.beans.property.SimpleIntegerProperty;
 public abstract class Personnage {
 
     private String nom;
-    public static int compteur = 0;
-    private String id;
+    private static int nextId = 1;
+    private final int id;
     private int vitesse;
     private Terrain terrain;
     private int marge = 5;
@@ -26,8 +26,7 @@ public abstract class Personnage {
 
     public Personnage(String nom, int positionX, int positionY, int capaciteMax, int hauteur, int largeur, int vitesse, Terrain terrain, Environnement environnement, int pv) {
         this.nom = nom;
-        this.id = "P" + compteur;
-        compteur++;
+        this.id = nextId++;
         this.x = new SimpleIntegerProperty(positionX);
         this.y = new SimpleIntegerProperty(positionY);
         this.direction = new SimpleIntegerProperty(Direction.NEUTRE);
@@ -65,6 +64,10 @@ public abstract class Personnage {
             mourir();
         }
     }
+    public void setTerrain(Terrain terrain) {
+        this.terrain = terrain;
+    }
+
     public void tuer() {
         this.mort.set(true);
         setPvValue(0);
@@ -291,5 +294,9 @@ public abstract class Personnage {
     @Override
     public String toString() {
         return "Nom : " + this.nom + " id : " + id + " Capacité d'inventaire : " + capaciteMax + " Inventaire : " /*+ inventaire.toString()*/;
+    }
+
+    public int getId() {
+        return id;
     }
 }

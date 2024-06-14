@@ -1,5 +1,6 @@
 package sae.saezelda.controleur;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -12,6 +13,7 @@ import sae.saezelda.modele.*;
 import sae.saezelda.vue.*;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class Controleur implements Initializable {
@@ -41,21 +43,31 @@ public class Controleur implements Initializable {
     private Environnement environnement;
     private Terrain terrain;
     private TerrainVue terrainVue;
+    private ArrayList<Terrain> terrains = new ArrayList<>();
+    private Terrain terrainActif;
+    private TerrainVue terrainVueActif;
+
+    private boolean terrainRemplace = false;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        terrain = new Terrain();
+        terrainActif = new Terrain();
+        terrains.add(terrainActif);
+        terrainVueActif = new TerrainVue(terrainActif, panneauDeJeu, false);
         environnement = new Environnement();
-        link = new Link(environnement, terrain);
+        link = new Link(environnement, terrainActif);
         environnement.setLink(link);
-
-        terrainVue = new TerrainVue(terrain, panneauDeJeu);
-        linkVue = new LinkVue(link, paneJeu, terrainVue);
-
-        pvLink.textProperty().bind(link.getPvProperties().asString());
+        linkVue = new LinkVue(link, paneJeu, terrainVueActif);
 
         MonObservableListeObstacle observableListeObstacle = new MonObservableListeObstacle(paneJeu);
         environnement.getObstacles().addListener(observableListeObstacle);
+
+        MonObservableListeCoffre observableListeCoffre = new MonObservableListeCoffre(paneJeu);
+        environnement.getCoffres().addListener(observableListeCoffre);
+
+        MonObservableListeZombie observableListeZombie = new MonObservableListeZombie(paneJeu);
+        environnement.getZombies().addListener(observableListeZombie);
 
         observableListeBombe = new MonObservableListeBombe(paneJeu);
         environnement.getBombes().addListener(observableListeBombe);
@@ -63,20 +75,55 @@ public class Controleur implements Initializable {
         MonObservableListeFleche observableListeFleche = new MonObservableListeFleche(paneJeu);
         environnement.getFleches().addListener(observableListeFleche);
 
+        pvLink.textProperty().bind(link.getPvProperties().asString());
+
+
         Pierre pierre1 = new Pierre(80, 50);
         environnement.ajouterObstacle(pierre1);
 
         arc = new Arc("Arc", 10, 2000);
-        coffre1 = new Coffre(arc, 2 * 32, 0 * 32, terrain);
-        coffreVue = new CoffreVue(coffre1, paneJeu, terrainVue);
+        coffre1 = new Coffre(arc, 2 * 32, 0 * 32);
+        environnement.ajouterCoffre(coffre1);
 
-        Zombie zombie = new Zombie(environnement, terrain);
+//        coffreVue = new CoffreVue(coffre1, paneJeu);
+
+
+
+
+
+        // Changement de terrain OK Disparition du Zombie OK ImageDuZombieMort NON
+        Zombie zombie = new Zombie(environnement, terrainActif);
         environnement.ajouterZombie(zombie);
-        ZombieVue zombieVue = new ZombieVue(zombie, paneJeu, terrainVue);
+//        ZombieVue zombieVue = new ZombieVue(zombie, paneJeu, terrainVueActif);
 
-        gameLoop = new GameLoop(link, linkVue, zombie, zombieVue);
+
+        gameLoop = new GameLoop(link, linkVue);
         gameLoop.startGameLoop(environnement, paneJeu);
+
+        paneJeu.setFocusTraversable(true);
+        paneJeu.requestFocus();
     }
+
+    private void remplacerTerrain() {
+        if(!terrainRemplace) {
+            panneauDeJeu.getChildren().clear();
+            System.out.println("Ancien terrain supp");
+
+            Terrain nouveauTerrain = new Terrain();
+            nouveauTerrain.setTerrain(environnement.getTerrain().getTerrain2());
+            terrainVue = new TerrainVue(nouveauTerrain, panneauDeJeu, true);
+
+            environnement.changerTerrain(nouveauTerrain);
+
+            terrainRemplace = true;
+            terrainVue.afficherTerrain();
+
+            System.out.println("taille liste coffre : " + environnement.getCoffres().size());
+            System.out.println("Nouveau terrain mis");
+        }
+
+    }
+
 
     @FXML
     public void touchePresser(KeyEvent event) {
@@ -108,9 +155,12 @@ public class Controleur implements Initializable {
         else if(code == KeyCode.F) {
             link.attaquerCouteau();
         }
+        else if(code == KeyCode.P) {
+            if (linkEstDansZoneTeleportation() && !terrainRemplace) {
+                remplacerTerrain();
+            }
+        }
         changerDirectionLink();
-
-
     }
 
     @FXML
@@ -129,17 +179,38 @@ public class Controleur implements Initializable {
     }
 
     private Coffre coffreDansZone() {
-        if (link.estDansZone(coffre1)) {
-            if (coffre1.estOuvert()) {
-                System.out.println("Le coffre a déjà été ouvert");
-                return null;
+        if(!environnement.getCoffres().isEmpty()) {
+            if (link.estDansZone(coffre1)) {
+                if (coffre1.estOuvert()) {
+                    System.out.println("Le coffre a déjà été ouvert");
+                    return null;
+                }
+                System.out.println("Coffre à proximité");
+                return coffre1;
             }
-            System.out.println("Coffre à proximité");
-            return coffre1;
+            System.out.println("Pas de coffre à proximité");
+            return null;
         }
-        System.out.println("Pas de coffre à proximité");
-        return null;
+    return null;
     }
+    private boolean linkEstDansZoneTeleportation() {
+        // Coordonne pour les tests
+
+        int minX = 0;
+        int maxX = 100;
+        int minY = 0;
+        int maxY = 100;
+
+        // Vrai coordonnee ( en bas a droite de la map )
+
+
+        int linkX = link.getXValue();
+        int linkY = link.getYValue();
+        System.out.println(linkX);
+        System.out.println(linkY);
+        return (linkX >= minX && linkX <= maxX && linkY >= minY && linkY <= maxY);
+    }
+
 
     private void changerDirectionLink() {
         if (hPresser && gPresser) {

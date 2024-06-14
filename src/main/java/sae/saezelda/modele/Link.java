@@ -116,6 +116,7 @@ public class Link extends Personnage {
         }
     }
 
+
     public void linkMove() {
         int[] tabindice = super.move();
         linkVerification(tabindice[0], tabindice[1]);
@@ -206,10 +207,10 @@ public class Link extends Personnage {
     }
 
     public boolean estDansZone(Coffre coffre) {
-        return getXValue() - getHauteur() < coffre.getX() + coffre.getLargeur() &&
-                getXValue() + (getHauteur() * 2) > coffre.getX() &&
-                getYValue() - getHauteur() < coffre.getY() + coffre.getHauteur() &&
-                getYValue() + (getHauteur() * 2) > coffre.getY();
+        return getXValue() - getHauteur() < coffre.getXValue() + coffre.getLargeur() &&
+                getXValue() + (getHauteur() * 2) > coffre.getXValue() &&
+                getYValue() - getHauteur() < coffre.getYValue() + coffre.getHauteur() &&
+                getYValue() + (getHauteur() * 2) > coffre.getYValue();
     }
 
 }

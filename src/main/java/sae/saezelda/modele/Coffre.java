@@ -1,13 +1,16 @@
 package sae.saezelda.modele;
 
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
 public class Coffre {
+    private static int nextId = 1;
+    private final int id;
     private Item Contenu;
     private int x;
     private int y;
-    private Terrain terrain;
     private BooleanProperty ouvert;
     private int width;
     private int height;
@@ -15,24 +18,28 @@ public class Coffre {
 
 
     // Constructeur pour le premier coffre
-    public Coffre(Item Contenue,int x ,  int y ,Terrain terrain ){
+    public Coffre(Item Contenue,int x ,  int y){
+        this.id = nextId++;
         this.Contenu=Contenue;
         this.x=x;
         this.y=y;
         this.width=32;
         this.height=32;
         this.ouvert=new SimpleBooleanProperty(false);
-        this.terrain=terrain;
+    }
+
+    public int getId() {
+        return id;
     }
 
 
-
-    public int getX(){
+    public int getXValue() {
         return x;
     }
-    public int getY(){
+    public int getYValue() {
         return y;
     }
+
     public int getLargeur(){
         return width;
     }

@@ -9,23 +9,22 @@ import sae.saezelda.modele.Coffre;
 public class CoffreVue {
     private Coffre coffre;
     private Pane panneauJeu;
-    private TerrainVue terrainVue;
     private ImageView coffreImageView;
 
     // Constructor
-    public CoffreVue(Coffre coffre, Pane panneauJeu, TerrainVue terrainVue) {
+    public CoffreVue(Coffre coffre, Pane panneauJeu) {
         this.coffre = coffre;
         this.panneauJeu = panneauJeu;
-        this.terrainVue = terrainVue;
 
         this.coffreImageView = new ImageView();
         this.coffreImageView.setFitWidth(32);
         this.coffreImageView.setFitHeight(32);
-        this.coffreImageView.setTranslateX(coffre.getX());
-        this.coffreImageView.setTranslateY(coffre.getY());
+        this.coffreImageView.setTranslateX(coffre.getXValue());
+        this.coffreImageView.setTranslateY(coffre.getYValue());
 
         Image coffreFermeImage = new Image(String.valueOf(Main.class.getResource("/image/coffre_ferme.png")));
         Image coffreOuvertImage = new Image(String.valueOf(Main.class.getResource("/image/coffre_ouvert.png")));
+        coffreImageView.setId("coffre" + coffre.getId());
 
         this.coffreImageView.setImage(coffreFermeImage);
 

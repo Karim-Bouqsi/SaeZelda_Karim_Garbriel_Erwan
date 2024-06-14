@@ -11,8 +11,9 @@ public class Environnement {
     private int hauteur = 320;
     private ObservableList<Obstacle> obstacles;
     private ObservableList<Fleche> fleches;
-    private ArrayList<Zombie> zombies;
+    private ObservableList<Zombie> zombies;
     private ObservableList<Bombe> bombes;
+    private ObservableList<Coffre> coffres;
     private Terrain terrain;
     private Link link;
 
@@ -20,7 +21,8 @@ public class Environnement {
         obstacles = FXCollections.observableArrayList();
         bombes = FXCollections.observableArrayList();
         fleches = FXCollections.observableArrayList();
-        zombies = new ArrayList<>();
+        zombies = FXCollections.observableArrayList();
+        coffres = FXCollections.observableArrayList();
         this.terrain = new Terrain();
         this.link = new Link(this, terrain);
     }
@@ -81,12 +83,18 @@ public class Environnement {
         }
         fleches.removeAll(flechesASupprimer);
     }
-
+    public void retirerZombie(Zombie zombie) {
+        zombies.remove(zombie);
+    }
     public boolean estDansLesLimites(int x, int y) {
         if (link != null && x >= 0 && x <= largeur - link.getLargeur() && y >= -link.getHauteur() && y <= hauteur - link.getHauteur()) {
             return true;
         }
         return false;
+    }
+
+    public ObservableList<Coffre> getCoffres() {
+        return coffres;
     }
 
     public boolean estObstacle(int x, int y) {
@@ -100,7 +108,9 @@ public class Environnement {
     public void ajouterBombe(Bombe bombe) {
         bombes.add(bombe);
     }
-
+    public void ajouterCoffre(Coffre coffre) {
+        coffres.add(coffre);
+    }
     public void retirerBombe(Bombe bombe) {
         bombes.remove(bombe);
     }
@@ -117,7 +127,7 @@ public class Environnement {
         this.zombies.add(zombie);
     }
 
-    public ArrayList<Zombie> getZombies() {
+    public ObservableList<Zombie> getZombies() {
         return zombies;
     }
 
@@ -135,7 +145,29 @@ public class Environnement {
         System.out.println("Nouvelle position valide");
         return true;
     }
+    public void setTerrain(Terrain terrain) {
+        this.terrain = terrain;
+    }
+    public void reinitialiserElementsTerrain() {
+        obstacles.clear();
+        bombes.clear();
+        fleches.clear();
+        zombies.clear();
+        System.out.println("taille coooofre : " + coffres.size());
+        coffres.clear();
+        System.out.println("taille coooofre : " + coffres.size());
 
+    }
+
+    public void changerTerrain(Terrain terrain) {
+        this.terrain = terrain;
+        link.setTerrain(terrain);
+        reinitialiserElementsTerrain();
+    }
+
+    public Terrain getTerrainActuel() {
+        return terrain;
+    }
     public Terrain getTerrain() {
         return terrain;
     }

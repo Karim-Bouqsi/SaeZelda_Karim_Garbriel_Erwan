@@ -9,16 +9,13 @@ import sae.saezelda.modele.Zombie;
 public class ZombieVue {
     private Zombie zombie;
     private Pane panneauJeu;
-    private TerrainVue terrainVue;
     private ImageView imageView;
     private Image normalImage;
     private Image attackImage;
 
-    public ZombieVue(Zombie zombie, Pane panneauJeu, TerrainVue terrainVue) {
+    public ZombieVue(Zombie zombie, Pane panneauJeu) {
         this.zombie = zombie;
         this.panneauJeu = panneauJeu;
-        this.terrainVue = terrainVue;
-
         normalImage = new Image(String.valueOf(Main.class.getResource("/image/personnage/zombie19x32.png")));
         attackImage = new Image(String.valueOf(Main.class.getResource("/image/personnage/attaquezombie.gif")));
         Image mortImage = new Image(String.valueOf(Main.class.getResource("/image/personnage/mort_zombie.png")));
@@ -28,6 +25,8 @@ public class ZombieVue {
         imageView.setFitHeight(32);
         imageView.setTranslateX(zombie.getXValue());
         imageView.setTranslateY(zombie.getYValue());
+
+        imageView.setId("personnage" + zombie.getId());
 
         imageView.translateXProperty().bind(zombie.getXProperties());
         imageView.translateYProperty().bind(zombie.getYProperties());
@@ -42,7 +41,9 @@ public class ZombieVue {
         });
 
         zombie.getMortProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("Entrez dans le listerner de la mort du zombie");
             if (newValue) {
+                System.out.println("Image de la mort du zombie");
                 imageView.setImage(mortImage);
             }
         });

@@ -13,6 +13,7 @@ public class ObstacleVue {
         this.obstacle = obstacle;
         this.panneauJeu = panneauJeu;
         this.imageObstacle = new ImageView(obstacle.getImage());
+        imageObstacle.setId("obstacle" + obstacle.getId());
 
 
         imageObstacle.translateXProperty().bind(obstacle.getXProperties());

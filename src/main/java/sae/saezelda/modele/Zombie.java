@@ -45,7 +45,8 @@ public class Zombie extends Personnage {
     }
 
     public void deplacerVersLink(int linkX, int linkY) {
-        if (!super.getMortValue()) {
+        System.out.println(getMortValue());
+        if (!getMortValue()) {
             if (getYValue() == linkY) {
                 if (getXValue() < linkX) {
                     setDirectionValue(Direction.RIGHT);
@@ -63,6 +64,9 @@ public class Zombie extends Personnage {
             }
             attaquerLink();
         }
+//        else if(getMortValue() == true) {
+//            getEnvironnement().getZombies().remove(this);
+//        }
     }
 
     public void attaquerLink() {

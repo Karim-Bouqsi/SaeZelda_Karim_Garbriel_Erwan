@@ -17,6 +17,7 @@ public class BombeVue {
 
         Image bombeImage = new Image(String.valueOf(Main.class.getResource("/image/bombe.gif")));
         bombeImageView = new ImageView(bombeImage);
+        bombeImageView.setId("bombe" + bombe.getId());
 
         bombeImageView.translateXProperty().bind(bombe.getXProperty());
         bombeImageView.translateYProperty().bind(bombe.getYProperty());

@@ -1,20 +1,20 @@
 package sae.saezelda.modele;
 
 import javafx.collections.ListChangeListener;
-import javafx.scene.layout.Pane;
 import javafx.scene.image.ImageView;
-import sae.saezelda.Main;
-import sae.saezelda.vue.BombeVue;
+import javafx.scene.layout.Pane;
 
-public class MonObservableListeBombe implements ListChangeListener<Bombe> {
+import sae.saezelda.vue.CoffreVue;
+
+public class MonObservableListeCoffre implements ListChangeListener<Coffre> {
     private Pane panneauJeu;
 
-    public MonObservableListeBombe(Pane panneauJeu) {
+    public MonObservableListeCoffre(Pane panneauJeu) {
         this.panneauJeu = panneauJeu;
     }
 
     @Override
-    public void onChanged(Change<? extends Bombe> change) {
+    public void onChanged(ListChangeListener.Change<? extends Coffre> change) {
         while (change.next()) {
             if (change.wasAdded()) {
                 for(int i = 0; i < change.getAddedSubList().size(); i++) {
@@ -23,18 +23,16 @@ public class MonObservableListeBombe implements ListChangeListener<Bombe> {
             }
             if (change.wasRemoved()) {
                 for(int i = 0; i < change.getRemoved().size(); i++) {
-                    panneauJeu.getChildren().remove(this.panneauJeu.lookup("#bombe" + change.getRemoved().get(i).getId()));
+                    panneauJeu.getChildren().remove(this.panneauJeu.lookup("#coffre" + change.getRemoved().get(i).getId()));
                 }
             }
         }
     }
 
-    private void creerSprite(Bombe bombe) {
-        ImageView imageView = (ImageView) panneauJeu.lookup("#bombe" + bombe.getId());
+    private void creerSprite(Coffre coffre) {
+        ImageView imageView = (ImageView) panneauJeu.lookup("#coffre" + coffre.getId());
         if (imageView == null) {
-
-            BombeVue bombeVue = new BombeVue(bombe, panneauJeu);
+            CoffreVue coffreVue = new CoffreVue(coffre, panneauJeu);
         }
     }
 }
-

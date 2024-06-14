@@ -8,10 +8,13 @@ import sae.saezelda.modele.Terrain;
 public class TerrainVue {
     private Terrain terrain;
     private TilePane panneauJeu;
+    private boolean utiliserTerrain2;
 
-    public TerrainVue(Terrain terrain, TilePane panneauJeu){
+
+    public TerrainVue(Terrain terrain, TilePane panneauJeu, boolean utiliserTerrain2){
         this.terrain = terrain;
         this.panneauJeu = panneauJeu;
+        this.utiliserTerrain2 = utiliserTerrain2;
         afficherTerrain();
     }
     public void afficherTerrain(){
@@ -25,7 +28,10 @@ public class TerrainVue {
         Image solPierre = new Image(String.valueOf(Main.class.getResource("/image/solPierre.png")));
         Image fleur = new Image(String.valueOf(Main.class.getResource("/image/fleur.png")));
         Image obstaclePierre = new Image(String.valueOf(Main.class.getResource("/image/pierre.png")));
+        Image portail = new Image(String.valueOf(Main.class.getResource("/image/portail.png")));
 
+
+        panneauJeu.getChildren().clear();
 
         for (int i = 0; i < terrain.getTerrain().length; i++){
             switch (terrain.getTerrain()[i]) {
@@ -49,8 +55,16 @@ public class TerrainVue {
                 case 4 :
                     ImageView ivObstaclePierre = new ImageView(obstaclePierre);
                     panneauJeu.getChildren().add(ivObstaclePierre);
+                case 5 :
+                    ImageView imageViewPortail = new ImageView(portail);
+                    panneauJeu.getChildren().add(imageViewPortail);
             }
         }
+    }
+
+    public void setTerrain(Terrain terrain) {
+        this.terrain = terrain;
+        afficherTerrain();
     }
 
     public TilePane getPanneauJeu() {

@@ -21,11 +21,11 @@ public class GameLoop {
     private Zombie zombie;
     private ZombieVue zombieVue;
 
-    public GameLoop(Link link, LinkVue linkVue, Zombie zombie, ZombieVue zombieVue) {
+    public GameLoop(Link link, LinkVue linkVue) {
         this.link = link;
         this.linkVue = linkVue;
         this.zombie = zombie;
-        this.zombieVue = zombieVue;
+//        this.zombieVue = zombieVue;
     }
 
     public void startGameLoop(Environnement environnement, Pane paneJeu) {
@@ -43,8 +43,10 @@ public class GameLoop {
         link.linkMove();
         int linkX = link.getXValue();
         int linkY = link.getYValue();
-        zombie.deplacerVersLink(linkX, linkY);
-
+        for (int i =0; i < environnement.getZombies().size(); i++) {
+            environnement.getZombies().get(i).deplacerVersLink(linkX,linkY);
+//            System.out.println(environnement.getZombies().get(i).getMortValue());
+        }
         environnement.faireAvancerLesFleches();
         link.decrementCooldown();
     }
