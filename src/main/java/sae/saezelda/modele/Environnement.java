@@ -14,6 +14,8 @@ public class Environnement {
     private ObservableList<Zombie> zombies;
     private ObservableList<Bombe> bombes;
     private ObservableList<Coffre> coffres;
+    private ObservableList<Pnj> pnjs;
+
     private Terrain terrain;
     private Link link;
 
@@ -23,8 +25,15 @@ public class Environnement {
         fleches = FXCollections.observableArrayList();
         zombies = FXCollections.observableArrayList();
         coffres = FXCollections.observableArrayList();
+        pnjs = FXCollections.observableArrayList();
         this.terrain = new Terrain();
         this.link = new Link(this, terrain);
+    }
+    public void ajouterPnj(Pnj pnj) {
+        pnjs.add(pnj);
+    }
+    public ObservableList<Pnj> getPnjs() {
+        return pnjs;
     }
 
     public int getLargeur() {
@@ -153,9 +162,8 @@ public class Environnement {
         bombes.clear();
         fleches.clear();
         zombies.clear();
-        System.out.println("taille coooofre : " + coffres.size());
         coffres.clear();
-        System.out.println("taille coooofre : " + coffres.size());
+        pnjs.clear();
 
     }
 

@@ -183,8 +183,39 @@ public class Link extends Personnage {
             setXValue(x);
             setYValue(y);
         }
+//        for (int i=0; i < getEnvironnement().getPnjs().size(); i++) {
+//            if (getEnvironnement().getLink().estDansZonePnj(getEnvironnement().getPnjs().get(i).getXValue(), getEnvironnement().getPnjs().get(i).getYValue())) {
+//                String dialogue = getEnvironnement().getPnjs().get(i).parler();
+//                System.out.println(dialogue);
+//            }
+//        }
+    }
+    public String parlerPnjProche() {
+        for(int i = 0; i < getEnvironnement().getPnjs().size();i++) {
+            if(estDansZonePnj(getEnvironnement().getPnjs().get(i).getXValue(),getEnvironnement().getPnjs().get(i).getYValue())) {
+                return getEnvironnement().getPnjs().get(i).parler();
+            }
+        }
+        return null;
     }
 
+    public boolean linkEstDansZoneTeleportation() {
+        // Coordonne pour les tests
+
+        int minX = 600;
+        int maxX = 625;
+        int minY = 280;
+        int maxY = 320;
+
+        // Vrai coordonnee ( en bas a droite de la map )
+
+
+        int linkX = getXValue();
+        int linkY = getYValue();
+        System.out.println(linkX);
+        System.out.println(linkY);
+        return (linkX >= minX && linkX <= maxX && linkY >= minY && linkY <= maxY);
+    }
     public BooleanProperty getArcEquipeProperty() {
         return arcEquipe;
     }
@@ -213,4 +244,10 @@ public class Link extends Personnage {
                 getYValue() + (getHauteur() * 2) > coffre.getYValue();
     }
 
+    public boolean estDansZonePnj(int pnjX, int pnjY) {
+        int linkX = getXValue();
+        int linkY = getYValue();
+        return linkX - 19 < pnjX + 32 && linkX + (19 * 2) > pnjX &&
+                linkY - 32 < pnjY + 32 && linkY + (32 * 2) > pnjY;
+    }
 }

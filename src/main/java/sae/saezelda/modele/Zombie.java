@@ -45,7 +45,6 @@ public class Zombie extends Personnage {
     }
 
     public void deplacerVersLink(int linkX, int linkY) {
-        System.out.println(getMortValue());
         if (!getMortValue()) {
             if (getYValue() == linkY) {
                 if (getXValue() < linkX) {

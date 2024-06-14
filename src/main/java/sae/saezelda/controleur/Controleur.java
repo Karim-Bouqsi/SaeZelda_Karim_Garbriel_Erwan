@@ -38,6 +38,9 @@ public class Controleur implements Initializable {
 
     @FXML
     private Label pvLink;
+    @FXML
+    private Label dialogueLabel;
+
 
     private MonObservableListeBombe observableListeBombe;
     private Environnement environnement;
@@ -75,6 +78,9 @@ public class Controleur implements Initializable {
         MonObservableListeFleche observableListeFleche = new MonObservableListeFleche(paneJeu);
         environnement.getFleches().addListener(observableListeFleche);
 
+        MonObservableListePnj observableListePnj = new MonObservableListePnj(paneJeu);
+        environnement.getPnjs().addListener(observableListePnj);
+
         pvLink.textProperty().bind(link.getPvProperties().asString());
 
 
@@ -88,6 +94,10 @@ public class Controleur implements Initializable {
 //        coffreVue = new CoffreVue(coffre1, paneJeu);
 
 
+//              Bon pnj avec bonne coordonne
+        Pnj pnj = new Pnj("Sage", 620, 170, 10, 32, 19,2, terrainActif, environnement, 10000);
+//        Pnj pnj = new Pnj("Sage", 70, 0, 10, 32, 19,2, terrainActif, environnement, 10000);
+        environnement.ajouterPnj(pnj);
 
 
 
@@ -156,9 +166,12 @@ public class Controleur implements Initializable {
             link.attaquerCouteau();
         }
         else if(code == KeyCode.P) {
-            if (linkEstDansZoneTeleportation() && !terrainRemplace) {
+            if (link.linkEstDansZoneTeleportation() && !terrainRemplace) {
                 remplacerTerrain();
             }
+        }
+        else if (code == KeyCode.I) {
+            dialogueLabel.setText(link.parlerPnjProche());
         }
         changerDirectionLink();
     }
@@ -192,23 +205,6 @@ public class Controleur implements Initializable {
             return null;
         }
     return null;
-    }
-    private boolean linkEstDansZoneTeleportation() {
-        // Coordonne pour les tests
-
-        int minX = 0;
-        int maxX = 100;
-        int minY = 0;
-        int maxY = 100;
-
-        // Vrai coordonnee ( en bas a droite de la map )
-
-
-        int linkX = link.getXValue();
-        int linkY = link.getYValue();
-        System.out.println(linkX);
-        System.out.println(linkY);
-        return (linkX >= minX && linkX <= maxX && linkY >= minY && linkY <= maxY);
     }
 
 

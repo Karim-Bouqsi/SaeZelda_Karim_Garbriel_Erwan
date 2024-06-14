@@ -20,8 +20,6 @@ public class ObstacleVue {
         imageObstacle.translateYProperty().bind(obstacle.getYProperties());
 
         panneauJeu.getChildren().add(imageObstacle);
-
-
     }
 
 }
