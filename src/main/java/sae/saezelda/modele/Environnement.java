@@ -141,17 +141,19 @@ public class Environnement {
     }
 
     public boolean nouvellePositionValide(int x, int y) {
+
         if (!estDansLesLimites(x, y)) {
-            System.out.println("Nouvelle position invalide");
+//            System.out.println("Nouvelle position invalide");
             return false;
         }
+
         for (Obstacle obstacle : obstacles) {
             if (obstacle.getXValue() == x && obstacle.getYValue() == y) {
-                System.out.println("Nouvelle position invalide");
+//                System.out.println("Nouvelle position invalide");
                 return false;
             }
         }
-        System.out.println("Nouvelle position valide");
+//        System.out.println("Nouvelle position valide");
         return true;
     }
     public void setTerrain(Terrain terrain) {

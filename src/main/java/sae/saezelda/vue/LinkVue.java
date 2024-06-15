@@ -8,6 +8,8 @@ import sae.saezelda.Main;
 import sae.saezelda.modele.Direction;
 import sae.saezelda.modele.Link;
 
+import java.security.spec.RSAOtherPrimeInfo;
+
 public class LinkVue {
     private Link link;
     private Pane panneauJeu;
@@ -18,11 +20,11 @@ public class LinkVue {
     private Image[] imagesLinkCouteau;
 
 
-
     public LinkVue(Link link, Pane panneauJeu, TerrainVue terrainVue) {
         this.link = link;
         this.panneauJeu = panneauJeu;
         this.terrainVue = terrainVue;
+
 
         imagesLink = new Image[9];
         imagesLink[Direction.DOWN] = new Image(String.valueOf(Main.class.getResource("/image/personnage/linkbas.gif")));
@@ -77,14 +79,14 @@ public class LinkVue {
                  linkImageView.setImage(imageLinkMort);
              }
          });
-        link.getArcEquipeProperty().addListener((observable, oldValue, newValue) -> updateLinkImageView());
+        link.getArcEquipeProperty().addListener((observable, oldValue, newValue) ->
+                updateLinkImageView());
         link.getAttaqueCouteauProperty().addListener((observable, oldValue, newValue) -> {
             updateLinkImageView();
         });
-
     }
 
-    private void updateLinkImageView() {
+    public void updateLinkImageView() {
         int direction = link.getDirectionValue();
         if (direction >= 0 && direction < imagesLink.length && !link.getMortValue()) {
             if (link.getArcEquiperValue()) {
@@ -99,7 +101,6 @@ public class LinkVue {
         }
     }
 
-    public Link getLink() {
-        return link;
-    }
+
+
 }

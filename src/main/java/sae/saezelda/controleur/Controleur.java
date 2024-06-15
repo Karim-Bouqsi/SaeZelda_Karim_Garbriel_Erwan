@@ -203,7 +203,7 @@ public class Controleur implements Initializable {
 
     private Coffre coffreDansZone() {
         if(!environnement.getCoffres().isEmpty()) {
-            if (link.estDansZone(coffre1)) {
+            if (link.estDansZoneCoffre(coffre1)) {
                 if (coffre1.estOuvert()) {
                     System.out.println("Le coffre a déjà été ouvert");
                     return null;

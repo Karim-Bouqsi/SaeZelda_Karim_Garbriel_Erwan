@@ -16,6 +16,8 @@ public class Link extends Personnage {
     private BooleanProperty peutTirerFLeches;
     private BooleanProperty peutAttaquerCouteau;
     private BooleanProperty attaqueCouteau;
+
+
     private Terrain terrain;
 
     public Link(Environnement environnement, Terrain terrain) {
@@ -27,7 +29,6 @@ public class Link extends Personnage {
         this.terrain = terrain;
         this.arcEquipe = new SimpleBooleanProperty(false);
         this.attaqueCouteau = new SimpleBooleanProperty(false);
-
     }
 
     public void utiliser(Item item) {
@@ -40,6 +41,7 @@ public class Link extends Personnage {
         }
     }
 
+
     public void placerBombe() {
         if (peutPoserBombe.get() && !getMortValue()) {
             Bombe bombe = new Bombe("Bombe", 50, getXValue(), getYValue(), getEnvironnement());
@@ -51,6 +53,9 @@ public class Link extends Personnage {
             System.out.println("Doucement les bombes");
         }
     }
+
+
+
 //    public void tirerAvecArc() {
 //        System.out.println("print en dehors du if tirerarc");
 //        if (arc != null && arc.getNombreDeFleches() > 0 && peutTirerFLeches.get() && !getMortValue()) {
@@ -97,7 +102,8 @@ public class Link extends Personnage {
             System.out.println("Tu n'as pas de flèche");
         }
     }
-    public boolean getArcEquiperValue() {
+
+        public boolean getArcEquiperValue() {
         return arcEquipe.getValue();
     }
     public boolean getCouteauAttaqueValue() {
@@ -107,7 +113,6 @@ public class Link extends Personnage {
     public void setCouteauAttaqueValue(boolean couteauValue) {
         this.attaqueCouteau.set(couteauValue);
     }
-
     public void attaquerCouteau() {
         if(!getMortValue() && !getArcEquiperValue()) {
             attaqueCouteau.set(true);
@@ -182,22 +187,25 @@ public class Link extends Personnage {
 
     }
 
+
     public void pousserPierre(int direction, Obstacle pierre) {
         int newX = pierre.getXValue();
         int newY = pierre.getYValue();
+        int terrainLargeur = getEnvironnement().getLargeur();
+        int terrainHauteur = getEnvironnement().getHauteur();
 
         switch (direction) {
             case Direction.UP:
-                newY -= 1;
+                newY -= 3;
                 break;
             case Direction.DOWN:
-                newY += 1;
+                newY += 3;
                 break;
             case Direction.LEFT:
-                newX -= 1;
+                newX -= 3;
                 break;
             case Direction.RIGHT:
-                newX += 1;
+                newX += 3;
                 break;
             case Direction.UP_LEFT:
             case Direction.UP_RIGHT:
@@ -206,7 +214,8 @@ public class Link extends Personnage {
                 break;
         }
 
-        if (getEnvironnement().nouvellePositionValide(newX, newY)) {
+
+        if (newX >= 0 && newX <= terrainLargeur - pierre.getLargeur() && newY >= 0 && newY <= terrainHauteur - pierre.getHauteur() && getEnvironnement().nouvellePositionValide(newX, newY)) {
             switch (direction) {
                 case Direction.UP:
                     pierre.move(0, -3);
@@ -226,8 +235,22 @@ public class Link extends Personnage {
                 case Direction.DOWN_RIGHT:
                     break;
             }
+        } else {
+            if (direction == Direction.LEFT && newX >= 0) {
+                pierre.move(-3, 0);
+            } else if (direction == Direction.RIGHT && newX <= terrainLargeur - pierre.getLargeur()) {
+                pierre.move(3, 0);
+            } else if (direction == Direction.UP && newY >= 0) {
+                pierre.move(0, -3);
+            } else if (direction == Direction.DOWN && newY <= terrainHauteur - pierre.getHauteur()) {
+                pierre.move(0, 3);
+            } else {
+                System.out.println("Deplacement impossible hors terrain");
+            }
         }
     }
+
+
 
     public void linkVerification(int x, int y) {
         Obstacle obstacle = recupererObstacle(x, y);
@@ -235,15 +258,10 @@ public class Link extends Personnage {
             pousserPierre(getDirectionValue(), obstacle);
         }
 
-        if (detecterPierre(getDirectionValue(), x, y)) {
-            System.out.println("Obstacle détecté " + getDirectionValue());
-        }
-
         if (canMove(getDirectionValue(), x, y)) {
             setXValue(x);
             setYValue(y);
         }
-
     }
     public String parlerPnjProche() {
         for(int i = 0; i < getEnvironnement().getPnjs().size();i++) {
@@ -278,6 +296,7 @@ public class Link extends Personnage {
         return attaqueCouteau;
     }
 
+
     public boolean arcEquipeValue() {
         return arcEquipe.get();
     }
@@ -295,7 +314,7 @@ public class Link extends Personnage {
         this.arc = arc;
     }
 
-    public boolean estDansZone(Coffre coffre) {
+    public boolean estDansZoneCoffre(Coffre coffre) {
         return getXValue() - getHauteur() < coffre.getXValue() + coffre.getLargeur() &&
                 getXValue() + (getHauteur() * 2) > coffre.getXValue() &&
                 getYValue() - getHauteur() < coffre.getYValue() + coffre.getHauteur() &&
