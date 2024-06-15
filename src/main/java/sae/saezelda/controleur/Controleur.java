@@ -40,6 +40,9 @@ public class Controleur implements Initializable {
     private Label pvLink;
     @FXML
     private Label dialogueLabel;
+    @FXML
+    private Label gameOverLabel;
+
 
 
     private MonObservableListeBombe observableListeBombe;
@@ -62,6 +65,12 @@ public class Controleur implements Initializable {
         link = new Link(environnement, terrainActif);
         environnement.setLink(link);
         linkVue = new LinkVue(link, paneJeu, terrainVueActif);
+        link.getMortProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                afficherGameOver();
+            }
+        });
+
 
         MonObservableListeObstacle observableListeObstacle = new MonObservableListeObstacle(paneJeu);
         environnement.getObstacles().addListener(observableListeObstacle);
@@ -94,17 +103,15 @@ public class Controleur implements Initializable {
 //        coffreVue = new CoffreVue(coffre1, paneJeu);
 
 
-//              Bon pnj avec bonne coordonne
         Pnj pnj = new Pnj("Sage", 620, 170, 10, 32, 19,2, terrainActif, environnement, 10000);
 //        Pnj pnj = new Pnj("Sage", 70, 0, 10, 32, 19,2, terrainActif, environnement, 10000);
         environnement.ajouterPnj(pnj);
 
 
 
-        // Changement de terrain OK Disparition du Zombie OK ImageDuZombieMort NON
         Zombie zombie = new Zombie(environnement, terrainActif);
         environnement.ajouterZombie(zombie);
-//        ZombieVue zombieVue = new ZombieVue(zombie, paneJeu, terrainVueActif);
+
 
 
         gameLoop = new GameLoop(link, linkVue);
@@ -112,6 +119,9 @@ public class Controleur implements Initializable {
 
         paneJeu.setFocusTraversable(true);
         paneJeu.requestFocus();
+    }
+    private void afficherGameOver() {
+        gameOverLabel.setVisible(true);
     }
 
     private void remplacerTerrain() {

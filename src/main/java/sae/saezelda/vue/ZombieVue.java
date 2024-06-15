@@ -41,7 +41,6 @@ public class ZombieVue {
         });
 
         zombie.getMortProperty().addListener((observable, oldValue, newValue) -> {
-//            System.out.println("Entrez dans le listerner de la mort du zombie");
             if (newValue) {
                 imageView.setImage(mortImage);
             }

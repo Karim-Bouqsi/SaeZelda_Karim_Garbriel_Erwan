@@ -15,6 +15,7 @@ public class Link extends Personnage {
     private BooleanProperty peutPoserBombe;
     private BooleanProperty peutTirerFLeches;
     private BooleanProperty peutAttaquerCouteau;
+    private BooleanProperty attaqueCouteau;
     private Terrain terrain;
 
     public Link(Environnement environnement, Terrain terrain) {
@@ -25,21 +26,22 @@ public class Link extends Personnage {
         this.peutAttaquerCouteau = new SimpleBooleanProperty(true);
         this.terrain = terrain;
         this.arcEquipe = new SimpleBooleanProperty(false);
+        this.attaqueCouteau = new SimpleBooleanProperty(false);
+
     }
 
     public void utiliser(Item item) {
         if (item != null) {
             System.out.println("Link a ramassé " + item.getNom());
             this.item = item;
-            this.arc = null;
-            this.cooldown = 60;
-            this.cooldownCompteur = 0;
-            this.arcEquipe.set(false);
+            if(item instanceof Arc) {
+                this.arcEquipe.set(true);
+            }
         }
     }
 
     public void placerBombe() {
-        if (peutPoserBombe.get()) {
+        if (peutPoserBombe.get() && !getMortValue()) {
             Bombe bombe = new Bombe("Bombe", 50, getXValue(), getYValue(), getEnvironnement());
             getEnvironnement().ajouterBombe(bombe);
             bombe.cooldownBombeEtExplose();
@@ -49,13 +51,43 @@ public class Link extends Personnage {
             System.out.println("Doucement les bombes");
         }
     }
+//    public void tirerAvecArc() {
+//        System.out.println("print en dehors du if tirerarc");
+//        if (arc != null && arc.getNombreDeFleches() > 0 && peutTirerFLeches.get() && !getMortValue()) {
+//            System.out.println("print du if tirerarc");
+//            Fleche fleche = new Fleche(getXValue() + getLargeur(), getYValue() + getHauteur() / 2, getDirectionValue(), 5, getEnvironnement());
+//            getEnvironnement().ajouterFleche(fleche);
+//            arc.setNombreDeFleches(arc.getNombreDeFleches() - 1);
+//            peutTirerFLeches.set(false);
+//            activerCooldownFleche();
+//        } else if (arc == null) {
+//            System.out.println("Tu n'as pas d'arc");
+//        } else {
+//            System.out.println("Tu n'as pas de flèche");
+//        }
+//    }
 
     public void tirerAvecArc() {
-        System.out.println("print en dehors du if tirerarc");
+        Fleche fleche;
         if (arc != null && arc.getNombreDeFleches() > 0 && peutTirerFLeches.get() && !getMortValue()) {
-            System.out.println("print du if tirerarc");
-            Fleche fleche = new Fleche(getXValue() + getLargeur(), getYValue() + getHauteur() / 2, getDirectionValue(), 5, getEnvironnement());
-            getEnvironnement().ajouterFleche(fleche);
+            switch (getDirectionValue()) {
+                case Direction.RIGHT, Direction.DOWN_RIGHT, Direction.UP_RIGHT :
+                    fleche = new Fleche(getXValue() + getLargeur(), getYValue() + getHauteur() / 2, getDirectionValue(), 5, getEnvironnement());
+                    getEnvironnement().ajouterFleche(fleche);
+                    break;
+                case Direction.LEFT, Direction.DOWN_LEFT, Direction.UP_LEFT:
+                    fleche = new Fleche(getXValue(), getYValue() + getHauteur() / 2, getDirectionValue(), 5, getEnvironnement());
+                    getEnvironnement().ajouterFleche(fleche);
+                    break;
+                case Direction.DOWN:
+                    fleche = new Fleche(getXValue() + getLargeur()/2, getYValue() + getHauteur(), getDirectionValue(), 5, getEnvironnement());
+                    getEnvironnement().ajouterFleche(fleche);
+                    break;
+                case Direction.UP:
+                    fleche = new Fleche(getXValue() + getLargeur()/2, getYValue(), getDirectionValue(), 5, getEnvironnement());
+                    getEnvironnement().ajouterFleche(fleche);
+                    break;
+            }
             arc.setNombreDeFleches(arc.getNombreDeFleches() - 1);
             peutTirerFLeches.set(false);
             activerCooldownFleche();
@@ -65,23 +97,37 @@ public class Link extends Personnage {
             System.out.println("Tu n'as pas de flèche");
         }
     }
+    public boolean getArcEquiperValue() {
+        return arcEquipe.getValue();
+    }
+    public boolean getCouteauAttaqueValue() {
+        return attaqueCouteau.getValue();
+    }
+
+    public void setCouteauAttaqueValue(boolean couteauValue) {
+        this.attaqueCouteau.set(couteauValue);
+    }
 
     public void attaquerCouteau() {
-        Couteau couteau = new Couteau("couteau", 70, getEnvironnement());
-        for (Zombie zombie : getEnvironnement().getZombies()) {
-            if (getXValue() - 32 < zombie.getXValue() + zombie.getLargeur() && getXValue() + (32 * 2) > zombie.getXValue() &&
-                    getYValue() - 32 < zombie.getYValue() + zombie.getHauteur() && getYValue() + (32 * 2) > zombie.getYValue()) {
-                System.out.println("Zombie à proximité");
-                if (peutAttaquerCouteau.get()) {
-                    System.out.println("Le zombie a été attaqué au couteau");
-                    zombie.recevoirDegats(couteau.getPtAtt());
-                    peutAttaquerCouteau.set(false);
-                    activerCooldownCouteau();
+        if(!getMortValue()) {
+            attaqueCouteau.set(true);
+            Couteau couteau = new Couteau("couteau", 70, getEnvironnement());
+            for (Zombie zombie : getEnvironnement().getZombies()) {
+                if (getXValue() - 32 < zombie.getXValue() + zombie.getLargeur() && getXValue() + (32 * 2) > zombie.getXValue() &&
+                        getYValue() - 32 < zombie.getYValue() + zombie.getHauteur() && getYValue() + (32 * 2) > zombie.getYValue()) {
+                    System.out.println("Zombie à proximité");
+                    if (peutAttaquerCouteau.get()) {
+                        System.out.println("Le zombie a été attaqué au couteau");
+                        zombie.recevoirDegats(couteau.getPtAtt());
+                        peutAttaquerCouteau.set(false);
+                    }
+                } else {
+                    System.out.println("Zombie non détecté à proximité");
                 }
-            } else {
-                System.out.println("Zombie non détecté à proximité");
             }
+            activerCooldownCouteau();
         }
+
     }
 
     public void activerCooldownBombe() {
@@ -93,11 +139,19 @@ public class Link extends Personnage {
         Timeline cooldownTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> peutTirerFLeches.set(true)));
         cooldownTimeline.play();
     }
-
-    private void activerCooldownCouteau() {
-        Timeline cooldownTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> peutAttaquerCouteau.set(true)));
+    public void activerCooldownCouteau() {
+        Timeline cooldownTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            attaqueCouteau.set(false);
+            peutAttaquerCouteau.set(true);
+        }));
         cooldownTimeline.play();
     }
+
+
+//    private void activerCooldownCouteau() {
+//        Timeline cooldownTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> peutAttaquerCouteau.set(true)));
+//        cooldownTimeline.play();
+//    }
 
     public void recevoirDegats(int degats) {
         setPvValue(getPvValue() - degats);
@@ -118,8 +172,14 @@ public class Link extends Personnage {
 
 
     public void linkMove() {
-        int[] tabindice = super.move();
-        linkVerification(tabindice[0], tabindice[1]);
+        if(getPvValue() <= 0) {
+            setMortValue(true);
+        }
+        if(!getMortValue()) {
+            int[] tabindice = super.move();
+            linkVerification(tabindice[0], tabindice[1]);
+        }
+
     }
 
     public void pousserPierre(int direction, Obstacle pierre) {
@@ -183,12 +243,7 @@ public class Link extends Personnage {
             setXValue(x);
             setYValue(y);
         }
-//        for (int i=0; i < getEnvironnement().getPnjs().size(); i++) {
-//            if (getEnvironnement().getLink().estDansZonePnj(getEnvironnement().getPnjs().get(i).getXValue(), getEnvironnement().getPnjs().get(i).getYValue())) {
-//                String dialogue = getEnvironnement().getPnjs().get(i).parler();
-//                System.out.println(dialogue);
-//            }
-//        }
+
     }
     public String parlerPnjProche() {
         for(int i = 0; i < getEnvironnement().getPnjs().size();i++) {
@@ -218,6 +273,9 @@ public class Link extends Personnage {
     }
     public BooleanProperty getArcEquipeProperty() {
         return arcEquipe;
+    }
+    public BooleanProperty getAttaqueCouteauProperty() {
+        return attaqueCouteau;
     }
 
     public boolean arcEquipeValue() {

@@ -63,6 +63,9 @@ public class Zombie extends Personnage {
             }
             attaquerLink();
         }
+        else if(getEnvironnement().getLink().getMortValue()) {
+            deplacer();
+        }
 //        else if(getMortValue() == true) {
 //            getEnvironnement().getZombies().remove(this);
 //        }
@@ -72,7 +75,7 @@ public class Zombie extends Personnage {
         Environnement environnement = getEnvironnement();
         Link link = environnement.getLink();
 
-        if (!super.getMortValue()) {
+        if (!super.getMortValue() && !getEnvironnement().getLink().getMortValue()) {
             int distanceX = Math.abs(getXValue() - link.getXValue());
             int distanceY = Math.abs(getYValue() - link.getYValue());
             int proximite = 2;
@@ -83,6 +86,10 @@ public class Zombie extends Personnage {
             } else {
                 attaqueLink.set(false);
             }
+        }
+        else {
+            deplacer();
+            attaqueLink.set(false);
         }
     }
 
