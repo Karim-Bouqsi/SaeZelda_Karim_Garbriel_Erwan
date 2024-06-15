@@ -16,7 +16,9 @@ public class Link extends Personnage {
     private BooleanProperty peutTirerFLeches;
     private BooleanProperty peutAttaquerCouteau;
     private BooleanProperty attaqueCouteau;
-
+    private BooleanProperty arcJeter;
+    private int arcPositionX = 0;
+    private int arcPositionY = 0;
 
     private Terrain terrain;
 
@@ -29,6 +31,7 @@ public class Link extends Personnage {
         this.terrain = terrain;
         this.arcEquipe = new SimpleBooleanProperty(false);
         this.attaqueCouteau = new SimpleBooleanProperty(false);
+        this.arcJeter = new SimpleBooleanProperty(false);
     }
 
     public void utiliser(Item item) {
@@ -53,7 +56,9 @@ public class Link extends Personnage {
             System.out.println("Doucement les bombes");
         }
     }
-
+    public BooleanProperty arcJeterProperty() {
+        return arcJeter;
+    }
 
 
 //    public void tirerAvecArc() {
@@ -74,7 +79,7 @@ public class Link extends Personnage {
 
     public void tirerAvecArc() {
         Fleche fleche;
-        if (arc != null && arc.getNombreDeFleches() > 0 && peutTirerFLeches.get() && !getMortValue()) {
+        if (arc != null && arc.getNombreDeFleches() > 0 && peutTirerFLeches.get() && !getMortValue() && !getJeterArcValue()) {
             switch (getDirectionValue()) {
                 case Direction.RIGHT, Direction.DOWN_RIGHT, Direction.UP_RIGHT :
                     fleche = new Fleche(getXValue() + getLargeur(), getYValue() + getHauteur() / 2, getDirectionValue(), 5, getEnvironnement());
@@ -102,8 +107,28 @@ public class Link extends Personnage {
             System.out.println("Tu n'as pas de flèche");
         }
     }
+    public void jeterArc() {
+        if (arc != null && arcEquipeValue()) {
+            arcJeter.set(true);
+            arcPositionX = getXValue();
+            arcPositionY = getYValue();
+            arc = null;
+            setArcEquipe(false);
+            System.out.println("Arc jeter.");
+        }
+        else
+            System.out.println("Vous n'avez pas d'arc.");
+    }
 
-        public boolean getArcEquiperValue() {
+    public void recupererArcJeter() {
+        if (arcJeter.get() && estDansArcZone()) {
+            arcJeter.set(false);
+            setArcEquipe(true);
+            arc = new Arc("arc", 50, 10);
+            System.out.println("Arc recup.");
+        }
+    }
+    public boolean getArcEquiperValue() {
         return arcEquipe.getValue();
     }
     public boolean getCouteauAttaqueValue() {
@@ -295,7 +320,9 @@ public class Link extends Personnage {
     public BooleanProperty getAttaqueCouteauProperty() {
         return attaqueCouteau;
     }
-
+    public boolean getJeterArcValue() {
+        return arcJeter.getValue();
+    }
 
     public boolean arcEquipeValue() {
         return arcEquipe.get();
@@ -319,6 +346,12 @@ public class Link extends Personnage {
                 getXValue() + (getHauteur() * 2) > coffre.getXValue() &&
                 getYValue() - getHauteur() < coffre.getYValue() + coffre.getHauteur() &&
                 getYValue() + (getHauteur() * 2) > coffre.getYValue();
+    }
+    public boolean estDansArcZone() {
+        return getXValue() - getHauteur() < arcPositionX + 32 &&
+                getXValue() + (getHauteur() * 2) > arcPositionX &&
+                getYValue() - getHauteur() < arcPositionY + 32 &&
+                getYValue() + (getHauteur() * 2) > arcPositionY;
     }
 
     public boolean estDansZonePnj(int pnjX, int pnjY) {

@@ -168,6 +168,9 @@ public class Controleur implements Initializable {
                 link.utiliser(coffreDansZone().ouvrir());
                 link.equiperArc(arc);
             }
+            else if(link.estDansArcZone()) {
+                link.recupererArcJeter();
+            }
         }
         else if (code == KeyCode.B) {
             link.placerBombe();
@@ -182,6 +185,9 @@ public class Controleur implements Initializable {
         }
         else if (code == KeyCode.I) {
             dialogueLabel.setText(link.parlerPnjProche());
+        }
+        else if (code == KeyCode.T) {
+            link.jeterArc();
         }
         changerDirectionLink();
     }
@@ -214,7 +220,7 @@ public class Controleur implements Initializable {
             System.out.println("Pas de coffre à proximité");
             return null;
         }
-    return null;
+        return null;
     }
 
 
