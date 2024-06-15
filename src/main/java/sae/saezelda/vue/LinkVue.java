@@ -90,7 +90,7 @@ public class LinkVue {
             if (link.getArcEquiperValue()) {
                     linkImageView.setImage(imagesLinkArc[direction]);
             }
-            if (link.getCouteauAttaqueValue()) {
+            else if (link.getCouteauAttaqueValue()) {
                 linkImageView.setImage(imagesLinkCouteau[direction]);
             }
             else {

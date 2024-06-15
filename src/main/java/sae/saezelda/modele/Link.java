@@ -109,7 +109,7 @@ public class Link extends Personnage {
     }
 
     public void attaquerCouteau() {
-        if(!getMortValue()) {
+        if(!getMortValue() && !getArcEquiperValue()) {
             attaqueCouteau.set(true);
             Couteau couteau = new Couteau("couteau", 70, getEnvironnement());
             for (Zombie zombie : getEnvironnement().getZombies()) {
