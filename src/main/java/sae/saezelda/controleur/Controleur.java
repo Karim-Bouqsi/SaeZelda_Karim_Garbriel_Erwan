@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
@@ -43,11 +44,12 @@ public class Controleur implements Initializable {
     @FXML
     private Label gameOverLabel;
 
-
-
+    private Arc arcJete;
     private MonObservableListeBombe observableListeBombe;
     private Environnement environnement;
     private Terrain terrain;
+    private ImageView arcJeteVue;
+
     private TerrainVue terrainVue;
     private ArrayList<Terrain> terrains = new ArrayList<>();
     private Terrain terrainActif;
@@ -127,6 +129,8 @@ public class Controleur implements Initializable {
     private void remplacerTerrain() {
         if(!terrainRemplace) {
             panneauDeJeu.getChildren().clear();
+            linkVue.retirerArcAuSol();
+
             System.out.println("Ancien terrain supp");
 
             Terrain nouveauTerrain = new Terrain();
@@ -134,6 +138,7 @@ public class Controleur implements Initializable {
             terrainVue = new TerrainVue(nouveauTerrain, panneauDeJeu, true);
 
             environnement.changerTerrain(nouveauTerrain);
+
 
             terrainRemplace = true;
             terrainVue.afficherTerrain();

@@ -8,7 +8,7 @@ public class Pnj extends Personnage {
         dialogues = new String[4];
         dialogues[0] = "Tu ne m'écoute pas ?";
         dialogues[1] = "Salut jeune aventurier, ne rentre surtout pas dans le portail situé en bas.";
-        dialogues[2] = "Appui sur la touche 'P' pour entrer dans le portail";
+        dialogues[2] = "Appui sur la touche 'P' sur le portail, il n'y a aucun retour en arrière !";
         dialogues[3] = "Bon courage !";
     }
 

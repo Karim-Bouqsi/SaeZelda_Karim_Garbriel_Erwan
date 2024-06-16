@@ -77,36 +77,44 @@ public class Link extends Personnage {
 //        }
 //    }
 
+    public void creerEtAjouterFleche(int x, int y, int direction) {
+        Fleche fleche = new Fleche(x, y, direction, 5, getEnvironnement());
+        getEnvironnement().ajouterFleche(fleche);
+    }
     public void tirerAvecArc() {
-        Fleche fleche;
         if (arc != null && arc.getNombreDeFleches() > 0 && peutTirerFLeches.get() && !getMortValue() && !getJeterArcValue()) {
+            int flecheX = 0, flecheY = 0;
             switch (getDirectionValue()) {
-                case Direction.RIGHT, Direction.DOWN_RIGHT, Direction.UP_RIGHT :
-                    fleche = new Fleche(getXValue() + getLargeur(), getYValue() + getHauteur() / 2, getDirectionValue(), 5, getEnvironnement());
-                    getEnvironnement().ajouterFleche(fleche);
+                case Direction.RIGHT, Direction.DOWN_RIGHT, Direction.UP_RIGHT:
+                    flecheX = getXValue() + getLargeur();
+                    flecheY = getYValue() + getHauteur() / 2;
                     break;
                 case Direction.LEFT, Direction.DOWN_LEFT, Direction.UP_LEFT:
-                    fleche = new Fleche(getXValue(), getYValue() + getHauteur() / 2, getDirectionValue(), 5, getEnvironnement());
-                    getEnvironnement().ajouterFleche(fleche);
+                    flecheX = getXValue();
+                    flecheY = getYValue() + getHauteur() / 2;
                     break;
                 case Direction.DOWN:
-                    fleche = new Fleche(getXValue() + getLargeur()/2, getYValue() + getHauteur(), getDirectionValue(), 5, getEnvironnement());
-                    getEnvironnement().ajouterFleche(fleche);
+                    flecheX = getXValue() + getLargeur() / 2;
+                    flecheY = getYValue() + getHauteur();
                     break;
                 case Direction.UP:
-                    fleche = new Fleche(getXValue() + getLargeur()/2, getYValue(), getDirectionValue(), 5, getEnvironnement());
-                    getEnvironnement().ajouterFleche(fleche);
+                    flecheX = getXValue() + getLargeur() / 2;
+                    flecheY = getYValue();
                     break;
             }
+            creerEtAjouterFleche(flecheX, flecheY, getDirectionValue());
             arc.setNombreDeFleches(arc.getNombreDeFleches() - 1);
             peutTirerFLeches.set(false);
             activerCooldownFleche();
-        } else if (arc == null) {
-            System.out.println("Tu n'as pas d'arc");
         } else {
-            System.out.println("Tu n'as pas de flèche");
+            if (arc == null) {
+                System.out.println("Tu n'as pas d'arc");
+            } else {
+                System.out.println("Tu n'as pas de flèche");
+            }
         }
     }
+
     public void jeterArc() {
         if (arc != null && arcEquipeValue()) {
             arcJeter.set(true);
@@ -214,69 +222,34 @@ public class Link extends Personnage {
 
 
     public void pousserPierre(int direction, Obstacle pierre) {
-        int newX = pierre.getXValue();
-        int newY = pierre.getYValue();
-        int terrainLargeur = getEnvironnement().getLargeur();
-        int terrainHauteur = getEnvironnement().getHauteur();
-
         switch (direction) {
             case Direction.UP:
-                newY -= 3;
+                deplacerPierre(pierre, 0, -3);
                 break;
             case Direction.DOWN:
-                newY += 3;
+                deplacerPierre(pierre, 0, 3);
                 break;
             case Direction.LEFT:
-                newX -= 3;
+                deplacerPierre(pierre, -3, 0);
                 break;
             case Direction.RIGHT:
-                newX += 3;
+                deplacerPierre(pierre, 3, 0);
                 break;
-            case Direction.UP_LEFT:
-            case Direction.UP_RIGHT:
-            case Direction.DOWN_LEFT:
-            case Direction.DOWN_RIGHT:
+            case Direction.UP_LEFT, Direction.UP_RIGHT, Direction.DOWN_LEFT, Direction.DOWN_RIGHT:
                 break;
-        }
-
-
-        if (newX >= 0 && newX <= terrainLargeur - pierre.getLargeur() && newY >= 0 && newY <= terrainHauteur - pierre.getHauteur() && getEnvironnement().nouvellePositionValide(newX, newY)) {
-            switch (direction) {
-                case Direction.UP:
-                    pierre.move(0, -3);
-                    break;
-                case Direction.DOWN:
-                    pierre.move(0, 3);
-                    break;
-                case Direction.LEFT:
-                    pierre.move(-3, 0);
-                    break;
-                case Direction.RIGHT:
-                    pierre.move(3, 0);
-                    break;
-                case Direction.UP_LEFT:
-                case Direction.UP_RIGHT:
-                case Direction.DOWN_LEFT:
-                case Direction.DOWN_RIGHT:
-                    break;
-            }
-        } else {
-            if (direction == Direction.LEFT && newX >= 0) {
-                pierre.move(-3, 0);
-            } else if (direction == Direction.RIGHT && newX <= terrainLargeur - pierre.getLargeur()) {
-                pierre.move(3, 0);
-            } else if (direction == Direction.UP && newY >= 0) {
-                pierre.move(0, -3);
-            } else if (direction == Direction.DOWN && newY <= terrainHauteur - pierre.getHauteur()) {
-                pierre.move(0, 3);
-            } else {
-                System.out.println("Deplacement impossible hors terrain");
-            }
         }
     }
 
 
-
+    public void deplacerPierre(Obstacle pierre, int x, int y) {
+        int terrainLargeur = getEnvironnement().getLargeur();
+        int terrainHauteur = getEnvironnement().getHauteur();
+        int newX = pierre.getXValue() + x;
+        int newY = pierre.getYValue() + y;
+        if (newX >= 0 && newX <= terrainLargeur - pierre.getLargeur() && newY >= 0 && newY <= terrainHauteur - pierre.getHauteur() && getEnvironnement().nouvellePositionValide(newX, newY)) {
+            pierre.move(x, y);
+        }
+    }
     public void linkVerification(int x, int y) {
         Obstacle obstacle = recupererObstacle(x, y);
         if (obstacle != null) {

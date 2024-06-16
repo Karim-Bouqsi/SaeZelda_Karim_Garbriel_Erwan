@@ -63,7 +63,6 @@ public class LinkVue {
         Image imageLinkMort = new Image(String.valueOf(Main.class.getResource("/image/personnage/link_mort.png")));
         arcImage = new Image(String.valueOf(Main.class.getResource("/image/arc.png")));
 
-
         linkImageView = new ImageView();
         linkImageView.setFitWidth(19);
         linkImageView.setFitHeight(32);
