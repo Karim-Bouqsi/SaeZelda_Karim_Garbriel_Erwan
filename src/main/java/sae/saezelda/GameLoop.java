@@ -55,7 +55,7 @@ public class GameLoop {
         environnement.faireAvancerLesFleches();
         link.decrementCooldown();
 
-        /*for (int i =0; i < environnement.getAquamen().size(); i++) {
+        for (int i =0; i < environnement.getAquamen().size(); i++) {
             if(environnement.getAquamen().get(i).linkAPortee(link)){
                 Projectile projectile = new Projectile(environnement, environnement.getTerrain());
                 environnement.ajouterProjectile(projectile);
@@ -65,6 +65,6 @@ public class GameLoop {
 
         for (int i =0; i < environnement.getProjectiles().size(); i++){
             environnement.getProjectiles().get(i).bouge();
-        }*/
+        }
     }
 }

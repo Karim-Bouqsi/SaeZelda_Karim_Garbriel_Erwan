@@ -92,6 +92,13 @@ public class Controleur implements Initializable {
         MonObservableListePnj observableListePnj = new MonObservableListePnj(paneJeu);
         environnement.getPnjs().addListener(observableListePnj);
 
+        MonObservableListeAquaman observableListeAquaman = new MonObservableListeAquaman(paneJeu);
+        environnement.getAquamen().addListener(observableListeAquaman);
+
+        MonObservableListeProjectile observableListeProjectile = new MonObservableListeProjectile(paneJeu);
+        environnement.getProjectiles().addListener(observableListeProjectile);
+
+
         pvLink.textProperty().bind(link.getPvProperties().asString());
 
 
@@ -110,6 +117,11 @@ public class Controleur implements Initializable {
         environnement.ajouterPnj(pnj);
 
 
+        Aquaman aquaman = new Aquaman(environnement, terrainActif);
+        environnement.ajouterAquaman(aquaman);
+
+//        Projectile projectile = new Projectile(environnement, terrainActif);
+//        environnement.ajouterProjectile(projectile);
 
         Zombie zombie = new Zombie(environnement);
         environnement.ajouterZombie(zombie);
@@ -151,10 +163,12 @@ public class Controleur implements Initializable {
         Coffre coffre;
         coffre1 = new Coffre(arc, 2 * 32, 0 * 32);
         environnement.ajouterCoffre(coffre1);
-        Obstacle obstacle = new Pierre(100, 100);
-        environnement.ajouterObstacle(obstacle);
-        Zombie zombie = new Zombie(environnement);
-        environnement.ajouterZombie(zombie);
+
+        Aquaman aquaman = new Aquaman(environnement, terrainActif);
+        environnement.ajouterAquaman(aquaman);
+
+        Projectile projectile = new Projectile(environnement, terrainActif);
+        environnement.ajouterProjectile(projectile);
     }
 
     @FXML

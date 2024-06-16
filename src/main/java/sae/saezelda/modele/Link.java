@@ -23,7 +23,7 @@ public class Link extends Personnage {
     private Terrain terrain;
 
     public Link(Environnement environnement, Terrain terrain) {
-        super("Link", 0, 0, 10, 32, 19, 3, environnement, 2);
+        super("Link", 0, 0, 10, 32, 19, 3, environnement, 100);
         this.item = null;
         this.peutPoserBombe = new SimpleBooleanProperty(true);
         this.peutTirerFLeches = new SimpleBooleanProperty(true);
