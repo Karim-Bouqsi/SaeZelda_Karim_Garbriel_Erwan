@@ -13,8 +13,8 @@ public class Zombie extends Personnage {
     private boolean enCooldown = false;
 
 
-    public Zombie(Environnement environnement, Terrain terrain) {
-        super("ZombieMan", 400, 110, 20, 32, 19, 4, terrain, environnement, 50);
+    public Zombie(Environnement environnement) {
+        super("ZombieMan", 400, 110, 20, 32, 19, 4, environnement, 50);
     }
 
     public IntegerProperty getXProperty() {

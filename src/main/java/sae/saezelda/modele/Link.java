@@ -23,7 +23,7 @@ public class Link extends Personnage {
     private Terrain terrain;
 
     public Link(Environnement environnement, Terrain terrain) {
-        super("Link", 0, 0, 10, 32, 19, 3, terrain, environnement, 100);
+        super("Link", 0, 0, 10, 32, 19, 3, environnement, 100);
         this.item = null;
         this.peutPoserBombe = new SimpleBooleanProperty(true);
         this.peutTirerFLeches = new SimpleBooleanProperty(true);
@@ -62,23 +62,6 @@ public class Link extends Personnage {
     public void setArcJeterValue(boolean arcJeterValue) {
         arcJeter.set(arcJeterValue);
     }
-
-
-//    public void tirerAvecArc() {
-//        System.out.println("print en dehors du if tirerarc");
-//        if (arc != null && arc.getNombreDeFleches() > 0 && peutTirerFLeches.get() && !getMortValue()) {
-//            System.out.println("print du if tirerarc");
-//            Fleche fleche = new Fleche(getXValue() + getLargeur(), getYValue() + getHauteur() / 2, getDirectionValue(), 5, getEnvironnement());
-//            getEnvironnement().ajouterFleche(fleche);
-//            arc.setNombreDeFleches(arc.getNombreDeFleches() - 1);
-//            peutTirerFLeches.set(false);
-//            activerCooldownFleche();
-//        } else if (arc == null) {
-//            System.out.println("Tu n'as pas d'arc");
-//        } else {
-//            System.out.println("Tu n'as pas de flèche");
-//        }
-//    }
 
     public void creerEtAjouterFleche(int x, int y, int direction) {
         Fleche fleche = new Fleche(x, y, direction, 5, getEnvironnement());
@@ -187,12 +170,6 @@ public class Link extends Personnage {
         }));
         cooldownTimeline.play();
     }
-
-
-//    private void activerCooldownCouteau() {
-//        Timeline cooldownTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> peutAttaquerCouteau.set(true)));
-//        cooldownTimeline.play();
-//    }
 
     public void recevoirDegats(int degats) {
         setPvValue(getPvValue() - degats);

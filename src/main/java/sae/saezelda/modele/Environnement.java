@@ -171,7 +171,6 @@ public class Environnement {
 
     public void changerTerrain(Terrain terrain) {
         this.terrain = terrain;
-        link.setTerrain(terrain);
         reinitialiserElementsTerrain();
     }
 

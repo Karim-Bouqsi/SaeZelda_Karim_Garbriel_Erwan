@@ -111,7 +111,7 @@ public class Controleur implements Initializable {
 
 
 
-        Zombie zombie = new Zombie(environnement, terrainActif);
+        Zombie zombie = new Zombie(environnement);
         environnement.ajouterZombie(zombie);
 
 
@@ -137,17 +137,25 @@ public class Controleur implements Initializable {
             terrainVue = new TerrainVue(nouveauTerrain, panneauDeJeu, true);
 
             environnement.changerTerrain(nouveauTerrain);
-
-
             terrainRemplace = true;
+            ajouterElementsAuNouveauTerrain();
             terrainVue.afficherTerrain();
 
-            System.out.println("taille liste coffre : " + environnement.getCoffres().size());
             System.out.println("Nouveau terrain mis");
         }
 
     }
 
+    private void ajouterElementsAuNouveauTerrain() {
+        // TODO Ajouter boss ici
+        Coffre coffre;
+        coffre1 = new Coffre(arc, 2 * 32, 0 * 32);
+        environnement.ajouterCoffre(coffre1);
+        Obstacle obstacle = new Pierre(100, 100);
+        environnement.ajouterObstacle(obstacle);
+        Zombie zombie = new Zombie(environnement);
+        environnement.ajouterZombie(zombie);
+    }
 
     @FXML
     public void touchePresser(KeyEvent event) {
