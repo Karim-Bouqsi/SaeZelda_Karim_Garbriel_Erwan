@@ -15,6 +15,8 @@ public class Environnement {
     private ObservableList<Bombe> bombes;
     private ObservableList<Coffre> coffres;
     private ObservableList<Pnj> pnjs;
+    private ObservableList<Aquaman> aquamen;
+    private ObservableList<Projectile> projectiles;
 
     private Terrain terrain;
     private Link link;
@@ -26,6 +28,8 @@ public class Environnement {
         zombies = FXCollections.observableArrayList();
         coffres = FXCollections.observableArrayList();
         pnjs = FXCollections.observableArrayList();
+        aquamen = FXCollections.observableArrayList();
+        projectiles = FXCollections.observableArrayList();
         this.terrain = new Terrain();
         this.link = new Link(this, terrain);
     }
@@ -139,6 +143,18 @@ public class Environnement {
     public ObservableList<Zombie> getZombies() {
         return zombies;
     }
+
+    public void ajouterAquaman(Aquaman aquaman) { this.aquamen.add(aquaman); }
+
+    public void retirerAquaman(Aquaman aquaman) {aquamen.remove(aquaman);}
+
+    public ObservableList<Aquaman> getAquamen() { return aquamen; }
+
+    public void ajouterProjectile(Projectile projectile) {this.projectiles.add(projectile);}
+
+    public void retirerProjectile(Projectile projectile){projectiles.remove(projectile); }
+
+    public ObservableList<Projectile> getProjectiles() { return projectiles; }
 
     public boolean nouvellePositionValide(int x, int y) {
         if (!estDansLesLimites(x, y)) {

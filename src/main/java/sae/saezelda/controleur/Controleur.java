@@ -81,6 +81,12 @@ public class Controleur implements Initializable {
         MonObservableListePnj observableListePnj = new MonObservableListePnj(paneJeu);
         environnement.getPnjs().addListener(observableListePnj);
 
+        MonObservableListeAquaman observableListeAquaman = new MonObservableListeAquaman(paneJeu);
+        environnement.getAquamen().addListener(observableListeAquaman);
+
+        MonObservableListeProjectile observableListeProjectile = new MonObservableListeProjectile(paneJeu);
+        environnement.getProjectiles().addListener(observableListeProjectile);
+
         pvLink.textProperty().bind(link.getPvProperties().asString());
 
 
@@ -106,6 +112,11 @@ public class Controleur implements Initializable {
         environnement.ajouterZombie(zombie);
 //        ZombieVue zombieVue = new ZombieVue(zombie, paneJeu, terrainVueActif);
 
+        Aquaman aquaman = new Aquaman(environnement, terrainActif);
+        environnement.ajouterAquaman(aquaman);
+
+        Projectile projectile = new Projectile(environnement, terrainActif);
+        environnement.ajouterProjectile(projectile);
 
         gameLoop = new GameLoop(link, linkVue);
         gameLoop.startGameLoop(environnement, paneJeu);

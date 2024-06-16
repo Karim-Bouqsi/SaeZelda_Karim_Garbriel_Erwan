@@ -5,10 +5,7 @@ import javafx.animation.Timeline;
 import javafx.scene.layout.TilePane;
 import javafx.util.Duration;
 import sae.saezelda.modele.*;
-import sae.saezelda.vue.LinkVue;
-import sae.saezelda.vue.TerrainVue;
-import sae.saezelda.vue.ZombieVue;
-import sae.saezelda.vue.FlecheVue;
+import sae.saezelda.vue.*;
 import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
@@ -21,11 +18,19 @@ public class GameLoop {
     private Zombie zombie;
     private ZombieVue zombieVue;
 
+    private Aquaman aquaman;
+    private AquamanVue aquamanVue;
+
+    private Projectile projectile;
+    private ProjectileVue projectileVue;
+
     public GameLoop(Link link, LinkVue linkVue) {
         this.link = link;
         this.linkVue = linkVue;
         this.zombie = zombie;
 //        this.zombieVue = zombieVue;
+        this.aquaman = aquaman;
+        this.projectile = projectile;
     }
 
     public void startGameLoop(Environnement environnement, Pane paneJeu) {
@@ -49,5 +54,15 @@ public class GameLoop {
         }
         environnement.faireAvancerLesFleches();
         link.decrementCooldown();
+
+        for (int i =0; i < environnement.getAquamen().size(); i++) {
+            if(environnement.getAquamen().get(i).linkAPortee(link)){
+                environnement.getProjectiles().get(i).tir(environnement.getAquamen().get(i).getXValue(), environnement.getAquamen().get(i).getYValue(), linkX, linkY);
+            };
+        }
+
+        for (int i =0; i < environnement.getProjectiles().size(); i++){
+            environnement.getProjectiles().get(i).bouge();
+        }
     }
 }
