@@ -4,10 +4,16 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.util.Duration;
 
 public class Link extends Personnage {
     private Item item;
+    private Item arme;
+    private Item armure;
+    public static final int PV_MAX = 100;
+    private ObservableList<Item> invetaire;
     private Arc arc;
     private int cooldown;
     private int cooldownCompteur;
@@ -25,6 +31,9 @@ public class Link extends Personnage {
     public Link(Environnement environnement, Terrain terrain) {
         super("Link", 0, 0, 10, 32, 19, 3, environnement, 100);
         this.item = null;
+        this.arme = null;
+        this.armure=null;
+        this.invetaire = FXCollections.observableArrayList();
         this.peutPoserBombe = new SimpleBooleanProperty(true);
         this.peutTirerFLeches = new SimpleBooleanProperty(true);
         this.peutAttaquerCouteau = new SimpleBooleanProperty(true);
@@ -33,11 +42,62 @@ public class Link extends Personnage {
         this.attaqueCouteau = new SimpleBooleanProperty(false);
         this.arcJeter = new SimpleBooleanProperty(false);
     }
+    public ObservableList getInventaire(){
+        return invetaire;
+    }
+
+    public void equiper(Item item){
+        if(item instanceof Arme){
+            if(this.arme==null) {
+                this.arme=item;
+                getInventaire().remove(item);
+            }
+            else {
+                getInventaire().add(this.arme);
+                this.arme=item;
+            }
+        }
+        else if (item instanceof PotionVie){
+            boire((PotionVie) item);
+
+        }
+    }
+    public void desquiperArme(){
+        Item pivot = this.arme;
+        this.arme=null;
+        this.invetaire.add(pivot);
+
+    }
+    public void desequiperArmure(){
+        Item pivot = this.armure;
+        this.armure=null;
+        this.invetaire.add(pivot);
+    }
+    public Item getArme(){
+        return this.arme;
+    }
+    public Item getArmure(){
+        return this.armure;
+    }
+    public void boire(PotionVie potion){
+        if (getPvValue()==PV_MAX) System.out.println("Tu ne peux pas boire pv max");
+        else if (getPvValue()>PV_MAX-20){
+            System.out.println("Pv regenerer 100pv");
+            this.setPvValue(100);
+
+        }
+        else{
+            System.out.println("regene pv");
+            this.setPvValue(getPvValue()+ potion.getPv());
+        }
+    }
+
 
     public void utiliser(Item item) {
-        if (item != null) {
+        if (item != null) {// regler item / inventaire
             System.out.println("Link a ramassé " + item.getNom());
             this.item = item;
+            invetaire.add(item);
             if(item instanceof Arc) {
                 this.arcEquipe.set(true);
             }

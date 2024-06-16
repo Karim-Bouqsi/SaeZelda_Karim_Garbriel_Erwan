@@ -1,14 +1,17 @@
 package sae.saezelda.controleur;
 
-import javafx.application.Platform;
+
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
+import javafx.scene.layout.VBox;
 import sae.saezelda.GameLoop;
 import sae.saezelda.modele.*;
 import sae.saezelda.vue.*;
@@ -43,6 +46,15 @@ public class Controleur implements Initializable {
     private Label dialogueLabel;
     @FXML
     private Label gameOverLabel;
+    @FXML
+    private GridPane inventaireGrid;
+    @FXML
+    private GridPane porteGrid;
+    @FXML
+    private VBox sidePane;
+
+    private InventaireVue inventaireVue;
+    private Potion potion;
 
     private Arc arcJete;
     private MonObservableListeBombe observableListeBombe;
@@ -115,6 +127,21 @@ public class Controleur implements Initializable {
         Pnj pnj = new Pnj("Sage", 620, 170, 10, 32, 19,2, environnement, 10000);
 //        Pnj pnj = new Pnj("Sage", 70, 0, 10, 32, 19,2, terrainActif, environnement, 10000);
         environnement.ajouterPnj(pnj);
+        // feature inventaire
+        inventaireVue = new InventaireVue(sidePane,inventaireGrid,porteGrid,link);
+        link.getInventaire().addListener( new ListChangeListener() {
+            @Override
+            public void onChanged(Change change) {
+                inventaireVue.dessinePane();
+            }
+        });
+
+        // feature zombie :
+
+        epee = new Epee();
+        potion = new PotionVie();
+
+
 
 
         Aquaman aquaman = new Aquaman(environnement, terrainActif);
@@ -272,3 +299,6 @@ public class Controleur implements Initializable {
         }
     }
 }
+
+
+
