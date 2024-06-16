@@ -8,12 +8,12 @@ public class Link extends Personnage {
     private Terrain terrain;
     private Item arme;
     private Item armure;
-    public static final int PV_MAX = 100;
+    public static final int PV_MAX = 80;
 
     private ObservableList<Item> invetaire;
 
     public Link(Terrain terrain) {
-        super("Link", 0, 0, 10, 32, 19, 3, terrain, 100);
+        super("Link", 0, 0, 10, 32, 19, 3, terrain, 87);
         this.terrain = terrain;
         this.arme = null;
         this.armure=null;
@@ -40,6 +40,17 @@ public class Link extends Personnage {
             boire((PotionVie) item);
         }
     }
+    public void desquiperArme(){
+        Item pivot = this.arme;
+        this.arme=null;
+        this.invetaire.add(pivot);
+
+    }
+    public void desequiperArmure(){
+        Item pivot = this.armure;
+        this.armure=null;
+        this.invetaire.add(pivot);
+    }
     public Item getArme(){
         return this.arme;
     }
@@ -51,6 +62,7 @@ public class Link extends Personnage {
         else if (getPvValue()>PV_MAX-20){
             System.out.println("Pv regenerer 100pv");
             this.setPvValue(100);
+
         }
         else{
             System.out.println("regene pv");

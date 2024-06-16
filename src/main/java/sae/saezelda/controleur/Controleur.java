@@ -9,6 +9,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
+import javafx.scene.layout.VBox;
 import sae.saezelda.GameLoop;
 import sae.saezelda.modele.*;
 import sae.saezelda.vue.*;
@@ -38,6 +39,8 @@ public class Controleur implements Initializable {
     private GridPane inventaireGrid;
     @FXML
     private GridPane porteGrid;
+    @FXML
+    private VBox sidePane;
 
     private InventaireVue inventaireVue;
     private Potion potion;
@@ -54,7 +57,7 @@ public class Controleur implements Initializable {
         terrain.ajouterObstacle(pierre1);
 
         // feature inventaire
-        inventaireVue = new InventaireVue(inventaireGrid,porteGrid,link);
+        inventaireVue = new InventaireVue(sidePane,inventaireGrid,porteGrid,link);
         link.getInventaire().addListener( new ListChangeListener() {
             @Override
             public void onChanged(Change change) {
@@ -65,11 +68,11 @@ public class Controleur implements Initializable {
         // feature zombie :
 
         epee = new Epee();
-        potion = new Potion("Vrai Potion");
+        potion = new PotionVie();
 
 
 
-        coffre1 = new Coffre(epee,12*32,2*32,terrain);
+        coffre1 = new Coffre(potion,12*32,2*32,terrain);
         coffreVue = new CoffreVue(coffre1,paneJeu , terrainVue);
 
 
