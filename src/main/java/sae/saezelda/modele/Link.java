@@ -19,8 +19,8 @@ public class Link extends Personnage {
     private BooleanProperty arcJeter;
     private int arcPositionX = 0;
     private int arcPositionY = 0;
-    private Terrain terrain;
 
+    private Terrain terrain;
 
     public Link(Environnement environnement, Terrain terrain) {
         super("Link", 0, 0, 10, 32, 19, 3, environnement, 2);
@@ -28,10 +28,10 @@ public class Link extends Personnage {
         this.peutPoserBombe = new SimpleBooleanProperty(true);
         this.peutTirerFLeches = new SimpleBooleanProperty(true);
         this.peutAttaquerCouteau = new SimpleBooleanProperty(true);
+        this.terrain = terrain;
         this.arcEquipe = new SimpleBooleanProperty(false);
         this.attaqueCouteau = new SimpleBooleanProperty(false);
         this.arcJeter = new SimpleBooleanProperty(false);
-        this.terrain = terrain;
     }
 
     public void utiliser(Item item) {

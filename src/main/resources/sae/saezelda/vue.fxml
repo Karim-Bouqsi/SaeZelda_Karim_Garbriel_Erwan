@@ -7,6 +7,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.TilePane?>
 
+<?import javafx.scene.text.Font?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sae.saezelda.controleur.Controleur">
    <top>
       <HBox BorderPane.alignment="CENTER">
@@ -21,6 +22,15 @@
          <children>
             <TilePane fx:id="panneauDeJeu" prefHeight="200.0" prefWidth="200.0" />
             <Pane fx:id="paneJeu" focusTraversable="true" onKeyPressed="#touchePresser" onKeyReleased="#toucheRelacher" prefHeight="200.0" prefWidth="200.0" />
+            <Label fx:id="gameOverLabel" text="Game Over" visible="false">
+               <font>
+                  <Font size="70.0" />
+               </font>
+               <style>
+                  -fx-text-fill: red;
+               </style>
+            </Label>
+
          </children>
       </StackPane>
    </center>

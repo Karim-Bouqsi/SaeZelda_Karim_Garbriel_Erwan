@@ -35,6 +35,7 @@ public abstract class Personnage {
         this.environnement = environnement;
         this.pv = new SimpleIntegerProperty(pv);
         this.mort = new SimpleBooleanProperty(false);
+//        this.terrain = terrain;
         direction.addListener((obs, oldVal, newVal) -> {
             int newDirection = newVal.intValue();
 //            System.out.println("changement d direction");
@@ -111,7 +112,6 @@ public abstract class Personnage {
                 indicetab[1] = newY;
                 break;
             case Direction.DOWN_LEFT:
-                System.out.println("ok");
                 newY += 1;
                 newX -= 1;
                 indicetab[0] = newX;
@@ -130,26 +130,33 @@ public abstract class Personnage {
         return indicetab;
     }
 
+    public boolean estObstaclePresent(int x, int y) {
+        return environnement.estObstacle(x, y + getHauteur() - marge) || environnement.estObstacle(x + getLargeur(), y + getHauteur() - marge);
+    }
+
+    public boolean estObstaclePresentDiagonal(int x, int y) {
+        return environnement.estObstacle(x, y + getHauteur() - marge) || environnement.estObstacle(x + getLargeur(), y + getHauteur() - marge) || environnement.estObstacle(x, y);
+    }
 
     public boolean canMove(int direction, int x, int y) {
         switch (direction) {
             case Direction.UP:
                 return environnement.estDansLesLimites(x, y) &&
-                        !environnement.estObstacle(x, y + getHauteur() - marge) && // haut gauche
-                        !environnement.estObstacle(x + getLargeur(), y + getHauteur() - marge) && // haut droite
+                        !environnement.estObstacle(x, y + getHauteur() - marge) &&
+                        !environnement.estObstacle(x + getLargeur(), y + getHauteur() - marge) &&
                         !detecterPierre(direction, x, y);
             case Direction.DOWN:
                 return environnement.estDansLesLimites(x, y) &&
-                        !environnement.estObstacle(x, y + getHauteur()) && // bas gauche
-                        !environnement.estObstacle(x + getLargeur(), y + getHauteur()) && // bas droite
+                        !environnement.estObstacle(x, y + getHauteur()) &&
+                        !environnement.estObstacle(x + getLargeur(), y + getHauteur()) &&
                         !detecterPierre(direction, x, y);
             case Direction.LEFT:
                 return environnement.estDansLesLimites(x, y) &&
-                        !environnement.estObstacle(x, y + getHauteur() - 1) && // gauche haut
+                        !environnement.estObstacle(x, y + getHauteur() - 1) &&
                         !detecterPierre(direction, x, y);
             case Direction.RIGHT:
                 return environnement.estDansLesLimites(x, y) &&
-                        !environnement.estObstacle(x + getLargeur(), y + getHauteur() - marge) && // droite bas
+                        !environnement.estObstacle(x + getLargeur(), y + getHauteur() - marge) &&
                         !detecterPierre(direction, x, y);
             case Direction.UP_LEFT:
                 return environnement.estDansLesLimites(x - 1, y - 1) &&
@@ -285,7 +292,7 @@ public abstract class Personnage {
 
     @Override
     public String toString() {
-        return "Nom : " + this.nom + " id : " + id + " CapacitÃ© d'inventaire : " + capaciteMax + " Inventaire : " /*+ inventaire.toString()*/;
+        return "Nom : " + this.nom + " id : " + id + " Capacité d'inventaire : " + capaciteMax + " Inventaire : " /*+ inventaire.toString()*/;
     }
 
     public int getId() {
