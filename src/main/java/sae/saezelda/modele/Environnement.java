@@ -166,7 +166,7 @@ public class Environnement {
         zombies.clear();
         coffres.clear();
         pnjs.clear();
-
+        link.setArcJeterValue(false);
     }
 
     public void changerTerrain(Terrain terrain) {

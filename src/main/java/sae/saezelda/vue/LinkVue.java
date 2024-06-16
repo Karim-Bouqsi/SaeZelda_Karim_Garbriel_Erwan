@@ -7,9 +7,6 @@ import javafx.scene.layout.Pane;
 import sae.saezelda.Main;
 import sae.saezelda.modele.Direction;
 import sae.saezelda.modele.Link;
-
-import java.security.spec.RSAOtherPrimeInfo;
-
 public class LinkVue {
     private Link link;
     private Pane panneauJeu;

@@ -129,7 +129,6 @@ public class Controleur implements Initializable {
     private void remplacerTerrain() {
         if(!terrainRemplace) {
             panneauDeJeu.getChildren().clear();
-            linkVue.retirerArcAuSol();
 
             System.out.println("Ancien terrain supp");
 

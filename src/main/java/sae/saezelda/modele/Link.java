@@ -59,6 +59,9 @@ public class Link extends Personnage {
     public BooleanProperty arcJeterProperty() {
         return arcJeter;
     }
+    public void setArcJeterValue(boolean arcJeterValue) {
+        arcJeter.set(arcJeterValue);
+    }
 
 
 //    public void tirerAvecArc() {
