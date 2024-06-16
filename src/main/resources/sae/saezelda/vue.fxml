@@ -45,7 +45,7 @@
          </children>
       </HBox>
    </bottom>
-=======
+
    <right>
       <VBox fx:id="sidePane" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
