@@ -24,14 +24,14 @@ public class MonObservableListeAquaman implements ListChangeListener<Aquaman> {
             }
             if (change.wasRemoved()) {
                 for(int i = 0; i < change.getRemoved().size(); i++) {
-                    panneauJeu.getChildren().remove(this.panneauJeu.lookup("#personnage" + change.getRemoved().get(i).getId()));
+                    panneauJeu.getChildren().remove(this.panneauJeu.lookup("#aquaman" + change.getRemoved().get(i).getId()));
                 }
             }
         }
     }
 
     private void creerSprite(Aquaman aquaman) {
-        ImageView imageView = (ImageView) panneauJeu.lookup("#personnage" + aquaman.getId());
+        ImageView imageView = (ImageView) panneauJeu.lookup("#aquaman" + aquaman.getId());
         if (imageView == null) {
             AquamanVue aquamanVue = new AquamanVue(aquaman, panneauJeu);
         }

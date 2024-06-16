@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
@@ -40,11 +41,15 @@ public class Controleur implements Initializable {
     private Label pvLink;
     @FXML
     private Label dialogueLabel;
+    @FXML
+    private Label gameOverLabel;
 
-
+    private Arc arcJete;
     private MonObservableListeBombe observableListeBombe;
     private Environnement environnement;
     private Terrain terrain;
+    private ImageView arcJeteVue;
+
     private TerrainVue terrainVue;
     private ArrayList<Terrain> terrains = new ArrayList<>();
     private Terrain terrainActif;
@@ -62,6 +67,12 @@ public class Controleur implements Initializable {
         link = new Link(environnement, terrainActif);
         environnement.setLink(link);
         linkVue = new LinkVue(link, paneJeu, terrainVueActif);
+        link.getMortProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                afficherGameOver();
+            }
+        });
+
 
         MonObservableListeObstacle observableListeObstacle = new MonObservableListeObstacle(paneJeu);
         environnement.getObstacles().addListener(observableListeObstacle);
@@ -81,12 +92,6 @@ public class Controleur implements Initializable {
         MonObservableListePnj observableListePnj = new MonObservableListePnj(paneJeu);
         environnement.getPnjs().addListener(observableListePnj);
 
-        MonObservableListeAquaman observableListeAquaman = new MonObservableListeAquaman(paneJeu);
-        environnement.getAquamen().addListener(observableListeAquaman);
-
-        MonObservableListeProjectile observableListeProjectile = new MonObservableListeProjectile(paneJeu);
-        environnement.getProjectiles().addListener(observableListeProjectile);
-
         pvLink.textProperty().bind(link.getPvProperties().asString());
 
 
@@ -100,23 +105,16 @@ public class Controleur implements Initializable {
 //        coffreVue = new CoffreVue(coffre1, paneJeu);
 
 
-//              Bon pnj avec bonne coordonne
-        Pnj pnj = new Pnj("Sage", 620, 170, 10, 32, 19,2, terrainActif, environnement, 10000);
+        Pnj pnj = new Pnj("Sage", 620, 170, 10, 32, 19,2, environnement, 10000);
 //        Pnj pnj = new Pnj("Sage", 70, 0, 10, 32, 19,2, terrainActif, environnement, 10000);
         environnement.ajouterPnj(pnj);
 
 
 
-        // Changement de terrain OK Disparition du Zombie OK ImageDuZombieMort NON
-        Zombie zombie = new Zombie(environnement, terrainActif);
+        Zombie zombie = new Zombie(environnement);
         environnement.ajouterZombie(zombie);
-//        ZombieVue zombieVue = new ZombieVue(zombie, paneJeu, terrainVueActif);
 
-        Aquaman aquaman = new Aquaman(environnement, terrainActif);
-        environnement.ajouterAquaman(aquaman);
 
-        Projectile projectile = new Projectile(environnement, terrainActif);
-        environnement.ajouterProjectile(projectile);
 
         gameLoop = new GameLoop(link, linkVue);
         gameLoop.startGameLoop(environnement, paneJeu);
@@ -124,10 +122,14 @@ public class Controleur implements Initializable {
         paneJeu.setFocusTraversable(true);
         paneJeu.requestFocus();
     }
+    private void afficherGameOver() {
+        gameOverLabel.setVisible(true);
+    }
 
     private void remplacerTerrain() {
         if(!terrainRemplace) {
             panneauDeJeu.getChildren().clear();
+
             System.out.println("Ancien terrain supp");
 
             Terrain nouveauTerrain = new Terrain();
@@ -135,16 +137,21 @@ public class Controleur implements Initializable {
             terrainVue = new TerrainVue(nouveauTerrain, panneauDeJeu, true);
 
             environnement.changerTerrain(nouveauTerrain);
-
             terrainRemplace = true;
+            ajouterElementsAuNouveauTerrain();
             terrainVue.afficherTerrain();
 
-            System.out.println("taille liste coffre : " + environnement.getCoffres().size());
             System.out.println("Nouveau terrain mis");
         }
 
     }
 
+    private void ajouterElementsAuNouveauTerrain() {
+        // TODO Ajouter boss ici
+        Coffre coffre;
+        coffre1 = new Coffre(arc, 2 * 32, 0 * 32);
+        environnement.ajouterCoffre(coffre1);
+    }
 
     @FXML
     public void touchePresser(KeyEvent event) {
@@ -169,6 +176,9 @@ public class Controleur implements Initializable {
                 link.utiliser(coffreDansZone().ouvrir());
                 link.equiperArc(arc);
             }
+            else if(link.estDansArcZone()) {
+                link.recupererArcJeter();
+            }
         }
         else if (code == KeyCode.B) {
             link.placerBombe();
@@ -183,6 +193,9 @@ public class Controleur implements Initializable {
         }
         else if (code == KeyCode.I) {
             dialogueLabel.setText(link.parlerPnjProche());
+        }
+        else if (code == KeyCode.T) {
+            link.jeterArc();
         }
         changerDirectionLink();
     }
@@ -204,7 +217,7 @@ public class Controleur implements Initializable {
 
     private Coffre coffreDansZone() {
         if(!environnement.getCoffres().isEmpty()) {
-            if (link.estDansZone(coffre1)) {
+            if (link.estDansZoneCoffre(coffre1)) {
                 if (coffre1.estOuvert()) {
                     System.out.println("Le coffre a déjà été ouvert");
                     return null;
@@ -215,7 +228,7 @@ public class Controleur implements Initializable {
             System.out.println("Pas de coffre à proximité");
             return null;
         }
-    return null;
+        return null;
     }
 
 

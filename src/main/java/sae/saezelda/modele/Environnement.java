@@ -15,8 +15,6 @@ public class Environnement {
     private ObservableList<Bombe> bombes;
     private ObservableList<Coffre> coffres;
     private ObservableList<Pnj> pnjs;
-    private ObservableList<Aquaman> aquamen;
-    private ObservableList<Projectile> projectiles;
 
     private Terrain terrain;
     private Link link;
@@ -28,8 +26,6 @@ public class Environnement {
         zombies = FXCollections.observableArrayList();
         coffres = FXCollections.observableArrayList();
         pnjs = FXCollections.observableArrayList();
-        aquamen = FXCollections.observableArrayList();
-        projectiles = FXCollections.observableArrayList();
         this.terrain = new Terrain();
         this.link = new Link(this, terrain);
     }
@@ -144,30 +140,20 @@ public class Environnement {
         return zombies;
     }
 
-    public void ajouterAquaman(Aquaman aquaman) { this.aquamen.add(aquaman); }
-
-    public void retirerAquaman(Aquaman aquaman) {aquamen.remove(aquaman);}
-
-    public ObservableList<Aquaman> getAquamen() { return aquamen; }
-
-    public void ajouterProjectile(Projectile projectile) {this.projectiles.add(projectile);}
-
-    public void retirerProjectile(Projectile projectile){projectiles.remove(projectile); }
-
-    public ObservableList<Projectile> getProjectiles() { return projectiles; }
-
     public boolean nouvellePositionValide(int x, int y) {
+
         if (!estDansLesLimites(x, y)) {
-            System.out.println("Nouvelle position invalide");
+//            System.out.println("Nouvelle position invalide");
             return false;
         }
+
         for (Obstacle obstacle : obstacles) {
             if (obstacle.getXValue() == x && obstacle.getYValue() == y) {
-                System.out.println("Nouvelle position invalide");
+//                System.out.println("Nouvelle position invalide");
                 return false;
             }
         }
-        System.out.println("Nouvelle position valide");
+//        System.out.println("Nouvelle position valide");
         return true;
     }
     public void setTerrain(Terrain terrain) {
@@ -180,12 +166,11 @@ public class Environnement {
         zombies.clear();
         coffres.clear();
         pnjs.clear();
-
+        link.setArcJeterValue(false);
     }
 
     public void changerTerrain(Terrain terrain) {
         this.terrain = terrain;
-        link.setTerrain(terrain);
         reinitialiserElementsTerrain();
     }
 

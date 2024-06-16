@@ -11,7 +11,6 @@ public abstract class Personnage {
     private static int nextId = 1;
     private final int id;
     private int vitesse;
-    private Terrain terrain;
     private int marge = 5;
     private int capaciteMax;
     private IntegerProperty pv;
@@ -24,7 +23,7 @@ public abstract class Personnage {
     private Environnement environnement;
 
 
-    public Personnage(String nom, int positionX, int positionY, int capaciteMax, int hauteur, int largeur, int vitesse, Terrain terrain, Environnement environnement, int pv) {
+    public Personnage(String nom, int positionX, int positionY, int capaciteMax, int hauteur, int largeur, int vitesse, Environnement environnement, int pv) {
         this.nom = nom;
         this.id = nextId++;
         this.x = new SimpleIntegerProperty(positionX);
@@ -36,7 +35,6 @@ public abstract class Personnage {
         this.environnement = environnement;
         this.pv = new SimpleIntegerProperty(pv);
         this.mort = new SimpleBooleanProperty(false);
-        this.terrain = terrain;
         direction.addListener((obs, oldVal, newVal) -> {
             int newDirection = newVal.intValue();
 //            System.out.println("changement d direction");
@@ -63,9 +61,6 @@ public abstract class Personnage {
         if (getPvValue() <= 0) {
             mourir();
         }
-    }
-    public void setTerrain(Terrain terrain) {
-        this.terrain = terrain;
     }
 
     public void tuer() {
@@ -233,7 +228,7 @@ public abstract class Personnage {
 
 
 
-                                    /* GETTEUR / SETTEUR */
+    /* GETTEUR / SETTEUR */
     public String getNom() {return nom;}
 
     public IntegerProperty getPvProperties() {return pv;}
@@ -284,16 +279,13 @@ public abstract class Personnage {
         this.direction.setValue(direction);
     }
 
-    public Terrain getTerrain() {
-        return terrain;
-    }
     public Environnement getEnvironnement() {
         return environnement;
     }
 
     @Override
     public String toString() {
-        return "Nom : " + this.nom + " id : " + id + " Capacité d'inventaire : " + capaciteMax + " Inventaire : " /*+ inventaire.toString()*/;
+        return "Nom : " + this.nom + " id : " + id + " CapacitÃ© d'inventaire : " + capaciteMax + " Inventaire : " /*+ inventaire.toString()*/;
     }
 
     public int getId() {

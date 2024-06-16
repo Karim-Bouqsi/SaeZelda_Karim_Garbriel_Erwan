@@ -8,11 +8,13 @@ public class Projectile extends Personnage{
     private int directionX = 0;
     private int directionY = 0;
     private BooleanProperty attaqueLink = new SimpleBooleanProperty(false);
+    private Terrain terrain;
 
     public Projectile(Environnement environnement, Terrain terrain) {
-        super("Projectile", 0, 0, 20, 32, 19, 0, terrain, environnement, 50);
+        super("Projectile", 0, 0, 20, 32, 19, 0, environnement, 50);
         this.directionX = directionX;
         this.directionY = directionY;
+        this.terrain = terrain;
 
     }
 

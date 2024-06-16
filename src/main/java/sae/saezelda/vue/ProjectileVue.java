@@ -24,7 +24,7 @@ public class ProjectileVue {
         imageView.setTranslateX(projectile.getXValue());
         imageView.setTranslateY(projectile.getYValue());
 
-        imageView.setId("personnage" + projectile.getId());
+        imageView.setId("projectile" + projectile.getId());
 
         imageView.translateXProperty().bind(projectile.getXProperties());
         imageView.translateYProperty().bind(projectile.getYProperties());

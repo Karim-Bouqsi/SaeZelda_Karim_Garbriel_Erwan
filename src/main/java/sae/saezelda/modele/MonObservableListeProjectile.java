@@ -24,14 +24,14 @@ public class MonObservableListeProjectile implements ListChangeListener<Projecti
             }
             if (change.wasRemoved()) {
                 for(int i = 0; i < change.getRemoved().size(); i++) {
-                    panneauJeu.getChildren().remove(this.panneauJeu.lookup("#personnage" + change.getRemoved().get(i).getId()));
+                    panneauJeu.getChildren().remove(this.panneauJeu.lookup("#projectile" + change.getRemoved().get(i).getId()));
                 }
             }
         }
     }
 
     private void creerSprite(Projectile projectile) {
-        ImageView imageView = (ImageView) panneauJeu.lookup("#personnage" + projectile.getId());
+        ImageView imageView = (ImageView) panneauJeu.lookup("#projectile" + projectile.getId());
         if (imageView == null) {
             ProjectileVue projectileVue = new ProjectileVue(projectile, panneauJeu);
         }

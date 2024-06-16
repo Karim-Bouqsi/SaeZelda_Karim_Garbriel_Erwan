@@ -24,7 +24,7 @@ public class AquamanVue {
         imageView.setTranslateX(aquaman.getXValue());
         imageView.setTranslateY(aquaman.getYValue());
 
-        imageView.setId("personnage" + aquaman.getId());
+        imageView.setId("aquaman" + aquaman.getId());
 
         imageView.translateXProperty().bind(aquaman.getXProperties());
         imageView.translateYProperty().bind(aquaman.getYProperties());

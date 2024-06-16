@@ -24,14 +24,14 @@ public class MonObservableListeZombie implements ListChangeListener<Zombie> {
             }
             if (change.wasRemoved()) {
                 for(int i = 0; i < change.getRemoved().size(); i++) {
-                    panneauJeu.getChildren().remove(this.panneauJeu.lookup("#personnage" + change.getRemoved().get(i).getId()));
+                    panneauJeu.getChildren().remove(this.panneauJeu.lookup("#zombie" + change.getRemoved().get(i).getId()));
                 }
             }
         }
     }
 
     private void creerSprite(Zombie zombie) {
-        ImageView imageView = (ImageView) panneauJeu.lookup("#personnage" + zombie.getId());
+        ImageView imageView = (ImageView) panneauJeu.lookup("#zombie" + zombie.getId());
         if (imageView == null) {
             ZombieVue zombieVue = new ZombieVue(zombie, panneauJeu);
         }
