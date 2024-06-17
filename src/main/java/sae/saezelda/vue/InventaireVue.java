@@ -32,10 +32,7 @@ public class InventaireVue {
         colonne = 0;
         dessinePane();
     }
-    //TODO Faire en sorte que l'on voit la bonne image pour le bonne item
-
     public void dessinePane(){
-        //DESSSINE LINVENTAIRE IMAGE PAR IMAGE SUR LE GRID PANE SANS PRENDRE EN COMPTE LITEM
         synchronized (this) {
             gi.getChildren().clear();
             ge.getChildren().clear();

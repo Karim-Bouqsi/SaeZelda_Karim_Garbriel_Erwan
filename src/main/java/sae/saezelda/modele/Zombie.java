@@ -11,20 +11,15 @@ public class Zombie extends Personnage {
     private boolean moveUp = true;
     private BooleanProperty attaqueLink = new SimpleBooleanProperty(false);
     private boolean enCooldown = false;
-
-
-    public Zombie(Environnement environnement) {
-        super("ZombieMan", 400, 110, 20, 32, 19, 4, environnement, 50);
+    public Zombie(Environnement environnement, int posx, int posy) {
+        super("ZombieMan", posx, posy, 20, 32, 19, 4, environnement, 50);
     }
-
     public IntegerProperty getXProperty() {
         return super.getXProperties();
     }
-
     public IntegerProperty getYProperty() {
         return super.getYProperties();
     }
-
     public BooleanProperty attaqueLinkProperty() {
         return attaqueLink;
     }
@@ -50,8 +45,6 @@ public class Zombie extends Personnage {
             moveUp = !moveUp;
         }
     }
-
-
 
     public void deplacerVersLink(int linkX, int linkY) {
         if (!getMortValue()) {
@@ -128,7 +121,16 @@ public class Zombie extends Personnage {
     public boolean estDansZoneBombe(int bombeX, int bombeY) {
         int zombieX = getXValue();
         int zombieY = getYValue();
-        return zombieX - 19 < bombeX + 32 && zombieX + (19 * 2) > bombeX &&
-                zombieY - 32 < bombeY + 32 && zombieY + (32 * 2) > bombeY;
+        return zombieX - getLargeurZombie() < bombeX + bombeX && zombieX + (getLargeurZombie() * 2) > bombeX &&
+                zombieY - getLargeurBombe() < bombeY + getLargeurBombe() && zombieY + (getLargeurBombe() * 2) > bombeY;
+    }
+    public int getLargeurBombe() {
+        return 32;
+    }
+    public int getLargeurZombie() {
+        return 19;
+    }
+    public int getHauteurZombie() {
+        return 32;
     }
 }

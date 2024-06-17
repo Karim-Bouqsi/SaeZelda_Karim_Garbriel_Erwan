@@ -16,21 +16,11 @@ public class GameLoop {
     private final int FPS = 60;
 
     private Zombie zombie;
-    private ZombieVue zombieVue;
-
     private Aquaman aquaman;
-    private AquamanVue aquamanVue;
-
     private Projectile projectile;
-    private ProjectileVue projectileVue;
-
     public GameLoop(Link link, LinkVue linkVue) {
         this.link = link;
         this.linkVue = linkVue;
-        this.zombie = zombie;
-//        this.zombieVue = zombieVue;
-        this.aquaman = aquaman;
-        this.projectile = projectile;
     }
 
     public void startGameLoop(Environnement environnement, Pane paneJeu) {
@@ -38,7 +28,6 @@ public class GameLoop {
         KeyFrame keyFrame = new KeyFrame(duration, event -> {
             updateGame(environnement, paneJeu);
         });
-
         Timeline timeline = new Timeline(keyFrame);
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
@@ -50,7 +39,6 @@ public class GameLoop {
         int linkY = link.getYValue();
         for (int i =0; i < environnement.getZombies().size(); i++) {
             environnement.getZombies().get(i).deplacerVersLink(linkX,linkY);
-//            System.out.println(environnement.getZombies().get(i).getMortValue());
         }
         environnement.faireAvancerLesFleches();
         link.decrementCooldown();
@@ -62,7 +50,6 @@ public class GameLoop {
                 environnement.getProjectiles().get(i).tir(environnement.getAquamen().get(i).getXValue(), environnement.getAquamen().get(i).getYValue(), linkX, linkY);
             }
         }
-
         for (int i =0; i < environnement.getProjectiles().size(); i++){
             environnement.getProjectiles().get(i).bouge();
         }

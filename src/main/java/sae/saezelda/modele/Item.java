@@ -1,13 +1,19 @@
 package sae.saezelda.modele;
 
 public class Item {
-    //TODO créer une sous classe equipement pour les armures que link pourra porter
+    private static int nextId = 1;
+    private final int id;
     private String nom;
     public Item(String nom){
         this.nom=nom;
+        this.id = nextId++;
     }
 
     public String getNom(){
         return nom;
     }
+    public int getId() {
+        return id;
+    }
+
 }

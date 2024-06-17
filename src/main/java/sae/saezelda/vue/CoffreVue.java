@@ -11,7 +11,6 @@ public class CoffreVue {
     private Pane panneauJeu;
     private ImageView coffreImageView;
 
-    // Constructor
     public CoffreVue(Coffre coffre, Pane panneauJeu) {
         this.coffre = coffre;
         this.panneauJeu = panneauJeu;

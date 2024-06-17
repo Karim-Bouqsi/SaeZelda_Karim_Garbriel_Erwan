@@ -5,7 +5,6 @@ import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
@@ -15,31 +14,16 @@ import javafx.scene.layout.VBox;
 import sae.saezelda.GameLoop;
 import sae.saezelda.modele.*;
 import sae.saezelda.vue.*;
-
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class Controleur implements Initializable {
-
     private GameLoop gameLoop;
-
     @FXML
     private Pane paneJeu;
-
     @FXML
     private TilePane panneauDeJeu;
-
-    private boolean hPresser, bPresser, gPresser, dPresser;
-
-    private Coffre coffre1;
-    private CoffreVue coffreVue;
-    private Arc arc;
-
-
-    private Link link;
-    private LinkVue linkVue;
-
     @FXML
     private Label pvLink;
     @FXML
@@ -52,16 +36,14 @@ public class Controleur implements Initializable {
     private GridPane porteGrid;
     @FXML
     private VBox sidePane;
-
+    private boolean hPresser, bPresser, gPresser, dPresser;
+    private Coffre coffre1;
+    private Arc arc;
+    private Link link;
+    private LinkVue linkVue;
     private InventaireVue inventaireVue;
     private Potion potion;
-
-    private Arc arcJete;
-    private MonObservableListeBombe observableListeBombe;
     private Environnement environnement;
-    private Terrain terrain;
-    private ImageView arcJeteVue;
-
     private TerrainVue terrainVue;
     private ArrayList<Terrain> terrains = new ArrayList<>();
     private Terrain terrainActif;
@@ -95,7 +77,8 @@ public class Controleur implements Initializable {
         MonObservableListeZombie observableListeZombie = new MonObservableListeZombie(paneJeu);
         environnement.getZombies().addListener(observableListeZombie);
 
-        observableListeBombe = new MonObservableListeBombe(paneJeu);
+
+        MonObservableListeBombe observableListeBombe = new MonObservableListeBombe(paneJeu);
         environnement.getBombes().addListener(observableListeBombe);
 
         MonObservableListeFleche observableListeFleche = new MonObservableListeFleche(paneJeu);
@@ -113,7 +96,6 @@ public class Controleur implements Initializable {
 
         pvLink.textProperty().bind(link.getPvProperties().asString());
 
-
         Pierre pierre1 = new Pierre(80, 50);
         environnement.ajouterObstacle(pierre1);
 
@@ -122,38 +104,18 @@ public class Controleur implements Initializable {
         coffre1 = new Coffre(arc, 2 * 32, 0 * 32);
         environnement.ajouterCoffre(coffre1);
 
-//        coffreVue = new CoffreVue(coffre1, paneJeu);
-
-
         Pnj pnj = new Pnj("Sage", 620, 170, 10, 32, 19,2, environnement, 10000);
-//        Pnj pnj = new Pnj("Sage", 70, 0, 10, 32, 19,2, terrainActif, environnement, 10000);
         environnement.ajouterPnj(pnj);
-        // feature inventaire
         inventaireVue = new InventaireVue(sidePane,inventaireGrid,porteGrid,link);
-        link.getInventaire().addListener( new ListChangeListener() {
+        link.getInventaire().addListener(new ListChangeListener() {
             @Override
             public void onChanged(Change change) {
                 inventaireVue.dessinePane();
             }
         });
 
-
-
-
-
-
-
-
-        Aquaman aquaman = new Aquaman(environnement, terrainActif);
-        environnement.ajouterAquaman(aquaman);
-
-//        Projectile projectile = new Projectile(environnement, terrainActif);
-//        environnement.ajouterProjectile(projectile);
-
-        Zombie zombie = new Zombie(environnement);
+        Zombie zombie = new Zombie(environnement, 380, 50);
         environnement.ajouterZombie(zombie);
-
-
 
         gameLoop = new GameLoop(link, linkVue);
         gameLoop.startGameLoop(environnement, paneJeu);
@@ -168,34 +130,35 @@ public class Controleur implements Initializable {
     private void remplacerTerrain() {
         if(!terrainRemplace) {
             panneauDeJeu.getChildren().clear();
-
-            System.out.println("Ancien terrain supp");
-
             Terrain nouveauTerrain = new Terrain();
             nouveauTerrain.setTerrain(environnement.getTerrain().getTerrain2());
             terrainVue = new TerrainVue(nouveauTerrain, panneauDeJeu, true);
-
             environnement.changerTerrain(nouveauTerrain);
             terrainRemplace = true;
             ajouterElementsAuNouveauTerrain();
             terrainVue.afficherTerrain();
-
-            System.out.println("Nouveau terrain mis");
+            System.out.println("Bienvenue dans notre mini donjon !");
         }
-
     }
 
     private void ajouterElementsAuNouveauTerrain() {
-        // TODO Ajouter boss ici
-        Coffre coffre;
-        coffre1 = new Coffre(arc, 2 * 32, 0 * 32);
+        coffre1 = new Coffre(potion, 610, 0 * 32);
         environnement.ajouterCoffre(coffre1);
 
         Aquaman aquaman = new Aquaman(environnement, terrainActif);
         environnement.ajouterAquaman(aquaman);
 
-        Projectile projectile = new Projectile(environnement, terrainActif);
-        environnement.ajouterProjectile(projectile);
+        Pierre pierre1 = new Pierre(200, 150);
+        environnement.ajouterObstacle(pierre1);
+
+        Pierre pierre2 = new Pierre(300, 40);
+        environnement.ajouterObstacle(pierre2);
+
+        Zombie zombie = new Zombie(environnement, 250, 150);
+        environnement.ajouterZombie(zombie);
+
+        Zombie zombie2 = new Zombie(environnement, 15, 200);
+        environnement.ajouterZombie(zombie2);
     }
 
     @FXML
@@ -219,7 +182,6 @@ public class Controleur implements Initializable {
         else if (code == KeyCode.E) {
             if (coffreDansZone() != null) {
                 link.utiliser(coffreDansZone().ouvrir());
-//                link.equiperArc(arc);
             }
             else if(link.estDansArcZone()) {
                 link.recupererArcJeter();
@@ -264,13 +226,10 @@ public class Controleur implements Initializable {
         if(!environnement.getCoffres().isEmpty()) {
             if (link.estDansZoneCoffre(coffre1)) {
                 if (coffre1.estOuvert()) {
-                    System.out.println("Le coffre a déjà été ouvert");
                     return null;
                 }
-                System.out.println("Coffre à proximité");
                 return coffre1;
             }
-            System.out.println("Pas de coffre à proximité");
             return null;
         }
         return null;

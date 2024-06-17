@@ -15,9 +15,6 @@ public class Coffre {
     private int width;
     private int height;
 
-
-
-    // Constructeur pour le premier coffre
     public Coffre(Item Contenue,int x ,  int y){
         this.id = nextId++;
         this.Contenu=Contenue;
@@ -27,12 +24,9 @@ public class Coffre {
         this.height=32;
         this.ouvert=new SimpleBooleanProperty(false);
     }
-
     public int getId() {
         return id;
     }
-
-
     public int getXValue() {
         return x;
     }
@@ -57,13 +51,5 @@ public class Coffre {
         ouvert.setValue(true);
         return Contenu;
     }
-
-
-
-
-    // Constructeur pour avoir les items de maniere aleatoire
-//    public Coffre(){
-//        this.Contenu=
-//    }
 }
 

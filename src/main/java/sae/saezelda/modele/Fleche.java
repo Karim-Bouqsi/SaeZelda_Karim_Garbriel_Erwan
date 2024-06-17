@@ -23,46 +23,6 @@ public class Fleche {
         this.id = nextId++;
     }
 
-    public IntegerProperty getDirectionProperties() {
-        return direction;
-    }
-
-    public void setDirectionValue(int directionValue) {
-        this.direction.set(directionValue);
-    }
-
-    public int directionValue() {
-        return direction.get();
-    }
-
-    public int getX() {
-        return x.get();
-    }
-
-    public void setX(int x) {
-        this.x.set(x);
-    }
-
-    public IntegerProperty getXProperty() {
-        return x;
-    }
-
-    public int getY() {
-        return y.get();
-    }
-
-    public void setY(int y) {
-        this.y.set(y);
-    }
-
-    public boolean aDepasseLimites() {
-        return x.get() + 11 < 0 || x.get() > 650 || y.get() < 0 || y.get() > 330;
-    }
-
-    public IntegerProperty getYProperty() {
-        return y;
-    }
-
     public void deplacer() {
         switch (direction.getValue()) {
             case Direction.UP:
@@ -141,16 +101,35 @@ public class Fleche {
         }
         return false;
     }
-
-    public int getHauteur() {
-        return 3;
+    public boolean aDepasseLimites() {
+        return x.get() + 11 < 0 || x.get() > 650 || y.get() < 0 || y.get() > 330;
     }
 
     public int getLargeur() {
         return 11;
     }
-
     public int getId() {
         return id;
+    }
+    public IntegerProperty getDirectionProperties() {
+        return direction;
+    }
+    public int getX() {
+        return x.get();
+    }
+    public void setX(int x) {
+        this.x.set(x);
+    }
+    public IntegerProperty getXProperty() {
+        return x;
+    }
+    public int getY() {
+        return y.get();
+    }
+    public void setY(int y) {
+        this.y.set(y);
+    }
+    public IntegerProperty getYProperty() {
+        return y;
     }
 }

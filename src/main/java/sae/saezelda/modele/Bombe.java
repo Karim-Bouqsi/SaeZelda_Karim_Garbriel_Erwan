@@ -18,8 +18,6 @@ public class Bombe extends Arme {
 
     }
 
-
-
     public Bombe(String nom, int ptAtt, int x, int y, Environnement environnement) {
         super(nom, ptAtt);
         this.x = new SimpleIntegerProperty(x);
@@ -29,15 +27,12 @@ public class Bombe extends Arme {
 
     public void bombeExplose() {
         ObservableList<Obstacle> obstaclesDansZone = estDansZone(environnement.getObstacles());
-        System.out.println("bombe explose");
         if (environnement.getLink().estDansZoneBombe(getXValue(), getYValue())) {
-            System.out.println("link toucher par la bombe");
             environnement.getLink().recevoirDegats(10);
         }
         for (Zombie zombie : environnement.getZombies()) {
             if (zombie.estDansZoneBombe(getXValue(), getYValue())) {
-                System.out.println("zombie toucher par la bombe");
-                zombie.recevoirDegats(100);
+                zombie.recevoirDegats(15);
             }
         }
         environnement.retirerBombe(this);
@@ -57,13 +52,9 @@ public class Bombe extends Arme {
                     getYValue() - 32 < obstacle.getYValue() + obstacle.getHauteur() && getYValue() + (32 * 2) > obstacle.getYValue()) {
                 obstaclesDansZone.add(obstacle);
                 obstaclesASupprimer.add(obstacle);
-                System.out.println("Bombe à proximité");
-            } else {
-                System.out.println("trop loin de la pierre");
             }
         }
         obstacles.removeAll(obstaclesASupprimer);
-
         return obstaclesDansZone;
     }
 
@@ -81,5 +72,8 @@ public class Bombe extends Arme {
 
     public IntegerProperty getYProperty() {
         return y;
+    }
+    public int getHauteurOuLargeurImage() {
+        return 32;
     }
 }

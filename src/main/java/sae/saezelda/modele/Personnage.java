@@ -35,7 +35,6 @@ public abstract class Personnage {
         this.environnement = environnement;
         this.pv = new SimpleIntegerProperty(pv);
         this.mort = new SimpleBooleanProperty(false);
-//        this.terrain = terrain;
         direction.addListener((obs, oldVal, newVal) -> {
             int newDirection = newVal.intValue();
 //            System.out.println("changement d direction");
@@ -46,35 +45,23 @@ public abstract class Personnage {
     public void setMortValue(boolean bool) {
         mort.set(bool);
     }
-
-
-
     public BooleanProperty getMortProperty() {
         return mort;
     }
-
     public boolean getMortValue() {
         return mort.get();
     }
-
     public void recevoirDegats(int degats) {
         setPvValue(getPvValue() - degats);
         if (getPvValue() <= 0) {
             mourir();
         }
     }
-
-    public void tuer() {
-        this.mort.set(true);
-        setPvValue(0);
-    }
-
     public void mourir() {
-        tuer();
+        this.mort.set(true);
+        setPvValue(0);;
     }
-
     public int[] move() {
-
         int[] indicetab = new int[2];
         int newX = getXValue();
         int newY = getYValue();
@@ -220,10 +207,6 @@ public abstract class Personnage {
         }
         return false;
     }
-
-
-
-
     public Obstacle recupererObstacle(int x, int y) {
         for (Obstacle obstacle : environnement.getObstacles()) {
             if (detecterPierre(getDirectionValue(), x, y)) {
@@ -232,9 +215,6 @@ public abstract class Personnage {
         }
         return null;
     }
-
-
-
     /* GETTEUR / SETTEUR */
     public String getNom() {return nom;}
 
@@ -297,5 +277,11 @@ public abstract class Personnage {
 
     public int getId() {
         return id;
+    }
+    public int getDimension32() {
+        return 32;
+    }
+    public int getDimension19() {
+        return 19;
     }
 }

@@ -80,22 +80,18 @@ public class LinkVue {
         });
         link.getArcEquipeProperty().addListener((observable, oldValue, newValue) ->
                 updateLinkImageView());
+
         link.getAttaqueCouteauProperty().addListener((observable, oldValue, newValue) -> {
             updateLinkImageView();
         });
         link.arcJeterProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
-//                System.out.println("appel 1");
                 afficherArcAuSol();
             }
             else {
-//                System.out.println("appel 2");
                 retirerArcAuSol();
-
             }
-
         });
-
     }
     public void afficherArcAuSol() {
         if (arcImageView == null) {
@@ -116,8 +112,6 @@ public class LinkVue {
         }
     }
 
-
-
     public void updateLinkImageView() {
         int direction = link.getDirectionValue();
         if (direction >= 0 && direction < imagesLink.length && !link.getMortValue()) {
@@ -132,7 +126,4 @@ public class LinkVue {
             }
         }
     }
-
-
-
 }

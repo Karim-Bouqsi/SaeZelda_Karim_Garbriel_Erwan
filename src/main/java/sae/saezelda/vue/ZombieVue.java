@@ -39,13 +39,11 @@ public class ZombieVue {
                 imageView.setImage(normalImage);
             }
         });
-
         zombie.getMortProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 imageView.setImage(mortImage);
             }
         });
-
         creerZombie();
     }
 
