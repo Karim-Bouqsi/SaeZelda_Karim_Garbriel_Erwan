@@ -43,7 +43,7 @@ public class InventaireVue {
                 ImageView imageView = new ImageView(new Image(String.valueOf(Main.class.getResource("/image/case.png"))));
                 ge.add(imageView, 0, 0);
             } else {
-                ImageView imageView = new ImageView(new Image(String.valueOf(Main.class.getResource("/image/epee.png"))));
+                ImageView imageView = new ImageView(choixImage(link.getArme()));
                 imageView.setOnMouseClicked(event -> {
                     System.out.println("Arme cliquée");
                     link.desquiperArme();
@@ -72,8 +72,9 @@ public class InventaireVue {
                     int finalI = i;
                     imageView.setOnMouseClicked(event -> {
                         System.out.println("Inventaire cliqué");
-                        if (link.getInventaire().get(finalI) instanceof Epee) {
+                        if (link.getInventaire().get(finalI) instanceof Arme) {
                             link.equiper((Item) link.getInventaire().get(finalI));
+
                         }
                         else if(link.getInventaire().get(finalI) instanceof PotionVie){
                             link.equiper((Item) link.getInventaire().get(finalI));
@@ -95,10 +96,14 @@ public class InventaireVue {
     }
     public Image choixImage(Item item){
         Image image;
-        if (item instanceof Epee) {
+        if (item instanceof Couteau) {
             image = new Image(String.valueOf(Main.class.getResource("/image/epee.png")));
         } else if (item instanceof Potion) {
             image = new Image(String.valueOf(Main.class.getResource("/image/potion.png")));
+        } else if (item instanceof Bombe) {
+            image = new Image(String.valueOf(Main.class.getResource("/image/case_bombe.png")));
+        } else if (item instanceof Arc) {
+            image = new Image(String.valueOf(Main.class.getResource("/image/case_arc.png")));
         } else {
             image = new Image(String.valueOf(Main.class.getResource("/image/sol.png")));
         }

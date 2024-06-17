@@ -34,8 +34,8 @@ public class Controleur implements Initializable {
 
     private Coffre coffre1;
     private CoffreVue coffreVue;
-    private Epee epee;
     private Arc arc;
+
 
     private Link link;
     private LinkVue linkVue;
@@ -117,6 +117,7 @@ public class Controleur implements Initializable {
         Pierre pierre1 = new Pierre(80, 50);
         environnement.ajouterObstacle(pierre1);
 
+        potion = new PotionVie();
         arc = new Arc("Arc", 10, 2000);
         coffre1 = new Coffre(arc, 2 * 32, 0 * 32);
         environnement.ajouterCoffre(coffre1);
@@ -136,10 +137,9 @@ public class Controleur implements Initializable {
             }
         });
 
-        // feature zombie :
 
-        epee = new Epee();
-        potion = new PotionVie();
+
+
 
 
 
@@ -219,7 +219,7 @@ public class Controleur implements Initializable {
         else if (code == KeyCode.E) {
             if (coffreDansZone() != null) {
                 link.utiliser(coffreDansZone().ouvrir());
-                link.equiperArc(arc);
+//                link.equiperArc(arc);
             }
             else if(link.estDansArcZone()) {
                 link.recupererArcJeter();

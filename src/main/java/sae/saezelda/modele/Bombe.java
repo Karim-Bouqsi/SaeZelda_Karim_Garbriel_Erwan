@@ -13,6 +13,13 @@ public class Bombe extends Arme {
     private IntegerProperty x;
     private IntegerProperty y;
 
+    public Bombe(){
+        super("Bombe",15);
+
+    }
+
+
+
     public Bombe(String nom, int ptAtt, int x, int y, Environnement environnement) {
         super(nom, ptAtt);
         this.x = new SimpleIntegerProperty(x);

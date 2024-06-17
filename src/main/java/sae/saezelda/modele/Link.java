@@ -25,14 +25,16 @@ public class Link extends Personnage {
     private BooleanProperty arcJeter;
     private int arcPositionX = 0;
     private int arcPositionY = 0;
+    private int nbBombe;
 
     private Terrain terrain;
 
     public Link(Environnement environnement, Terrain terrain) {
         super("Link", 0, 0, 10, 32, 19, 3, environnement, 100);
         this.item = null;
-        this.arme = null;
+        this.arme = new Couteau("bi",2,environnement);
         this.armure=null;
+        this.arc=new Arc("faa",12,12);
         this.invetaire = FXCollections.observableArrayList();
         this.peutPoserBombe = new SimpleBooleanProperty(true);
         this.peutTirerFLeches = new SimpleBooleanProperty(true);
@@ -41,6 +43,7 @@ public class Link extends Personnage {
         this.arcEquipe = new SimpleBooleanProperty(false);
         this.attaqueCouteau = new SimpleBooleanProperty(false);
         this.arcJeter = new SimpleBooleanProperty(false);
+        this.nbBombe=2;
     }
     public ObservableList getInventaire(){
         return invetaire;
@@ -53,12 +56,24 @@ public class Link extends Personnage {
                 getInventaire().remove(item);
             }
             else {
-                getInventaire().add(this.arme);
+                this.arme=this.arc;
+                Item pivot = this.arme;
                 this.arme=item;
+                desequiperArc();
+                peutTirerFLeches.setValue(false);
+                getInventaire().remove(item);
+                this.invetaire.add(pivot);
+
+            }
+            if(item instanceof Arc){
+                setArcEquipe(true);
+                peutTirerFLeches.setValue(true);
+                equiperArc(arc);
             }
         }
         else if (item instanceof PotionVie){
             boire((PotionVie) item);
+            getInventaire().remove(item);
 
         }
     }
@@ -98,20 +113,24 @@ public class Link extends Personnage {
             System.out.println("Link a ramassé " + item.getNom());
             this.item = item;
             invetaire.add(item);
-            if(item instanceof Arc) {
-                this.arcEquipe.set(true);
-            }
+//            if(item instanceof Arc) {
+//                this.arcEquipe.set(true);
+//            }
         }
     }
 
 
     public void placerBombe() {
-        if (peutPoserBombe.get() && !getMortValue()) {
+        if (peutPoserBombe.get() && !getMortValue()&&this.nbBombe>0 && this.arme instanceof Bombe) {
             Bombe bombe = new Bombe("Bombe", 50, getXValue(), getYValue(), getEnvironnement());
             getEnvironnement().ajouterBombe(bombe);
             bombe.cooldownBombeEtExplose();
             peutPoserBombe.set(false);
             activerCooldownBombe();
+            this.nbBombe--;
+        } else if (nbBombe==0) {
+            System.out.println("tu n'as plus de bombe");
+            this.arme=null;
         } else {
             System.out.println("Doucement les bombes");
         }
@@ -128,7 +147,7 @@ public class Link extends Personnage {
         getEnvironnement().ajouterFleche(fleche);
     }
     public void tirerAvecArc() {
-        if (arc != null && arc.getNombreDeFleches() > 0 && peutTirerFLeches.get() && !getMortValue() && !getJeterArcValue()) {
+        if (arc != null && arc.getNombreDeFleches() > 0 && peutTirerFLeches.get() && !getMortValue() && !getJeterArcValue() && this.arme instanceof Arc) {
             int flecheX = 0, flecheY = 0;
             switch (getDirectionValue()) {
                 case Direction.RIGHT, Direction.DOWN_RIGHT, Direction.UP_RIGHT:
@@ -193,7 +212,7 @@ public class Link extends Personnage {
         this.attaqueCouteau.set(couteauValue);
     }
     public void attaquerCouteau() {
-        if(!getMortValue() && !getArcEquiperValue()) {
+        if(!getMortValue() && !getArcEquiperValue() && this.arme instanceof Couteau) {
             attaqueCouteau.set(true);
             Couteau couteau = new Couteau("couteau", 70, getEnvironnement());
             for (Zombie zombie : getEnvironnement().getZombies()) {
