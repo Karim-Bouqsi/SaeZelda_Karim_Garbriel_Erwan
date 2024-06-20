@@ -51,5 +51,12 @@ public class Coffre {
         ouvert.setValue(true);
         return Contenu;
     }
+
+    public void setXValue(int x) {
+        this.x = x;
+    }
+    public void setYValue(int y) {
+        this.y = y;
+    }
 }
 

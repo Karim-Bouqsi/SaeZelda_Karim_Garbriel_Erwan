@@ -18,7 +18,7 @@ public class Link extends Personnage {
     private int cooldownCompteur;
     private BooleanProperty arcEquipe;
     private BooleanProperty peutPoserBombe;
-    private BooleanProperty peutTirerFLeches;
+    public BooleanProperty peutTirerFLeches;
     private BooleanProperty peutAttaquerCouteau;
     private BooleanProperty attaqueCouteau;
     private BooleanProperty arcJeter;
@@ -368,4 +368,8 @@ public class Link extends Personnage {
     public Item getArmure(){
         return this.armure;
     }
+//    public boolean getPeutTirerFlecheValue(){
+//        return this.peutTirerFLeches.getValue();
+//    }
+
 }
